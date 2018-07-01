@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="webpack 中的 plugin 大多都提供额外的能力，它们在 webpack 中的配置都只是把插件实例添加到 plugins 字段的数组中。不过由于需要提供不同的功能，不同的插件本身的配置比较多样化。 社区中有很多 webpack 插件可供使用，而优秀的插件基本上都提供了详细的使用说明文档。更多的插件可以在这里查找：plugins in awesome-webpack。 下面通过介绍几个常用的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-30T11:15:27.000Z">
+<meta property="og:updated_time" content="2018-07-01T03:47:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack-之五">
 <meta name="twitter:description" content="webpack 中的 plugin 大多都提供额外的能力，它们在 webpack 中的配置都只是把插件实例添加到 plugins 字段的数组中。不过由于需要提供不同的功能，不同的插件本身的配置比较多样化。 社区中有很多 webpack 插件可供使用，而优秀的插件基本上都提供了详细的使用说明文档。更多的插件可以在这里查找：plugins in awesome-webpack。 下面通过介绍几个常用的">
@@ -98,7 +98,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DefinePlugin"><span class="toc-number">1.</span> <span class="toc-text">DefinePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#copy-webpack-plugin"><span class="toc-number">2.</span> <span class="toc-text">copy-webpack-plugin</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DefinePlugin"><span class="toc-number">1.</span> <span class="toc-text">DefinePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#copy-webpack-plugin"><span class="toc-number">2.</span> <span class="toc-text">copy-webpack-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extract-text-webpack-plugin"><span class="toc-number">3.</span> <span class="toc-text">extract-text-webpack-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ProvidePlugin"><span class="toc-number">4.</span> <span class="toc-text">ProvidePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IgnorePlugin"><span class="toc-number">5.</span> <span class="toc-text">IgnorePlugin</span></a></li></ol>
 		
 		</div>
 		
@@ -131,6 +131,26 @@
 <p>glob 用法可以参考 glob-primer。</p>
 </blockquote>
 <p>上述的配置日常应用已经足够，跟多的配置内容可以参考copy-webpack-plugin。</p>
+<h2 id="extract-text-webpack-plugin"><a href="#extract-text-webpack-plugin" class="headerlink" title="extract-text-webpack-plugin"></a>extract-text-webpack-plugin</h2><hr>
+<p>我们用它来把依赖的 CSS 分离出来成为单独的文件。这里再看一下使用 extract-text-webpack-plugin 的配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        <span class="comment">// 因为这个插件需要干涉模块转换的内容，所以需要使用它对应的 loader</span></span><br><span class="line">        use: ExtractTextPlugin.extract(&#123; </span><br><span class="line">          fallback: <span class="string">'style-loader'</span>,</span><br><span class="line">          use: <span class="string">'css-loader'</span>,</span><br><span class="line">        &#125;), </span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// 引入插件，配置文件名，这里同样可以使用 [hash]</span></span><br><span class="line">    <span class="keyword">new</span> ExtractTextPlugin(<span class="string">'index.css'</span>),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述的配置中，我们使用了 index.css 作为单独分离出来的文件名，但有的时候构建入口不止一个，extract-text-webpack-plugin 会为每一个入口创建单独分离的文件，因此最好这样配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> ExtractTextPlugin(<span class="string">'[name].css'</span>),</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>这样确保在使用多个构建入口时，生成不同名称的文件。</p>
+<p> extract-text-webpack-plugin是蛮常用的插件，并且它的使用方式比较特别，除了在 <code>plugins</code> 字段添加插件实例之外，还需要调整 loader 对应的配置。</p>
+<p> 在这里要强调的是，在 webpack 中，loader 和 plugin 的区分是很清楚的，针对文件模块转换要做的使用 loader，而其他干涉构建内容的可以使用 plugin。 ExtractTextWebpackPlugin 既提供了 plugin，也提供了 extract 方法来获取对应需要的 loader。</p>
+<h2 id="ProvidePlugin"><a href="#ProvidePlugin" class="headerlink" title="ProvidePlugin"></a>ProvidePlugin</h2><hr>
+<p>ProvidePlugin 也是一个 webpack 内置的插件，我们可以直接使用 <code>webpack.ProvidePlugin</code> 来获取。</p>
+<p>该组件用于引用某些模块作为应用运行时的变量，从而不必每次都用 require 或者 import，其用法相对简单：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">  identifier: <span class="string">'module'</span>,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">  identifier: [<span class="string">'module'</span>, <span class="string">'property'</span>], <span class="comment">// 即引用 module 下的 property，类似 import &#123; property &#125; from 'module'</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>在你的代码中，当 <code>identifier</code> 被当作未赋值的变量时，module 就会被自动加载了，而 <code>identifier</code> 这个变量即 module 对外暴露的内容。</p>
+<p>注意，如果是 ES 的 <code>default export</code>，那么你需要指定模块的 default 属性：<code>identifier: [&#39;module&#39;, &#39;default&#39;],</code>。</p>
+<p>更多使用例子可以查看官方文档 ProvidePlugin。</p>
+<h2 id="IgnorePlugin"><a href="#IgnorePlugin" class="headerlink" title="IgnorePlugin"></a>IgnorePlugin</h2><hr>
+<p>IgnorePlugin 和 ProvidePlugin 一样，也是一个 webpack 内置的插件，可以直接使用 <code>webpack.IgnorePlugin</code> 来获取。</p>
+<p>这个插件用于忽略某些特定的模块，让 webpack 不把这些指定的模块打包进去。例如我们使用 moment.js，直接引用后，里边有大量的 i18n 的代码，导致最后打包出来的文件比较大，而实际场景并不需要这些 i18n 的代码，这时我们可以使用 IgnorePlugin 来忽略掉这些代码文件，配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  // ...</span><br><span class="line">  plugins: [</span><br><span class="line">    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>IgnorePlugin 配置的参数有两个，第一个是匹配引入模块路径的正则表达式，第二个是匹配模块的对应上下文，即所在目录名。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -182,7 +202,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DefinePlugin"><span class="toc-number">1.</span> <span class="toc-text">DefinePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#copy-webpack-plugin"><span class="toc-number">2.</span> <span class="toc-text">copy-webpack-plugin</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DefinePlugin"><span class="toc-number">1.</span> <span class="toc-text">DefinePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#copy-webpack-plugin"><span class="toc-number">2.</span> <span class="toc-text">copy-webpack-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extract-text-webpack-plugin"><span class="toc-number">3.</span> <span class="toc-text">extract-text-webpack-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ProvidePlugin"><span class="toc-number">4.</span> <span class="toc-text">ProvidePlugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IgnorePlugin"><span class="toc-number">5.</span> <span class="toc-text">IgnorePlugin</span></a></li></ol>
  
   </div>
 
@@ -201,11 +221,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
 			
 		
 			
