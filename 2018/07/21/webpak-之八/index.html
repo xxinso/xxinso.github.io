@@ -11,15 +11,18 @@
     
 
     
-    <meta name="keywords" content="用HRM提高开发效率">
+    <meta name="description" content="##用HMR提高开发效率HMR 全称是Hot Module Replacement，即某块替换。在这个概念之前使用郭Hot Reloading，当代码变更是通知浏览器刷新页面，以避免频繁手动刷新浏览器页面。HRM可以理解为增强版的Hot Reloading，但不用整个页面刷新，而是局部替换模块代码并且使其生效，可以看到代码变更的效果。所以HRM即避免了频繁手动刷新页面，也减少了页面刷新时的等待，可">
+<meta name="keywords" content="用HRM提高开发效率">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webpak-之八">
 <meta property="og:url" content="http://yoursite.com/2018/07/21/webpak-之八/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##用HMR提高开发效率HMR 全称是Hot Module Replacement，即某块替换。在这个概念之前使用郭Hot Reloading，当代码变更是通知浏览器刷新页面，以避免频繁手动刷新浏览器页面。HRM可以理解为增强版的Hot Reloading，但不用整个页面刷新，而是局部替换模块代码并且使其生效，可以看到代码变更的效果。所以HRM即避免了频繁手动刷新页面，也减少了页面刷新时的等待，可">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-21T13:39:05.632Z">
+<meta property="og:updated_time" content="2018-07-22T08:46:28.071Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpak-之八">
+<meta name="twitter:description" content="##用HMR提高开发效率HMR 全称是Hot Module Replacement，即某块替换。在这个概念之前使用郭Hot Reloading，当代码变更是通知浏览器刷新页面，以避免频繁手动刷新浏览器页面。HRM可以理解为增强版的Hot Reloading，但不用整个页面刷新，而是局部替换模块代码并且使其生效，可以看到代码变更的效果。所以HRM即避免了频繁手动刷新页面，也减少了页面刷新时的等待，可">
 
     
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -95,11 +98,43 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用HMR提高开发效率"><span class="toc-number">1.</span> <span class="toc-text">##用HMR提高开发效率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置使用HMR"><span class="toc-number">2.</span> <span class="toc-text">配置使用HMR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HMR运行原理"><span class="toc-number">3.</span> <span class="toc-text">HMR运行原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-hot常见API"><span class="toc-number">4.</span> <span class="toc-text">module.hot常见API</span></a></li></ol>
 		
 		</div>
 		
-		  
+		<h2 id="用HMR提高开发效率"><a href="#用HMR提高开发效率" class="headerlink" title="##用HMR提高开发效率"></a>##用HMR提高开发效率</h2><p>HMR 全称是Hot Module Replacement，即某块替换。在这个概念之前使用郭Hot Reloading，当代码变更是通知浏览器刷新页面，以避免频繁手动刷新浏览器页面。HRM可以理解为增强版的Hot Reloading，但不用整个页面刷新，而是局部替换模块代码并且使其生效，可以看到代码变更的效果。所以HRM即避免了频繁手动刷新页面，也减少了页面刷新时的等待，可以极大地提高前端页面开发效率。</p>
+<h2 id="配置使用HMR"><a href="#配置使用HMR" class="headerlink" title="配置使用HMR"></a>配置使用HMR</h2><hr>
+<p>HRM是webpack提供的非常有用的一个功能，跟我们之前提到的一样，安装好web-dev-server，添加一些简单的配置，即在webpack的配置文件中添加HMR需要的两个插件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  devServer: &#123;</span><br><span class="line">    hot: <span class="literal">true</span> <span class="comment">// dev server 的配置要启动 hot，或者在命令行中带参数开启</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin(), <span class="comment">// 用于启动 HMR 时可以显示模块的相对路径</span></span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(), <span class="comment">// Hot Module Replacement 的插件</span></span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HMR运行原理"><a href="#HMR运行原理" class="headerlink" title="HMR运行原理"></a>HMR运行原理</h2><hr>
+<p>HRM的实现和运行相对复杂，需要多个部分协同配合，这里稍微介绍一下HRM的运行原理。</p>
+<p>首先我们知道一个概念：webpack内部运行时，回维护一份用于管理构建代码时各个幂快之间交互的表数据。webpack官方称之为Manifest，其中包括入口文件和构建出来的bundle文件的关系。可以使用<code>WebpackManifestPlugin</code>插件来输出这样的一份数据。</p>
+<p>开启了hot功能的webpack回往我们应用的主要代码中添加WS相关的代码，用于和服务器保持连接，等待更新动作。</p>
+<p>当你配置了HMR的插件时，会往应用代码中添加HRM运行时的代码，主要用于定义代码模块更新时的API，</p>
+<p>有了这两个部分就可以支持HMR的功能了。当有更新时，webpack-dev-server发送更新信号给HMR运行时，然后HMR再请求所需要的更新数据，请求的更新数据没有问题的话就应用更新数据。</p>
+<p>如果HMR只是简单替换代码模块的内容，如替换掉所谓的<code>installedModules</code>中需要更新新的部分，那么浏览器就没有办法把跟新后的结果实时地在浏览器上显示出来。</p>
+<p>前面提到的HMR运行时的代码会提供定义模版应用跟新执行时的API，这些API可以让我们在模块中定义接收到HMR更新应用信号时，需要额外做些什么工作，例如<code>style-loader</code>就需要实现HMR接口，当收到更新时，使用新的样式替换掉久的样式，大概就是这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">'/some/path'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ... 用新样式替换旧样式</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详情可以产考style-loader中的代码实现<code>HMR interface implemention in style-loader</code> 。</p>
+<p>HRM应用更新时是使用<code>webpackHotUpdate</code>来处理的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">webpackHotUpdate(id, &#123; </span><br><span class="line">  <span class="string">'modulePath'</span>: </span><br><span class="line">  <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 模块更新后的代码</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>执行<code>webpackHotUpdate</code>时如发现模块代码实现了HMR接口，就会执行相应的回调或者方法，从而达到应用更新时，模块可以自行管理自己所需要额外做的工作。不过，并不是所有的模块都需要做相关的处理，当遇见没有HMR接口的模块时，就会开始向上层冒泡。</p>
+<p>这里还有一个问题提是，webpack如何保证HMR接口中的引用是最新的模块代码？看一个简单的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br><span class="line"><span class="keyword">import</span> hello <span class="keyword">from</span> <span class="string">'./bar'</span></span><br><span class="line"></span><br><span class="line">hello()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">'./bar'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// console.log('Accepting the updated bar module!')</span></span><br><span class="line">    hello()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从代码上看，hello都是同一个，这样的话并没有办法引入最新的代码，但是我们看一下上述代码webpack构建后的结果：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">"./src/bar.js"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">__WEBPACK_OUTDATED_DEPENDENCIES__</span>) </span>&#123; </span><br><span class="line">    <span class="comment">/* harmony import */</span> </span><br><span class="line">    __WEBPACK_IMPORTED_MODULE_1__bar__ = __webpack_require__(<span class="string">"./src/bar.js"</span>); </span><br><span class="line">    (<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// console.log('Accepting the updated bar module!')</span></span><br><span class="line">      <span class="built_in">Object</span>(__WEBPACK_IMPORTED_MODULE_1__bar__[<span class="string">"default"</span>])()</span><br><span class="line">    &#125;)(__WEBPACK_OUTDATED_DEPENDENCIES__); </span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其他代码比较复杂，我们集中看<code>module.hot</code>的处理部分。这里可以发现，我们的hello已经重新使用<code>_webpack_require_</code>来引入了，所以可以确保它是最新的代码。</p>
+<p>基本上HMR的执行原理就是这样，更具体的实现部分就不展开讲解了。在日常开发中，我们更多的需要工具来实现HMR的接口，避免编写过多HMR需要的代码。例如，React在组件代码更新时可能需要触发render开实现组件的展示效果，官方提供了一些现有的工具，需要的可以参考一下：<code>hot module replacement tools</code>。</p>
+<h2 id="module-hot常见API"><a href="#module-hot常见API" class="headerlink" title="module.hot常见API"></a>module.hot常见API</h2><hr>
+<p>前面HMR实现部分已经讲解了HRM接口的重要性，下面来看看常见的<code>module.hot</code>API有哪些，以及如何使用。</p>
+<p>之前已经介绍过，<code>module.hot.accept</code>方法指定在应用特定代码某块更新时执行相应的callback，第一个参数可以是字符串或者时数组，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept([<span class="string">'./bar.js'</span>, <span class="string">'./index.css'</span>], () =&gt; &#123;</span><br><span class="line">    <span class="comment">// ... 这样当 bar.js 或者 index.css 更新时都会执行该函数</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>module.hot,decline</code>对于指定的代码模块，拒绝进行某块代码更新，进入更新失败状态，如<code>module.hot.decline(&#39;./bar.js&#39;)</code>。这个方法比较少用到。</p>
+<p><code>module.hot.dispose</code>用于添加一个处理函数，在当前模块代码被替换时运行该函数，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.dispose(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// data 用于传递数据，如果有需要传递的数据可以挂在 data 对象上，然后在模块代码更新后可以通过 module.hot.data 来获取</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>module.hot.accept</code>通常用于指定当前依赖的某个模块需要更新时需要做的处理，如果当前模块跟新时需要处理的动作，使用<code>module.hot.dispose</code>会更加容易方便。</p>
+<p><code>module.hot.removeDisposeHandler</code>用于移除<code>dispose</code>方法添加的callback。</p>
+<p>关于<code>module.hot</code>的更多API详情可以产考官方文档：Hot Module Replacement APIs。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -150,7 +185,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用HMR提高开发效率"><span class="toc-number">1.</span> <span class="toc-text">##用HMR提高开发效率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置使用HMR"><span class="toc-number">2.</span> <span class="toc-text">配置使用HMR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HMR运行原理"><span class="toc-number">3.</span> <span class="toc-text">HMR运行原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-hot常见API"><span class="toc-number">4.</span> <span class="toc-text">module.hot常见API</span></a></li></ol>
  
   </div>
 
@@ -173,7 +208,7 @@
 			
 		
 			
-				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
 			
 		
 			
@@ -181,11 +216,15 @@
 			
 		
 			
-				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
 			
 		
 			
@@ -194,10 +233,6 @@
 		
 			
 				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
 			
 		
 		</ul>
