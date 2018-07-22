@@ -79,6 +79,91 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/07/22/webpack-之八前端资源加载/" title="webpack-之八前端资源加载1 - 图片加载优化和代码压缩" itemprop="url">webpack-之八前端资源加载1 - 图片加载优化和代码压缩</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-22T08:48:00.000Z" itemprop="datePublished"> Published 2018-07-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>我们总是希望浏览器在加载页面时用的时间越短越好，所以构建出来的文件应该越少越小越好，一来减少浏览器需要发起请求的数量，二来减少下载静态资源的时间。</p>
+<p>其实 webpack 把多个代码文件打包成几个必需的静态资源，已经很大程度减少了静态资源请求数量了，接下来我们来介绍下如何使用 webpack 实现更多的前端资源加载的优化需求。</p>
+<h2 id="CSS-Script"><a href="#CSS-Script" class="headerlink" title="##CSS Script"></a>##CSS Script</h2><p><code>CSS Script</code>技术时前端领域一种常见减少图片请求数的优化方式，这里不做详细的介绍。</p>
+<blockquote>
+<p>在了解webpack配置之前，需要先明白CSS Script的原理。</p>
+</blockquote>
+<p>如果你是用的webpack 3.x版本，需要CSS Script的话，可以使用<code>webpack-spritesmith</code> 或者 <code>sprite-webpack-plugin</code>。</p>
+<p>我们以 webpack-spritesmith 为例，先安装依赖：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install webpack-spritesmith --save-dev</span><br></pre></td></tr></table></figure>
+<p>在webpack的配置中应用插件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  loaders: [</span><br><span class="line">    <span class="comment">// ... 这里需要有处理图片的 loader，如 file-loader</span></span><br><span class="line">  ]</span><br><span class="line">&#125;,</span><br><span class="line">resolve: &#123;</span><br><span class="line">  modules: [</span><br><span class="line">    <span class="string">'node_modules'</span>, </span><br><span class="line">    <span class="string">'spritesmith-generated'</span>, <span class="comment">// webpack-spritesmith 生成所需文件的目录</span></span><br><span class="line">  ],</span><br><span class="line">&#125;,</span><br><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> SpritesmithPlugin(&#123;</span><br><span class="line">    src: &#123;</span><br><span class="line">      cwd: path.resolve(__dirname, <span class="string">'src/ico'</span>), <span class="comment">// 多个图片所在的目录</span></span><br><span class="line">      glob: <span class="string">'*.png'</span> <span class="comment">// 匹配图片的路径</span></span><br><span class="line">    &#125;,</span><br><span class="line">    target: &#123;</span><br><span class="line">      <span class="comment">// 生成最终图片的路径</span></span><br><span class="line">      image: path.resolve(__dirname, <span class="string">'src/spritesmith-generated/sprite.png'</span>), </span><br><span class="line">      <span class="comment">// 生成所需 SASS/LESS/Stylus mixins 代码，我们使用 Stylus 预处理器做例子</span></span><br><span class="line">      css: path.resolve(__dirname, <span class="string">'src/spritesmith-generated/sprite.styl'</span>), </span><br><span class="line">    &#125;,</span><br><span class="line">    apiOptions: &#123;</span><br><span class="line">      cssImageRef: <span class="string">"~sprite.png"</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;),</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>在你需要的样式中引入<code>sprite。styl</code>后调用需要的mixins即可</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@import <span class="string">'~sprite.styl'</span></span><br><span class="line"></span><br><span class="line">.close-button</span><br><span class="line">    sprite(<span class="variable">$close</span>)</span><br><span class="line">.open-button</span><br><span class="line">    sprite(<span class="variable">$open</span>)</span><br></pre></td></tr></table></figure>
+<p>更多的 webpack-spritesmith 配置可以参考：Config of webpack-spritesmith。</p>
+<p>遗憾的是，上面提到的两个plugin还没有更新到webpack4.x, 你需要配合postcss和postcss-sprites相关构建</p>
+<h2 id="图片压缩"><a href="#图片压缩" class="headerlink" title="##图片压缩"></a>##图片压缩</h2><p>在一般的项目中，图片资源会占前端资源的很大一部分，既然代码都进行压缩了，占大头的图片就更不用说了。</p>
+<p>用file-loader来处理图片文件，在此基础上，我们再添加一个<code>image-webpack-loader</code>来压缩图片文件。简单的配置如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/.*\.(gif|png|jpe?g|svg|webp)$/i</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'file-loader'</span>,</span><br><span class="line">            options: &#123;&#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'image-webpack-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              mozjpeg: &#123; <span class="comment">// 压缩 jpeg 的配置</span></span><br><span class="line">                progressive: <span class="literal">true</span>,</span><br><span class="line">                quality: <span class="number">65</span></span><br><span class="line">              &#125;,</span><br><span class="line">              optipng: &#123; <span class="comment">// 使用 imagemin-optipng 压缩 png，enable: false 为关闭</span></span><br><span class="line">                enabled: <span class="literal">false</span>,</span><br><span class="line">              &#125;,</span><br><span class="line">              pngquant: &#123; <span class="comment">// 使用 imagemin-pngquant 压缩 png</span></span><br><span class="line">                quality: <span class="string">'65-90'</span>,</span><br><span class="line">                speed: <span class="number">4</span></span><br><span class="line">              &#125;,</span><br><span class="line">              gifsicle: &#123; <span class="comment">// 压缩 gif 的配置</span></span><br><span class="line">                interlaced: <span class="literal">false</span>,</span><br><span class="line">              &#125;,</span><br><span class="line">              webp: &#123; <span class="comment">// 开启 webp，会把 jpg 和 png 图片压缩为 webp 格式</span></span><br><span class="line">                quality: <span class="number">75</span></span><br><span class="line">              &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>image-webpack-loader的压缩是使用<code>imagemin</code>提供的一系列图片库来处理的，如果需要进一步了解详细的配置，可以查看对应类库的官方文档<code>usage of image-webpck-loader</code>。</p>
+<h2 id="使用DataURL"><a href="#使用DataURL" class="headerlink" title="使用DataURL"></a>使用DataURL</h2><hr>
+<p>有的时候我们项目中会有一些很小的图片，因为某些缘故并不想使用CSS Script的方式来处理（譬如小图片不多，因此引入CSS Script感觉麻烦），那么我们可以在webpack中使用url-loader来处理这些很小的图片。</p>
+<p><code>url-loader</code>和<code>file-loader</code>的功能类似，但是在处理文件的时候，可以通过配置指定一个大小，当文件小于这个配置时，url-loader会将其转换为一个base64的DataURL，配置如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.(png|jpg|gif)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'url-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              limit: <span class="number">8192</span>, <span class="comment">// 单位是 Byte，当文件小于 8KB 时作为 DataURL 处理</span></span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多关于url-loader的配置可以参考官方文档<code>url-loader</code>,一般情况下使用<code>limit</code>即可。</p>
+<h2 id="代码压缩"><a href="#代码压缩" class="headerlink" title="##代码压缩"></a>##代码压缩</h2><p>除了 JS 代码之外，我们一般还需要 HTML 和 CSS 文件，这两种文件也都是可以压缩的，虽然不像 JS 的压缩那么彻底（替换掉长变量等），只能移除空格换行等无用字符，但也能在一定程度上减小文件大小。在 webpack 中的配置使用也不是特别麻烦，所以我们通常也会使用。</p>
+<p>对于 HTML 文件，html-webpack-plugin 插件可以帮助我们生成需要的 HTML 并对其进行压缩：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      filename: <span class="string">'index.html'</span>, <span class="comment">// 配置输出文件名和路径</span></span><br><span class="line">      template: <span class="string">'assets/index.html'</span>, <span class="comment">// 配置文件模板</span></span><br><span class="line">      minify: &#123; <span class="comment">// 压缩 HTML 的配置</span></span><br><span class="line">        minifyCSS: <span class="literal">true</span>, <span class="comment">// 压缩 HTML 中出现的 CSS 代码</span></span><br><span class="line">        minifyJS: <span class="literal">true</span> <span class="comment">// 压缩 HTML 中出现的 JS 代码</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上，使用<code>minify</code>字段配置就可以使用HTML压缩，这个插件是使用<code>html-minifier</code>来实现HTML代码压缩的<code>minify</code>下的配置项直接透传给html-minifier，配置产考html-minifier文档即可。</p>
+<p>对于 CSS 文件，我们之前介绍过用来处理 CSS 文件的 css-loader，也提供了压缩 CSS 代码的功能：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css/</span>,</span><br><span class="line">        include: [</span><br><span class="line">          path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">        ],</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'css-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              minimize: <span class="literal">true</span>, <span class="comment">// 使用 css 的压缩功能</span></span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 css-loader 的选项中配置 minimize 字段为 true 来使用 CSS 压缩代码的功能。css-loader 是使用 cssnano 来压缩代码的，minimize 字段也可以配置为一个对象，来将相关配置传递给 cssnano。更多详细内容请参考 cssnano 官方文档。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/">优化前端资源加载 1 - 图片加载优化和代码压缩</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/07/21/webpak-之八/" title="webpak-之八" itemprop="url">webpak-之八</a>
   </h1>
   <p class="article-author">By
@@ -944,6 +1029,10 @@
 		
 			
 				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
 			
 		
 			
