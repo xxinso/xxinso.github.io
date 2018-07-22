@@ -79,6 +79,60 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/07/21/webpak-之八/" title="webpak-之八" itemprop="url">webpak-之八</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-21T11:30:49.000Z" itemprop="datePublished"> Published 2018-07-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/用HRM提高开发效率/">用HRM提高开发效率</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/07/09/webpack-之七开发和生产环境的构建配置差异/" title="webpack-之七开发和生产环境的构建配置差异" itemprop="url">webpack-之七开发和生产环境的构建配置差异</a>
   </h1>
   <p class="article-author">By
@@ -97,6 +151,48 @@
 <p>当你指定使用production mode时，默认会启用各种性能优化的功能，包括构建结果优化以及webpack运行性优化，而如果是development mode的话，则会开启debug工具，运行时打印详细的错误信息，以及更加快速的增量编译构建。关于这两个 mode 的更详细区别，可以查阅 webpack 作者的这篇文章：<code>webpack 4: mode and optimization</code>。</p>
 <p>虽然webpack的mode参数已经给我们带来了很方便的环境差异化配置，但是针对一些项目的情况，例如使用css-loader或者url-loader等，不同环境传入loader的配置也不一样，而mode病没有帮组我们做这些事情，因此有些配置还是需要手动区分环境后来进行调整。</p>
 <h2 id="在配置文件中区分mode"><a href="#在配置文件中区分mode" class="headerlink" title="在配置文件中区分mode"></a>在配置文件中区分mode</h2><hr>
+<p>之前我们的配置文件都是直接对外暴露一个JS对象，这种方式暂时没有办法获取到webpack的mode参数，我们需要更换一种方式来处理配置。根据官方文档<code>多种配置类型</code>，配置文件可以对外暴露一个函数，因此我们可以这样做：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">env, argv</span>) =&gt;</span> (&#123;</span><br><span class="line">  <span class="comment">// ... 其他配置</span></span><br><span class="line">  optimization: &#123;</span><br><span class="line">    minimize: <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// 使用 argv 来获取 mode 参数的值</span></span><br><span class="line">    minimizer: argv.mode === <span class="string">'production'</span> ? [</span><br><span class="line">      <span class="keyword">new</span> UglifyJsPlugin(&#123; <span class="comment">/* 你自己的配置 */</span> &#125;), </span><br><span class="line">      <span class="comment">// 仅在我们要自定义压缩配置时才需要这么做</span></span><br><span class="line">      <span class="comment">// mode 为 production 时 webpack 会默认使用压缩 JS 的 plugin</span></span><br><span class="line">    ] : [],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>这样获取mode之后，我们就能区分不同的构建环境，然后根据不同环境再对特殊的loader或plugin做额外的配置就可以了。</p>
+<p>以上是webpck 4.x的做法，由于有了mode参数，区分就变的简答了。不过在当前业界还是使用webpck3.x版本居多，这里我们就简单介绍一下3.x如何区分环境。</p>
+<p>webpack的运行环境是Node.js,我们可以通过Node.js提供的机制给要运行的webpack程序传递环境变量，来控制不同环境下的构建行为。例如，我们在npm的<code>script</code>字段添加一个用于生产环境的构建命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"script"</span>:&#123;</span><br><span class="line">     <span class="attr">"build"</span>: <span class="string">"NODE_ENV=production webpack"</span>,</span><br><span class="line">    <span class="attr">"develop"</span>: <span class="string">"NODE_ENV=development webpack-dev-server"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在<code>webpack.config.js</code>文件可以通过<code>process.env.NODE_ENV</code>来过去命令传入的环境变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="comment">// ... webpack 配置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'production'</span>) &#123;</span><br><span class="line">  <span class="comment">// 生产环境需要做的事情，如使用代码压缩插件等</span></span><br><span class="line">  config.plugins.push(<span class="keyword">new</span> UglifyJsPlugin())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = config</span><br></pre></td></tr></table></figure>
+<h2 id="运行时的环境变量"><a href="#运行时的环境变量" class="headerlink" title="运行时的环境变量"></a>运行时的环境变量</h2><hr>
+<p>我们使用webpack时传递的mode参数，是可以在我们的应用代码运行是，通过<code>process.env.NODE_EVN</code>这个变量来获取的。这样方便我们在运行是判断当前执行的构建环境，使用最多的场景莫过于控制是否打印debug信息。</p>
+<p>下面这个简单的例子，在应用开发的代码中实现一个简单的console打印封装：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span> &amp;&amp; <span class="built_in">console</span> &amp;&amp; <span class="built_in">console</span>.log) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log.apply(<span class="built_in">console</span>, args)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，以上是webpack4.x的做法，下面介绍一下3.x版本应该如何实现。这里需要用DefinePlugin插件，它可以帮助我们在构建是给运行时定义变量，那么我们只要在前面webpack3.x版本区分构建环境例子的基础上，再使用DefinePlugin添加环境变量即可影响运行时的代码。</p>
+<p>在webpack的配置中添加DefinePlugin插件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// webpack 的配置</span></span><br><span class="line"></span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">      <span class="comment">// webpack 3.x 的 process.env.NODE_ENV 是通过手动在命令行中指定 NODE_ENV=... 的方式来传递的</span></span><br><span class="line">      <span class="string">'process.env.NODE_ENV'</span>: <span class="built_in">JSON</span>.stringify(process.env.NODE_ENV),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常见的环境差异配置"><a href="#常见的环境差异配置" class="headerlink" title="常见的环境差异配置"></a>常见的环境差异配置</h2><hr>
+<p>前面提及的使用环境变量的方式可以让我们在不同的构建环境中完成不同的构建需求，这里列举一下常见的webpack构建差异配置：</p>
+<ul>
+<li>生产环境需要分离CSS成单独的文件，以便多个页面课共享同一个CSS文件</li>
+<li>生产环境需要压缩HTML/CSS/JS代码</li>
+<li>生产环境需要压缩图片</li>
+<li>生产环境需要生成sourcemap文件</li>
+<li>开发环境需要打印debug信息</li>
+<li>开发环境需要live reload或者hot reload的功能</li>
+</ul>
+<p>以上是常见的环境需求差异，可能更复杂的项目中会有更多的构建需求（如划分静态域名等），但是我们都可以通过判断环境变量来实现这些有环境差异的构建需求。</p>
+<p>以上是常见的环境需求差异，可能更加复杂的项目我们会有更多的构建需求（如划分静态域名等），但是我们都可以通过判断环境变量来实现这些有环境差异的构建需求。</p>
+<p>webpack4.x的mode已经提供了上述配置的大部分功能，mode为production时默认使用JS压缩代码，而mode为developement时默认启用hot reload，等等。这样让我们的配置更为简洁，我们只需要针对特别使用的loader和pugin做区分配置就可以了。</p>
+<p>webapck 3.x版本还是只能自己动手修改配置来满足大部分环境差异需求，所以如果你要使用一个新的项目，建议使用webpack4.x版本。</p>
+<h2 id="拆分配置"><a href="#拆分配置" class="headerlink" title="拆分配置"></a>拆分配置</h2><hr>
+<p>前面我们列出了几个环境差异配置，可能这些构建需求就已经有点多了，会让整个webpack的配置变得复杂，尤其是有着大量环境变量判断的配置。我们可以吧webapck的配置按照不同环境拆分成多个文件，运行是直接根据环境变量加载对应的配置即可。基本可以划分如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* webapck.base.js:基础部分，即多个文件中的共享配置</span><br><span class="line">* webpack.development.js: 开发环境中使用的配置</span><br><span class="line">* webpack.production.js:生产环境中使用的配置</span><br><span class="line">* webpack.test.js 测试环境中使用的配置</span><br></pre></td></tr></table></figure>
+<p>一些复杂的项目可能会有更多配置。这里介绍一下如何处理这样的配置拆分。</p>
+<p>首先我们要明白，对于webpack的配置，其实是对外暴露一个JS对象，所以对于这个对象，我们都可以用JS代码来修改它，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="comment">// ... webpack 配置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们可以修改这个 config 来调整配置，例如添加一个新的插件</span></span><br><span class="line">config.plugins.push(<span class="keyword">new</span> YourPlugin());</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = config;</span><br></pre></td></tr></table></figure>
+<p>因此，只要有一个工具能够智能地合并多个配置对象，我们就可以轻松的拆分webapck配置，然后通过判断环境变量，使用工具将对应环境的多个配置对象整合后提供给webpack使用。这个工具就是<code>webpack-merge</code>。</p>
+<p>我们webpack配置基础部分，即webpack.base.js应该大致是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'...'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    <span class="comment">// 这里是一个简单的例子，后面介绍 API 时会用到</span></span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>, </span><br><span class="line">        use: [<span class="string">'babel'</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后webpack.development.js需要添加loader或plugin，这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'...'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    <span class="comment">// 这里是一个简单的例子，后面介绍 API 时会用到</span></span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>, </span><br><span class="line">        use: [<span class="string">'babel'</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后webpack.development.js需要添加loader或plugin，就可以使用webpack-merge的API，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; smart &#125; = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="keyword">const</span> base = <span class="built_in">require</span>(<span class="string">'./webpack.base.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = smart(base, &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      <span class="comment">// 用 smart API，当这里的匹配规则相同且 use 值都是数组时，smart 会识别后处理</span></span><br><span class="line">      <span class="comment">// 和上述 base 配置合并后，这里会是 &#123; test: /\.js$/, use: ['babel', 'coffee'] &#125;</span></span><br><span class="line">      <span class="comment">// 如果这里 use 的值用的是字符串或者对象的话，那么会替换掉原本的规则 use 的值</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        use: [<span class="string">'coffee'</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// plugins 这里的数组会和 base 中的 plugins 数组进行合并</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">      <span class="string">'process.env.NODE_ENV'</span>: <span class="built_in">JSON</span>.stringify(process.env.NODE_ENV),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>可见webppack-marge提供的<code>smart</code>方法，可以帮助我们更加轻松地处理loader配置的合并。webpack-merge还有其他的API可以用于自定义合并行为，这里就不详细介绍了，需要更深入了解的同学可以直接查阅官方文档<code>webpack-merge</code>。</p>
 
         
         
@@ -807,15 +903,11 @@
 			
 		
 			
-				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
 			
 		
 			
@@ -823,7 +915,15 @@
 			
 		
 			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
 			
 		
 			
