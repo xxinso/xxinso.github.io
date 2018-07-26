@@ -4,25 +4,20 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>webpack 基本使用一 | Hexo</title>
+    <title>Hexo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="xxinso">
     
 
     
-    <meta name="description" content="什么是webpackwebpack 是一个 JS 代码模块化的打包工具，藉由它强大的扩展能力，随着社区的发展，逐渐成为一个功能完善的构建工具。相信开始学习这小册的同学们多多少少都能够理解为什么前端开发中会使用到 webpack，我们不再详细介绍 webpack 的使用背景，直奔本主题…  安装和使用我们使用 npm 或者 yarn 来安装 webpack，可以作为一个全局的命令来使用： 1234">
-<meta name="keywords" content="webpack的使用方法">
-<meta property="og:type" content="article">
-<meta property="og:title" content="webpack 基本使用一">
-<meta property="og:url" content="http://yoursite.com/2018/05/24/webpack/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="什么是webpackwebpack 是一个 JS 代码模块化的打包工具，藉由它强大的扩展能力，随着社区的发展，逐渐成为一个功能完善的构建工具。相信开始学习这小册的同学们多多少少都能够理解为什么前端开发中会使用到 webpack，我们不再详细介绍 webpack 的使用背景，直奔本主题…  安装和使用我们使用 npm 或者 yarn 来安装 webpack，可以作为一个全局的命令来使用： 1234">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-24T14:36:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="webpack 基本使用一">
-<meta name="twitter:description" content="什么是webpackwebpack 是一个 JS 代码模块化的打包工具，藉由它强大的扩展能力，随着社区的发展，逐渐成为一个功能完善的构建工具。相信开始学习这小册的同学们多多少少都能够理解为什么前端开发中会使用到 webpack，我们不再详细介绍 webpack 的使用背景，直奔本主题…  安装和使用我们使用 npm 或者 yarn 来安装 webpack，可以作为一个全局的命令来使用： 1234">
+<meta name="twitter:title" content="Hexo">
 
     
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -76,10 +71,12 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2018/05/24/webpack/" title="webpack 基本使用一" itemprop="url">webpack 基本使用一</a>
@@ -93,16 +90,9 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是webpack"><span class="toc-number">1.</span> <span class="toc-text">什么是webpack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装和使用"><span class="toc-number">2.</span> <span class="toc-text">安装和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#入口"><span class="toc-number">2.1.</span> <span class="toc-text">入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#loader"><span class="toc-number">2.2.</span> <span class="toc-text">loader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin"><span class="toc-number">2.3.</span> <span class="toc-text">plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出"><span class="toc-number">2.4.</span> <span class="toc-text">输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单的-webpack-配置"><span class="toc-number">3.</span> <span class="toc-text">一个简单的 webpack 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
-		
-		</div>
-		
-		<hr>
+    <div class="article-content">
+        
+        <hr>
 <h2 id="什么是webpack"><a href="#什么是webpack" class="headerlink" title="什么是webpack"></a>什么是webpack</h2><p>webpack 是一个 JS 代码模块化的打包工具，藉由它强大的扩展能力，随着社区的发展，逐渐成为一个功能完善的构建工具。相信开始学习这小册的同学们多多少少都能够理解为什么前端开发中会使用到 webpack，我们不再详细介绍 webpack 的使用背景，直奔本主题…</p>
 <hr>
 <h2 id="安装和使用"><a href="#安装和使用" class="headerlink" title="安装和使用"></a>安装和使用</h2><p>我们使用 npm 或者 yarn 来安装 webpack，可以作为一个全局的命令来使用：</p>
@@ -144,9 +134,14 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><hr>
 <p>webpack 的安装和使用和大多数使用 Node.js 开发的命令行工具一样，使用 npm 安装后执行命令即可，webpack 4.x 版本的零配置特性也让上手变得更加简单。</p>
 <p>前面我们已经介绍了 webpack 的几个重要的概念：入口，loader，plugin，输出，并且展示了一个简单的 webpack 配置例子，最后提供了前端社区三大框架基于 webpack 的脚手架工具的链接，也许这些工具提供的配置会比较难懂，后续的小节会帮助你逐渐去深入，慢慢地，你会对 webpack 配置越来越得心应手。…</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 
@@ -159,45 +154,28 @@
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://yoursite.com/2018/05/24/webpack/" data-title="webpack 基本使用一 | Hexo" data-tsina="" class="share clearfix">
-	  </div>
-	
-	</div>
 
+<div class="comments-count">
+	
+</div>
 
 </footer>
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2018/06/21/webpack-之二/" title="webpack 搭建前端开发环境之二">
-  <strong>上一篇：</strong><br/>
-  <span>
-  webpack 搭建前端开发环境之二</span>
-</a>
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
 </div>
-
-
-</nav>
-
-	
-
-
-
-</div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是webpack"><span class="toc-number">1.</span> <span class="toc-text">什么是webpack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装和使用"><span class="toc-number">2.</span> <span class="toc-text">安装和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#入口"><span class="toc-number">2.1.</span> <span class="toc-text">入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#loader"><span class="toc-number">2.2.</span> <span class="toc-text">loader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin"><span class="toc-number">2.3.</span> <span class="toc-text">plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出"><span class="toc-number">2.4.</span> <span class="toc-text">输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单的-webpack-配置"><span class="toc-number">3.</span> <span class="toc-text">一个简单的 webpack 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -379,89 +357,12 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
 
 
 
@@ -534,4 +435,4 @@ var _hmt = _hmt || [];
 <!-- Tiny_search End -->
 
   </body>
-</html>
+ </html>

@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="分离代码文件 关于分离CSS文件这个主题，在webpack中使用extract-text-webpack-plugin插件即可。 先解释一下为什么要把CSS文件分离出来，而不是直接一起打包在JS中。最主要的原因是我们希望更好地利用缓存。 假设我们原本页面的静态资源打包成一个JS文件，加载页面时虽然只需要加载一个JS文件，但是我们的代码一旦改变了，用户访问新的页面时就需要重新加载一个新的JS文件。在">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-25T16:22:05.757Z">
+<meta property="og:updated_time" content="2018-07-25T16:22:19.586Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack-之十分离代码文件">
 <meta name="twitter:description" content="分离代码文件 关于分离CSS文件这个主题，在webpack中使用extract-text-webpack-plugin插件即可。 先解释一下为什么要把CSS文件分离出来，而不是直接一起打包在JS中。最主要的原因是我们希望更好地利用缓存。 假设我们原本页面的静态资源打包成一个JS文件，加载页面时虽然只需要加载一个JS文件，但是我们的代码一旦改变了，用户访问新的页面时就需要重新加载一个新的JS文件。在">
@@ -131,7 +131,7 @@
 <p>该函数在分析每一个依赖的时候会被调用，传入当前依赖模块的信息 <code>module</code>，以及已经被作为公共模块的数量 <code>count</code>，你可以在函数中针对每一个模块做更加精细化的控制。看一个简单的例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">minChunks: <span class="function">(<span class="params"><span class="built_in">module</span>, count</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">module</span>.context &amp;&amp; <span class="built_in">module</span>.context.includes(<span class="string">"node_modules"</span>); </span><br><span class="line">  <span class="comment">// node_modules 目录下的模块都作为公共部分，效果就如同 webpack 4.x 中的 test: path.resolve(__dirname, "node_modules")</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>更多使用 CommonsChunkPlugin 的配置参考官方文档 commons-chunk-plugin。</p>
-<p>而关于 webpack 4.x 的 splitChunks 配置，笔者写这一部分的时候官方文档还没有更新出来，上述配置预估可以满足大部分项目的需求，更加详细的内容还请等待官方文档更新后查阅。</p>
+<p>而关于 webpack 4.x 的 splitChunks 配置，笔者写这一部分的时候官方文档还没有更新出来，上述配置预估可以满足大部分项目的需求，更加详细的内容还请等待官方文档更新后查阅。 </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -162,6 +162,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/07/26/webpack之十一———优化前端资源加载3-进一步控制JS大小/" title="webpack之十一———优化前端资源加载3-进一步控制JS大小">
+  <strong>上一篇：</strong><br/>
+  <span>
+  webpack之十一———优化前端资源加载3-进一步控制JS大小</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2018/07/22/webpack-之九前端资源加载/"  title="webpack-之八前端资源加载1 - 图片加载优化和代码压缩">
@@ -202,11 +210,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
 			
 		
 			
@@ -214,19 +218,11 @@
 			
 		
 			
-				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
 			
 		
 			
@@ -234,11 +230,27 @@
 			
 		
 			
-				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
 			
 		
 		</ul>
