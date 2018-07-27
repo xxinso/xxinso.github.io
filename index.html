@@ -79,6 +79,72 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/07/27/探究webpack内部工作流程/" title="探究webpack之十二内部工作流程" itemprop="url">探究webpack之十二内部工作流程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-26T17:13:22.000Z" itemprop="datePublished"> Published 2018-07-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>了解 webpack 整个基础工作流程，有助于我们解决日常使用 webpack 时遇到的一些问题，也有助于我们更好地理解 webpack loader 和 plugin 的使用。</p>
+<p>抛开复杂的loader和plugin机制，webpack本质上就是一个JS ModuleBundler，用于将多个代码某块进行打包，所以我们先撇开webpack错综复杂的整体实现，来看一下一个相对简单的 JS Module Bunlder 的基础工作流程是怎么样的，在了解了 bundler 如何工作的基础上，再进一步去整理 webpack 整个流程，将 loader 和 plugin 的机制弄明白。</p>
+<blockquote>
+<p>以下内容将 module bundler 简称为 bundler。</p>
+</blockquote>
+<h2 id="bundler的基础流程"><a href="#bundler的基础流程" class="headerlink" title="bundler的基础流程"></a>bundler的基础流程</h2><hr>
+<p>首先，bundler 从一个构建入口出发，解析代码，分析出代码模块依赖关系，然后将依赖的代码模块组合在一起，在 JavaScript bundler 中，还需要提供一些胶水代码让多个代码模块可以协同工作，相互引用。下边会举一些简单的例子来说明一下这几个关键的部分是怎么工作的。</p>
+<p>首先是解析代码，分析依赖关系，对于 <code>ES6 Module</code> 以及 <code>CommonJS Modules</code> 语法定义的模块，例如这样的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entry.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; bar &#125; <span class="keyword">from</span> <span class="string">'./bar.js'</span>; <span class="comment">// 依赖 ./bar.js 模块</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// bar.js</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="built_in">require</span>(<span class="string">'./foo.js'</span>); <span class="comment">// 依赖 ./foo.js 模块</span></span><br></pre></td></tr></table></figure>
+<p>bundler 需要从这个入口代码（第一段）中解析出依赖 bar.js，然后再读取 bar.js 这个代码文件，解析出依赖 foo.js 代码文件，继续解析其依赖，递归下去，直至没有更多的依赖模块，最终形成一颗模块依赖树。</p>
+<p>如果 foo.js 文件没有依赖其他的模块的话，那么这个简单例子的依赖树也就相对简单：<code>entry.js -&gt; bar.js -&gt; foo.js</code>，当然，日常开发中遇见的一般都是相当复杂的代码模块依赖关系。</p>
+<p>分析出依赖关系后，bunlder 需要将依赖关系中涉及的所有文件组合到一起，但由于依赖代码的执行是有先后顺序以及会引用模块内部不同的内容，不能简单地将代码拼接到一起。webpack 会利用 JavaScript Function 的特性提供一些代码来将各个模块整合到一起，即是将每一个模块包装成一个 JS Function，提供一个引用依赖模块的方法，如下面例子中的 <strong>webpack</strong>require__，这样做，既可以避免变量相互干扰，又能够有效控制执行顺序，简单的代码例子如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分别将各个依赖模块的代码用 modules 的方式组织起来打包成一个文件</span></span><br><span class="line"><span class="comment">// entry.js</span></span><br><span class="line">modules[<span class="string">'./entry.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; bar &#125; = __webpack__require__(<span class="string">'./bar.js'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bar.js</span></span><br><span class="line">modules[<span class="string">'./bar.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> foo = __webpack__require__(<span class="string">'./foo.js'</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo.js</span></span><br><span class="line">modules[<span class="string">'./foo.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 已经执行的代码模块结果会保存在这里</span></span><br><span class="line"><span class="keyword">const</span> installedModules = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__webpack__require__</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ... </span></span><br><span class="line">  <span class="comment">// 如果 installedModules 中有就直接获取</span></span><br><span class="line">  <span class="comment">// 没有的话从 modules 中获取 function 然后执行，将结果缓存在 installedModules 中然后返回结果</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/探究webpack内部工作流程/">探究webpack内部工作流程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/07/26/webpack十二之提升webpack的构建速度/" title="webpack十二之提升webpack的构建速度" itemprop="url">webpack十二之提升webpack的构建速度</a>
   </h1>
   <p class="article-author">By
@@ -944,116 +1010,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/06/25/webpack-之三/" title="webpack 之三" itemprop="url">webpack 之三</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
-		
-  <p class="article-time">
-    <time datetime="2018-06-24T18:28:02.000Z" itemprop="datePublished"> Published 2018-06-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="webpack-如何解析代码模块路径"><a href="#webpack-如何解析代码模块路径" class="headerlink" title="webpack 如何解析代码模块路径"></a>webpack 如何解析代码模块路径</h2><hr>
-<p>在 webpack 支持的前端代码模块化中，我们可以使用类似 import * as m from ‘./index.js’ 来引用代码模块 index.js。</p>
-<p>引用第三方类库则是像这样：import React from ‘react’。webpack 构建的时候，会解析依赖后，然后再去加载依赖的模块文件，那么 webpack 如何将上述编写的 ./index.js 或 react 解析成对应的模块文件路径呢？</p>
-<blockquote>
-<p>在 JavaScript 中尽量使用 ECMAScript 2015 Modules 语法来引用依赖。</p>
-</blockquote>
-<p>webpack 中有一个很关键的模块 enhanced-resolve 就是处理依赖模块路径的解析的，这个模块可以说是 Node.js 那一套模块路径解析的增强版本，有很多可以自定义的解析配置。</p>
-<blockquote>
-<p>不熟悉 Node.js 模块路径解析机制的同学可以参考这篇文章：深入 Node.js 的模块机制。</p>
-</blockquote>
-<h2 id="解析模块规则"><a href="#解析模块规则" class="headerlink" title="解析模块规则"></a>解析模块规则</h2><hr>
-<p>我们简单整理一下基本的模块解析规则，以便更好地理解后续 webpack 的一些配置会产生的影响。</p>
-<ul>
-<li><p>解析相对路径<br>  1.查找相对当前模块路径下是否有对应的文件或文件夹<br>  2.是文件则直接加载<br>  3.是文件夹则继续查找文件夹下的 package.json 文件<br>  4.有 package.json 文件则按照文件中 main 字段的文件名来查找文件<br>  5.无 package.json 或者无 main 字段则查找 index.js 文件</p>
-</li>
-<li><p>解析模块名<br>查找当前文件目录下，父级目录及以上目录下的 node_modules 文件夹，看是否有对应名称的模块    </p>
-</li>
-<li>解析绝对路径（不建议使用）<br>直接查找对应路径的文件</li>
-</ul>
-<p>在webpack配置中，和模块路径解析相关的配置都在<code>resolve</code>字段下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="常用的一些配置"><a href="#常用的一些配置" class="headerlink" title="常用的一些配置"></a>常用的一些配置</h2><hr>
-<p>我们先从一些简单的需求来阐述 webpack 可以支持哪些解析路径规则的自定义配置。</p>
-<p><code>resolve.alias</code><br>假设我们有个 <code>utils</code> 模块极其常用，经常编写相对路径很麻烦，希望可以直接 <code>import &#39;utils&#39;</code> 来引用，那么我们可以配置某个模块的别名，如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias: &#123;</span><br><span class="line">  utils: path.resolve(__dirname, <span class="string">'src/utils'</span>) <span class="comment">// 这里使用 path.resolve 和 __dirname 来获取绝对路径</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述的配置是模糊匹配，意味着只要模块路径中携带了 utils 就可以被替换掉，如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'utils/query.js'</span> <span class="comment">// 等同于 import '[项目绝对路径]/src/utils/query.js'</span></span><br></pre></td></tr></table></figure>
-<p>如果需要进行精确匹配可以使用</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias: &#123;</span><br><span class="line">  utils$: path.resolve(__dirname, <span class="string">'src/utils'</span>) <span class="comment">// 只会匹配 import 'utils'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>更多匹配相关的写法可以参考官方文档 <code>Resolve Alias</code>，这里不一一举例说明。</p>
-<blockquote>
-<p>resolve.extensions</p>
-</blockquote>
-<p>看到数组中配置的字符串大概就可以猜到，这个配置的作用是和文件后缀名有关的。是的，这个配置可以定义在进行模块路径解析时，webpack 会尝试帮你补全那些后缀名来进行查找，例如有了上述的配置，当你在 src/utils/ 目录下有一个 common.js 文件时，就可以这样来引用：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> common <span class="keyword">from</span> <span class="string">'./src/utils/common'</span></span><br></pre></td></tr></table></figure>
-<p>webpack 会尝试给你依赖的路径添加上 <code>extensions</code> 字段所配置的后缀，然后进行依赖路径查找，所以可以命中 src/utils/common.js 文件。</p>
-<p>但如果你是引用 src/styles 目录下的 common.css 文件时，如 <code>import &#39;./src/styles/common&#39;</code>，webpack 构建时则会报无法解析模块的错误。</p>
-<p>你可以在引用时添加后缀，<code>import &#39;./src/styles/common.css&#39;</code> 来解决，或者在 extensions 添加一个 .css 的配置</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extensions: [<span class="string">'.wasm'</span>, <span class="string">'.mjs'</span>, <span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.jsx'</span>, <span class="string">'.css'</span>],</span><br></pre></td></tr></table></figure>
-<p><code>resolve.modules</code></p>
-<p>前面的内容有提到，对于直接声明依赖名的模块（如 react ），webpack 会类似 Node.js 一样进行路径搜索，搜索 node_modules 目录，这个目录就是使用 resolve.modules 字段进行配置的，默认就是：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">  modules: [<span class="string">'node_modules'</span>],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>通常情况下，我们不会调整这个配置，但是如果可以确定项目内所有的第三方依赖模块都是在项目根目录下的 node_modules 中的话，那么可以在 node_modules 之前配置一个确定的绝对路径：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">  modules: [</span><br><span class="line">    path.resolve(__dirname, <span class="string">'node_modules'</span>), <span class="comment">// 指定当前目录下的 node_modules 优先查找</span></span><br><span class="line">    <span class="string">'node_modules'</span>, <span class="comment">// 如果有一些类库是放在一些奇怪的地方的，你可以添加自定义的路径或者目录</span></span><br><span class="line">  ],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>这样配置在某种程度上可以简化模块的查找，提升构建速度。</p>
-<p><code>resolve.mainFields</code></p>
-<p>&lt; 4. 由package.json 文件则按照文件中 main 字段的文件名来查找文件</p>
-<p>我们之前有提过这么一句话，其实确切的情况并不是这样的，webpack的<code>resolve.mainFields</code> 配置可以进行调整，当引用的是一个模块或者一个目录时，会使用 package.json 文件的哪一个字段下指定的文件，默认的配置是这样的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">  <span class="comment">// 配置 target === "web" 或者 target === "webworker" 时 mainFields 默认值是：</span></span><br><span class="line">  mainFields: [<span class="string">'browser'</span>, <span class="string">'module'</span>, <span class="string">'main'</span>],</span><br><span class="line"></span><br><span class="line">  <span class="comment">// target 的值为其他时，mainFields 默认值为：</span></span><br><span class="line">  mainFields: [<span class="string">"module"</span>, <span class="string">"main"</span>],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>因为通常情况下，模块的package都不会声明<code>browswer</code>或<code>module</code>字段，所以使用的是<code>main</code>了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">  mainFiles: [<span class="string">'index'</span>], <span class="comment">// 你可以添加其他默认使用的文件名</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>通常情况下我们也无需修改这个配置，index.js基本就是约定俗成的了。</p>
-<p><code>resolve.resolveLoader</code></p>
-<p>这个字段<code>resolve.resolveLoader</code>用于配置解析loader时的resolve配置，原本 resolve 的配置项在这个字段下基本都有。我们看下默认的配置：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">  resolveLoader: &#123;</span><br><span class="line">    extensions: [<span class="string">'.js'</span>, <span class="string">'.json'</span>],</span><br><span class="line">    mainFields: [<span class="string">'loader'</span>, <span class="string">'main'</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>这里提供的配置相对少用，我们一般遵从标准的使用方式，使用默认配置，然后把 loader 安装在项目根路径下的 node_modules 下就可以了。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/webpack-如何解析模块代码路径/">webpack 如何解析模块代码路径</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1122,6 +1078,10 @@
 		
 			
 				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/探究webpack内部工作流程/" title="探究webpack内部工作流程">探究webpack内部工作流程<sup>1</sup></a></li>
 			
 		
 		</ul>
