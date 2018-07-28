@@ -79,94 +79,79 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/08/01/webpack-之四（loader）/" title="webpack之四loader" itemprop="url">webpack之四loader</a>
+      <a href="/2017/07/27/webpack-之十四（内部工作流程）/" title="内部工作流程" itemprop="url">内部工作流程</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
 		
   <p class="article-time">
-    <time datetime="2017-08-01T02:58:27.000Z" itemprop="datePublished"> Published 2017-08-01</time>
+    <time datetime="2017-07-26T17:13:22.000Z" itemprop="datePublished"> Published 2017-07-27</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="loader匹配规则"><a href="#loader匹配规则" class="headerlink" title="loader匹配规则"></a>loader匹配规则</h2><hr>
-<p>当我们需要配置 loader 时，都是在 <code>module.rules</code> 中添加新的配置项，在该字段中，每一项被视为一条匹配使用 loader 的规则。</p>
-<p>先来看一个基础的例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [ </span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.jsx?/</span>, <span class="comment">// 条件</span></span><br><span class="line">        include: [ </span><br><span class="line">          path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">        ], <span class="comment">// 条件</span></span><br><span class="line">        use: <span class="string">'babel-loader'</span>, <span class="comment">// 规则应用结果</span></span><br><span class="line">      &#125;, <span class="comment">// 一个 object 即一条规则</span></span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>loader 的匹配规则中有两个最关键的因素：一个是匹配条件，一个是匹配规则后的应用。</p>
-<p>匹配条件通常都使用请求资源文件的绝对路径来进行匹配，在官方文档中称为 resource，除此之外还有比较少用到的 <code>issuer</code>，则是声明依赖请求的源文件的绝对路径。举个例子：在 <code>/path/to/app.js</code> 中声明引入 <code>import &#39;./src/style.scss&#39;</code>，resource 是 <code>/path/to/src/style.scss</code>，<code>issuer</code> 是 /path/to/app.js，规则条件会对这两个值来尝试匹配。</p>
-<p>上述代码中的 <code>test</code> 和 <code>include</code> 都用于匹配 <code>resource</code> 路径，是 <code>resource.test</code> 和 <code>resource.include</code> 的简写，你也可以这么配置：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  rules: [ </span><br><span class="line">      &#123;</span><br><span class="line">        resource: &#123; <span class="comment">// resource 的匹配条件</span></span><br><span class="line">          test: <span class="regexp">/\.jsx?/</span>, </span><br><span class="line">          include: [ </span><br><span class="line">            path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 如果要使用 issuer 匹配，便是 issuer: &#123; test: ... &#125;</span></span><br><span class="line">        use: <span class="string">'babel-loader'</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    ], </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>了解 webpack 整个基础工作流程，有助于我们解决日常使用 webpack 时遇到的一些问题，也有助于我们更好地理解 webpack loader 和 plugin 的使用。</p>
+<p>抛开复杂的loader和plugin机制，webpack本质上就是一个JS ModuleBundler，用于将多个代码某块进行打包，所以我们先撇开webpack错综复杂的整体实现，来看一下一个相对简单的 JS Module Bunlder 的基础工作流程是怎么样的，在了解了 bundler 如何工作的基础上，再进一步去整理 webpack 整个流程，将 loader 和 plugin 的机制弄明白。</p>
 <blockquote>
-<p>issuer 规则匹配的场景比较少见，你可以用它来尝试约束某些类型的文件中只能引用某些类型的文件。</p>
+<p>以下内容将 module bundler 简称为 bundler。</p>
 </blockquote>
-<p>当规则的条件匹配时，便会使用对应的 loader 配置，如上述例子中的 <code>babel-loader</code>。关于 loader 配置后面再详细介绍，这里先来看看如何配置更加复杂的规则匹配条件。</p>
-<h2 id="规则条件配置"><a href="#规则条件配置" class="headerlink" title="规则条件配置"></a>规则条件配置</h2><hr>
-<p>大多数情况下，配置 loader 的匹配条件时，只要使用 <code>test</code> 字段就好了，很多时候都只需要匹配文件后缀名来决定使用什么 loader，但也不排除在某些特殊场景下，我们需要配置比较复杂的匹配条件。webpack 的规则提供了多种配置形式：</p>
+<h2 id="bundler的基础流程"><a href="#bundler的基础流程" class="headerlink" title="bundler的基础流程"></a>bundler的基础流程</h2><hr>
+<p>首先，bundler 从一个构建入口出发，解析代码，分析出代码模块依赖关系，然后将依赖的代码模块组合在一起，在 JavaScript bundler 中，还需要提供一些胶水代码让多个代码模块可以协同工作，相互引用。下边会举一些简单的例子来说明一下这几个关键的部分是怎么工作的。</p>
+<p>首先是解析代码，分析依赖关系，对于 <code>ES6 Module</code> 以及 <code>CommonJS Modules</code> 语法定义的模块，例如这样的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entry.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; bar &#125; <span class="keyword">from</span> <span class="string">'./bar.js'</span>; <span class="comment">// 依赖 ./bar.js 模块</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// bar.js</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="built_in">require</span>(<span class="string">'./foo.js'</span>); <span class="comment">// 依赖 ./foo.js 模块</span></span><br></pre></td></tr></table></figure>
+<p>bundler 需要从这个入口代码（第一段）中解析出依赖 bar.js，然后再读取 bar.js 这个代码文件，解析出依赖 foo.js 代码文件，继续解析其依赖，递归下去，直至没有更多的依赖模块，最终形成一颗模块依赖树。</p>
+<p>如果 foo.js 文件没有依赖其他的模块的话，那么这个简单例子的依赖树也就相对简单：<code>entry.js -&gt; bar.js -&gt; foo.js</code>，当然，日常开发中遇见的一般都是相当复杂的代码模块依赖关系。</p>
+<p>分析出依赖关系后，bunlder 需要将依赖关系中涉及的所有文件组合到一起，但由于依赖代码的执行是有先后顺序以及会引用模块内部不同的内容，不能简单地将代码拼接到一起。webpack 会利用 JavaScript Function 的特性提供一些代码来将各个模块整合到一起，即是将每一个模块包装成一个 JS Function，提供一个引用依赖模块的方法，如下面例子中的 <strong>webpack</strong>require__，这样做，既可以避免变量相互干扰，又能够有效控制执行顺序，简单的代码例子如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分别将各个依赖模块的代码用 modules 的方式组织起来打包成一个文件</span></span><br><span class="line"><span class="comment">// entry.js</span></span><br><span class="line">modules[<span class="string">'./entry.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; bar &#125; = __webpack__require__(<span class="string">'./bar.js'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bar.js</span></span><br><span class="line">modules[<span class="string">'./bar.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> foo = __webpack__require__(<span class="string">'./foo.js'</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo.js</span></span><br><span class="line">modules[<span class="string">'./foo.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 已经执行的代码模块结果会保存在这里</span></span><br><span class="line"><span class="keyword">const</span> installedModules = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__webpack__require__</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ... </span></span><br><span class="line">  <span class="comment">// 如果 installedModules 中有就直接获取</span></span><br><span class="line">  <span class="comment">// 没有的话从 modules 中获取 function 然后执行，将结果缓存在 installedModules 中然后返回结果</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这只是webpack的实现的简单方式，<code>rollup</code>有另外的实现方式，并且笔者个人觉得 rollup 的实现方式比 webpack 要更加优秀一些，rollup 可以让你构建出来的代码量更少一点，有兴趣的同学可以看看这个文章：<a href="https://link.juejin.im/?target=https%3A%2F%2Fmedium.com%2Fwebpack%2Fwebpack-and-rollup-the-same-but-different-a41ad427058c" target="_blank" rel="noopener">Webpack and Rollup: the same but different</a>，也可以使用 rollup 来构建一个简单的例子，看看结果是什么样子的。</p>
+<p>我们在介绍bundler的基础流程时，把各个部分的细节都简化了，这有利于我们从整体角度看清楚整个轮廓，至于某一部分的实现，例如解析代码依赖，某块依赖关系管理，胶水代码生成等，深入细节的话会比较复杂，这里不再作相关的展开</p>
+<h2 id="webpack的结构"><a href="#webpack的结构" class="headerlink" title="webpack的结构"></a>webpack的结构</h2><hr>
+<p>webpack 需要强大的扩展性，尤其是插件实现这一块，webpack 利用了 tapable 这个库（其实也是 webpack 作者开发的库）来协助实现对于整个构建流程各个步骤的控制。</p>
+<p>关于这个库更多的使用内容可以去查看官方的文档：tapable，使用上并不算十分复杂，最主要的功能就是用来添加各种各样的钩子方法（即 Hook）。</p>
+<p>webpack 基于 tapable 定义了主要构建流程后，使用 tapable 这个库添加了各种各样的钩子方法来将 webpack 扩展至功能十分丰富，同时对外提供了相对强大的扩展性，即 plugin 的机制。</p>
+<p>在这个基础上，我们来了解一下 webpack 工作的主要流程和其中几个重要的概念。</p>
 <ul>
-<li><code>{ test: ... }</code> 匹配特定条件</li>
-<li><code>{ include: ... }</code> 匹配特定的路径</li>
-<li><code>{ exclude: ... }</code> 排除特定的路径</li>
-<li><code>{ and: [...] }</code> 必须匹配数组中的所有的条件</li>
-<li><code>{ or: [...] }</code> 匹配数组中的任意的条件</li>
-<li><code>{ not: [...] }</code> 排除数组中的任意条件</li>
+<li>Compiler webpack的运行入口，实例化时定义webpack构建主要流程，同事创建构建使用的核心对象complilation</li>
+<li>Complilation, 有Compiler实例化，存储构建过程中各个流程使用到的数据，用于控制这些数据的变化 </li>
+<li>Chunk，即用于表示chunk的类，对于构建时需要的chunk对象由Complication创建后保存管理。</li>
+<li>Module，用于表示某块的类，衍生出很多子类用于处理不同的情况，关于代码模块的所有的信息都会在Module实例中，例如<code>dependencies</code>记录代码模块的依赖等。</li>
+<li>Parser，其中相对复杂的一个部分，基于<code>acron</code>来分析AST语法树，解析出代码某块的依赖</li>
+<li>Dependency,解析时用于保存代码模块的对应依赖的对象</li>
+<li>Template，生成最中代码要使用的代码模版，像上述提到的胶水代码就是用对应的Template来生成。</li>
 </ul>
-<p>上诉的所谓条件的值可以是：</p>
-<ul>
-<li>字符串：必须以提供的字符串开始，所以是字符串的化，这里我们需要提供绝对路径。</li>
-<li>正则表达式：调用正则的<code>test</code>方法来匹配。</li>
-<li>函数：（path）=&gt;boolean,返回<code>true</code>表示匹配</li>
-<li>数组：至少包含一个条件的数组</li>
-<li>对象：匹配所有属性值的条件</li>
-</ul>
-<p>通过例子来帮助理解</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: /\.jsx?/, // 正则</span><br><span class="line">    include: [</span><br><span class="line">      path.resolve(__dirname, &apos;src&apos;), // 字符串，注意是绝对路径</span><br><span class="line">    ], // 数组</span><br><span class="line">    // ...</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    test: &#123;</span><br><span class="line">      js: /\.js/,</span><br><span class="line">      jsx: /\.jsx/,</span><br><span class="line">    &#125;, // 对象，不建议使用</span><br><span class="line">    not: [</span><br><span class="line">      (value) =&gt; &#123; /* ... */ return true; &#125;, // 函数，通常需要高度自定义时才会使用</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-<p>上述多个配置形式结合起来就能够基本满足各种各样的构建场景了，通常我们会结合使用 <code>test/and</code> 和 <code>include&amp;exclude</code> 来配置条件，如上述那个简单的例子。</p>
-<h2 id="modile-type"><a href="#modile-type" class="headerlink" title="modile type"></a>modile type</h2><hr>
-<p>webpack 4.x 版本强化了 module type，即模块类型的概念，不同的模块类型类似于配置了不同的 loader，webpack 会有针对性地进行处理，现阶段实现了以下 5 种模块类型。</p>
-<ul>
-<li><p><code>javascript/auto</code>:即 webpack 3 默认的类型，支持现有的各种 JS 代码模块类型 —— CommonJS、AMD、ESM</p>
-</li>
-<li><p><code>javascript/esm</code>:ECMAScript modules，其他模块系统，例如 CommonJS 或者 AMD 等不支持，是 .mjs 文件的默认类型</p>
-</li>
-<li><p><code>javascript/dynamic</code>:CommonJS 和 AMD，排除 ESM</p>
-</li>
-<li><code>javascript/json</code> :JSON 格式数据，<code>require</code> 或者 <code>import</code> 都可以引入，是 <code>.json</code> 文件的默认类型</li>
-<li><code>webassembly/experimental</code>:WebAssembly modules，当前还处于试验阶段，是 .wasm 文件的默认类型</li>
-</ul>
-<p>如果不希望使用默认的类型的话，在确定好匹配规则条件时，我们可以使用 type 字段来指定模块类型，例如把所有的 JS 代码文件都设置为强制使用 ESM 类型：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  test: <span class="regexp">/\.js/</span>,</span><br><span class="line">  include: [</span><br><span class="line">    path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">  ],</span><br><span class="line">  type: <span class="string">'javascript/esm'</span>, <span class="comment">// 这里指定模块类型</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>上述做法是可以帮助你规范整个项目的模块系统，但是如果遗留太多不同类型的模块代码时，建议还是直接使用默认的 <code>javascript/auto</code>。</p>
-<p>webpack 后续的开发计划会增加对更多模块类型的支持，例如极其常见的 CSS 和 HTML 模块类型，这个特性值得我们期待一下。</p>
-<h2 id="使用loader配置"><a href="#使用loader配置" class="headerlink" title="使用loader配置"></a>使用loader配置</h2><hr>
-<p>当然，在当前版本的 webpack 中，<code>module.rules</code> 的匹配规则最重要的还是用于配置 loader，我们可以使用 <code>use</code> 字段：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.less/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      <span class="string">'style-loader'</span>, <span class="comment">// 直接使用字符串表示 loader</span></span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'css-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          importLoaders: <span class="number">1</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;, <span class="comment">// 用对象表示 loader，可以传递 loader 配置等</span></span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'less-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          noIeCompat: <span class="literal">true</span></span><br><span class="line">        &#125;, <span class="comment">// 传递 loader 配置</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-<p>我们看下上述的例子，先忽略laoder的使用情况，单纯看看如何配置。<code>use</code>字段可以是一个数组，也可以是一个自负串或者loader的对象，也可以是这样<code>use: { loader: &#39;babel-loader&#39;, options: { ... } }</code></p>
-<p>我们还可以使用<code>options</code>给对应的loader传递一些配置，这里不再展开。当你使用一些 loader 时，loader 的说明一般都有相关配置的描述。</p>
-<h2 id="loader应用顺序"><a href="#loader应用顺序" class="headerlink" title="loader应用顺序"></a>loader应用顺序</h2><hr>
-<p>一个匹配规则中可以配置使用多个 loader，即一个模块文件可以经过多个 loader 的转换处理，执行顺序是从最后配置的 loader 开始，一步步往前。例如，对于上面的 <code>less</code> 规则配置，一个 style.less 文件会途径 less-loader、css-loader、style-loader 处理，成为一个可以打包的模块。</p>
-<p>loader的应用顺序在配置多个loader一起工作时很重要，通常会使用在CSS配置上，除了style-loader和CSS-loader，你可能还要配置less-loader然后再加个postcss的autoprefixe等。</p>
-<p>上述从后到前的顺序是在同一个 rule 中进行的，那如果多个 rule 匹配了同一个模块文件，loader 的应用顺序又是怎样的呢？看一份这样的配置：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"eslint-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"babel-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-<p>这样无法保证eslint-loader在babel-loader之前执行。webpack在<code>rules</code>中提供一个<code>enforce</code>的字段来配置当前rule的loader类型，没配置的话是普通类型，我们可以配置<code>pre</code>或<code>post</code>，分别对应前置类型或后置类型的loader</p>
 <blockquote>
-<p>eslint-loader要检查的时人工便携的代码，如果在babel-loader之后使用，那么检查的时Babel转换之后的代码，所以必须在babel-loader处理之前使用。</p>
+<p>官方对于 Compiler 和 Compilation 的定义是：<br>compiler 对象代表了完整的 webpack 环境配置。这个对象在启动 webpack 时被一次性建立，并配置好所有可操作的设置，包括 options，loader 和 plugin。当在 webpack 环境中应用一个插件时，插件将收到此 compiler 对象的引用。可以使用它来访问 webpack 的主环境。<br>compilation 对象代表了一次资源版本构建。当运行 webpack 开发环境中间件时，每当检测到一个文件变化，就会创建一个新的 compilation，从而生成一组新的编译资源。一个 compilation 对象表现了当前的模块资源、编译生成资源、变化的文件、以及被跟踪依赖的状态信息。compilation 对象也提供了很多关键步骤的回调，以供插件做自定义处理时选择使用。</p>
 </blockquote>
-<p>还有一种行内loader，即我们在应用代码中引用依赖时直接声明使用的loader，如<code>const json = require(&#39;json-loader!./file.json&#39;)</code>这种。不建议在应用开发中使用这种 loader。</p>
-<p>顾名思义，所有的 loader 按照前置 -&gt; 行内 -&gt; 普通 -&gt; 后置的顺序执行。所以当我们要确保 eslint-loader 在 babel-loader 之前执行时，可以如下添加 <code>enforce</code> 配置：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    enforce: <span class="string">'pre'</span>, <span class="comment">// 指定为前置类型</span></span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"eslint-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>当项目文件类型和应用的 loader 不是特别复杂的时候，通常建议把要应用的同一类型 loader 都写在同一个匹配规则中，这样更好维护和控制。</p>
-<h2 id="使用noParse"><a href="#使用noParse" class="headerlink" title="使用noParse"></a>使用noParse</h2><hr>
-<p>在webpack中，我们需要使用loader实在<code>module.rules</code>下配置的，webpack 配置中的 module 用于控制如何处理项目中不同类型的模块。</p>
-<p>除了<code>module.rules</code>字段用于配置loader之外，还有一个<code>module.noParse</code>字段，可以用于配置哪些模块文件的内容不需要进行解析。对于一些不需要解析依赖（即无依赖） 的第三方大型类库等，可以通过这个字段来配置，以提高整体的构建速度。</p>
+<p>上述时webpack源码实现中比较重要的几个部分，webpack运行的大概工作流程是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">创建 Compiler -&gt; </span><br><span class="line">调用 compiler.run 开始构建 -&gt;</span><br><span class="line">创建 Compilation -&gt; </span><br><span class="line">基于配置开始创建 Chunk -&gt; </span><br><span class="line">使用 Parser 从 Chunk 开始解析依赖 -&gt; </span><br><span class="line">使用 Module 和 Dependency 管理代码模块相互关系 -&gt; </span><br><span class="line">使用 Template 基于 Compilation 的数据生成结果代码</span><br></pre></td></tr></table></figure>
+<p>上述只是笔者理解中的大概流程，细节相对复杂，一方面时技术实现的细节有一定的复杂度，另一方面，深入介绍的话，篇幅会很长，并且效果不理想，当我们还到了要去实现具体功能的时候，无需关注那么多具体的细节，只需要站在更高的层面去分析整体的流程。</p>
+<p>有兴趣探究某一部分实现细节的同学，可以查阅webpack源码，从wenpack基础流入手：<code>Compiler Hooks</code></p>
 <blockquote>
-<p>使用 noParse 进行忽略的模块文件中不能使用 import、require、define 等导入机制。</p>
+<p>这里提供的时4.x版本的源码master分支的连接地址，webpack的源码相对难懂，如果是想要学习 bundler 的整个工作流程，可以考虑看阅读 rollup 的源码，可读性相对会好很多。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    noParse: <span class="regexp">/jquery|lodash/</span>, <span class="comment">// 正则表达式</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 或者使用 function</span></span><br><span class="line">    noParse(content) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="regexp">/jquery|lodash/</span>.test(content)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>noParse</code>从某种程度上来说是个优化配置项，日常可以不用去考虑。</p>
+<h2 id="从远吗中探索webpack"><a href="#从远吗中探索webpack" class="headerlink" title="从远吗中探索webpack"></a>从远吗中探索webpack</h2><hr>
+<p>webpack主要的候检处理方法都在<code>Complilation</code>中,我们要了解loader和plugin的机制，就要深入<code>Compliation</code>这一部分的内容。</p>
+<p>Complilation的实现时比较复杂的，<code>lib/Compilation.js</code> 单个文件就近有2000行之多，我们挑关键的几部分来介绍一下。</p>
+<h3 id="addEntry和-addModuleChain"><a href="#addEntry和-addModuleChain" class="headerlink" title="addEntry和_addModuleChain"></a>addEntry和_addModuleChain</h3><p><code>addEntry</code>这个方法顾名思义，用于把配置的入口加入到构建任务中去，当解析好webpack配置，准备好构建时，便会执行<code>addEntry</code>,而<code>addEntry</code>会调用<code>_addModuleChain</code>来为入口文件（入口文件这个时候等同于第一个依赖）创建一个对用的<code>Module</code>实例。</p>
+<p><code>_addModuleChain</code>方法回根据入口文件这第一个依赖类型创建一个<code>moduleFactory</code>,然后再使用这个<code>moduleFactory</code>给入口文件创建一个<code>Module</code>实例，这个<code>Module</code>实例用来管理后续这个入口构建相关数据信息，</p>
+<p>我们介绍<code>addEntry</code>主要是为了寻找整个构建的起点，让这一切有迹可循，后续的深入可以从这个点出发。</p>
+<h3 id="buildModule"><a href="#buildModule" class="headerlink" title="buildModule"></a>buildModule</h3><p>当一个Module实例被创建后，比较重要的一步时执行<code>compilation.buildModule</code>这个方法，这个方法主要回调用<code>module</code>实力需要的一些东西，对我们梳理流程来说，这里边最重要的部分就是调用自身的runLoader方法。</p>
+<p><code>runLoader</code>这个方法是webpack依赖这个类库实现的：<code>loader-runner</code>,这个方法也比较容易理解，就是执行对应的loader，将代码的源内容一一交由指定的loader处理之后，再把处理的结果保存起来。</p>
+<p>我们之前介绍过，webpack的loader就是转换器，loader就是在这个时候发挥作用的，至于loader执行的细节，有兴趣深入的同学可以去了解<code>loader-runner</code>的实现。</p>
+<p>上述提到的<code>Module</code>实例的<code>build</code>方法在执行完对应的loader，处理完模块代码自身的转换后，还有相当重要的一步是调用 Parser 的实例来解析自身依赖的模块，解析后的结果存放在<code>module.dependencies</code>中，首先保存的是依赖的路径，后续会经由<code>compilation.processModuleDependencies</code>方法，再来处理各个依赖模块，递归地去建立整个依赖关系树。</p>
+<h3 id="Compilation的钩子"><a href="#Compilation的钩子" class="headerlink" title="Compilation的钩子"></a>Compilation的钩子</h3><p>我们前边提到了 webpack 会使用 tapable 给整个构建流程中的各个步骤定义钩子，用于注册事件，然后在特定的步骤执行时触发相应的事件，注册的事件函数便可以调整构建时的上下文数据，或者做额外的处理工作，这就是 webpack 的 plugin 机制。</p>
+<p>在webpack执行入口处<code>lib\webpack.js</code>有这么一段代码<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (options.plugins &amp;&amp; <span class="built_in">Array</span>.isArray(options.plugins)) &#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">const</span> plugin <span class="keyword">of</span> options.plugins) &#123;</span><br><span class="line">		plugin.apply(compiler); <span class="comment">// 调用每一个 plugin 的 apply 方法，把 compiler 实例传递过去</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个 plugin 的 <code>apply</code> 方法就是用来给 <code>compiler</code> 实例注册事件钩子函数的，而 <code>compiler</code> 的一些事件钩子中可以获得 <code>compilation</code> 实例的引用，通过引用又可以给 compilation 实例注册事件函数，以此类推，便可以将 plugin 的能力覆盖到整个 webpack 构建过程。</p>
+<p>而关于这些事件函数的名称和定义可以查看官方的文档：compiler 的事件钩子 和 compilation 的事件钩子。</p>
+<h3 id="产出构建结果"><a href="#产出构建结果" class="headerlink" title="产出构建结果"></a>产出构建结果</h3><p>最后还有一个部分，即用<code>Template</code>产出最终构建结果的代码内容，这一部分不做详细介绍了，仅留下一些线索，供有兴趣继续深入的同学使用：</p>
+<ul>
+<li><code>Template</code> 基础类：lib/Template.js</li>
+<li>常用的主要<code>Template</code>类：lib/MainTemplate.js</li>
+<li>Compilation 中产出构建结果的代码：compilation.createChunkAssets</li>
+</ul>
+<p>这一部分内容的介绍就到这里了，对此部分内容有兴趣继续深入探索的同学，建议使用断点调试的方式，结合笔者介绍的这些内容，大致走一遍 webpack 的构建流程，会对这一部分的内容印象更加深刻，同时也可以通过断点更有针对性地了解某一部分的细节处理。</p>
 
         
         
@@ -180,7 +165,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/配置loader/">配置loader</a>
+  <span></span> <a href="/tags/内部工作流程/">内部工作流程</a>
   </div>
 
 </div>
@@ -291,6 +276,135 @@
   <div class="article-tags">
   
   <span></span> <a href="/tags/webpack-如何解析模块代码路径/">webpack 如何解析模块代码路径</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/01/webpack-之四（loader）/" title="webpack之四loader" itemprop="url">webpack之四loader</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-01T02:58:27.000Z" itemprop="datePublished"> Published 2017-07-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="loader匹配规则"><a href="#loader匹配规则" class="headerlink" title="loader匹配规则"></a>loader匹配规则</h2><hr>
+<p>当我们需要配置 loader 时，都是在 <code>module.rules</code> 中添加新的配置项，在该字段中，每一项被视为一条匹配使用 loader 的规则。</p>
+<p>先来看一个基础的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [ </span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.jsx?/</span>, <span class="comment">// 条件</span></span><br><span class="line">        include: [ </span><br><span class="line">          path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">        ], <span class="comment">// 条件</span></span><br><span class="line">        use: <span class="string">'babel-loader'</span>, <span class="comment">// 规则应用结果</span></span><br><span class="line">      &#125;, <span class="comment">// 一个 object 即一条规则</span></span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>loader 的匹配规则中有两个最关键的因素：一个是匹配条件，一个是匹配规则后的应用。</p>
+<p>匹配条件通常都使用请求资源文件的绝对路径来进行匹配，在官方文档中称为 resource，除此之外还有比较少用到的 <code>issuer</code>，则是声明依赖请求的源文件的绝对路径。举个例子：在 <code>/path/to/app.js</code> 中声明引入 <code>import &#39;./src/style.scss&#39;</code>，resource 是 <code>/path/to/src/style.scss</code>，<code>issuer</code> 是 /path/to/app.js，规则条件会对这两个值来尝试匹配。</p>
+<p>上述代码中的 <code>test</code> 和 <code>include</code> 都用于匹配 <code>resource</code> 路径，是 <code>resource.test</code> 和 <code>resource.include</code> 的简写，你也可以这么配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  rules: [ </span><br><span class="line">      &#123;</span><br><span class="line">        resource: &#123; <span class="comment">// resource 的匹配条件</span></span><br><span class="line">          test: <span class="regexp">/\.jsx?/</span>, </span><br><span class="line">          include: [ </span><br><span class="line">            path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 如果要使用 issuer 匹配，便是 issuer: &#123; test: ... &#125;</span></span><br><span class="line">        use: <span class="string">'babel-loader'</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    ], </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>issuer 规则匹配的场景比较少见，你可以用它来尝试约束某些类型的文件中只能引用某些类型的文件。</p>
+</blockquote>
+<p>当规则的条件匹配时，便会使用对应的 loader 配置，如上述例子中的 <code>babel-loader</code>。关于 loader 配置后面再详细介绍，这里先来看看如何配置更加复杂的规则匹配条件。</p>
+<h2 id="规则条件配置"><a href="#规则条件配置" class="headerlink" title="规则条件配置"></a>规则条件配置</h2><hr>
+<p>大多数情况下，配置 loader 的匹配条件时，只要使用 <code>test</code> 字段就好了，很多时候都只需要匹配文件后缀名来决定使用什么 loader，但也不排除在某些特殊场景下，我们需要配置比较复杂的匹配条件。webpack 的规则提供了多种配置形式：</p>
+<ul>
+<li><code>{ test: ... }</code> 匹配特定条件</li>
+<li><code>{ include: ... }</code> 匹配特定的路径</li>
+<li><code>{ exclude: ... }</code> 排除特定的路径</li>
+<li><code>{ and: [...] }</code> 必须匹配数组中的所有的条件</li>
+<li><code>{ or: [...] }</code> 匹配数组中的任意的条件</li>
+<li><code>{ not: [...] }</code> 排除数组中的任意条件</li>
+</ul>
+<p>上诉的所谓条件的值可以是：</p>
+<ul>
+<li>字符串：必须以提供的字符串开始，所以是字符串的化，这里我们需要提供绝对路径。</li>
+<li>正则表达式：调用正则的<code>test</code>方法来匹配。</li>
+<li>函数：（path）=&gt;boolean,返回<code>true</code>表示匹配</li>
+<li>数组：至少包含一个条件的数组</li>
+<li>对象：匹配所有属性值的条件</li>
+</ul>
+<p>通过例子来帮助理解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: /\.jsx?/, // 正则</span><br><span class="line">    include: [</span><br><span class="line">      path.resolve(__dirname, &apos;src&apos;), // 字符串，注意是绝对路径</span><br><span class="line">    ], // 数组</span><br><span class="line">    // ...</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    test: &#123;</span><br><span class="line">      js: /\.js/,</span><br><span class="line">      jsx: /\.jsx/,</span><br><span class="line">    &#125;, // 对象，不建议使用</span><br><span class="line">    not: [</span><br><span class="line">      (value) =&gt; &#123; /* ... */ return true; &#125;, // 函数，通常需要高度自定义时才会使用</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>上述多个配置形式结合起来就能够基本满足各种各样的构建场景了，通常我们会结合使用 <code>test/and</code> 和 <code>include&amp;exclude</code> 来配置条件，如上述那个简单的例子。</p>
+<h2 id="modile-type"><a href="#modile-type" class="headerlink" title="modile type"></a>modile type</h2><hr>
+<p>webpack 4.x 版本强化了 module type，即模块类型的概念，不同的模块类型类似于配置了不同的 loader，webpack 会有针对性地进行处理，现阶段实现了以下 5 种模块类型。</p>
+<ul>
+<li><p><code>javascript/auto</code>:即 webpack 3 默认的类型，支持现有的各种 JS 代码模块类型 —— CommonJS、AMD、ESM</p>
+</li>
+<li><p><code>javascript/esm</code>:ECMAScript modules，其他模块系统，例如 CommonJS 或者 AMD 等不支持，是 .mjs 文件的默认类型</p>
+</li>
+<li><p><code>javascript/dynamic</code>:CommonJS 和 AMD，排除 ESM</p>
+</li>
+<li><code>javascript/json</code> :JSON 格式数据，<code>require</code> 或者 <code>import</code> 都可以引入，是 <code>.json</code> 文件的默认类型</li>
+<li><code>webassembly/experimental</code>:WebAssembly modules，当前还处于试验阶段，是 .wasm 文件的默认类型</li>
+</ul>
+<p>如果不希望使用默认的类型的话，在确定好匹配规则条件时，我们可以使用 type 字段来指定模块类型，例如把所有的 JS 代码文件都设置为强制使用 ESM 类型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  test: <span class="regexp">/\.js/</span>,</span><br><span class="line">  include: [</span><br><span class="line">    path.resolve(__dirname, <span class="string">'src'</span>),</span><br><span class="line">  ],</span><br><span class="line">  type: <span class="string">'javascript/esm'</span>, <span class="comment">// 这里指定模块类型</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>上述做法是可以帮助你规范整个项目的模块系统，但是如果遗留太多不同类型的模块代码时，建议还是直接使用默认的 <code>javascript/auto</code>。</p>
+<p>webpack 后续的开发计划会增加对更多模块类型的支持，例如极其常见的 CSS 和 HTML 模块类型，这个特性值得我们期待一下。</p>
+<h2 id="使用loader配置"><a href="#使用loader配置" class="headerlink" title="使用loader配置"></a>使用loader配置</h2><hr>
+<p>当然，在当前版本的 webpack 中，<code>module.rules</code> 的匹配规则最重要的还是用于配置 loader，我们可以使用 <code>use</code> 字段：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.less/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      <span class="string">'style-loader'</span>, <span class="comment">// 直接使用字符串表示 loader</span></span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'css-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          importLoaders: <span class="number">1</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;, <span class="comment">// 用对象表示 loader，可以传递 loader 配置等</span></span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'less-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          noIeCompat: <span class="literal">true</span></span><br><span class="line">        &#125;, <span class="comment">// 传递 loader 配置</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>我们看下上述的例子，先忽略laoder的使用情况，单纯看看如何配置。<code>use</code>字段可以是一个数组，也可以是一个自负串或者loader的对象，也可以是这样<code>use: { loader: &#39;babel-loader&#39;, options: { ... } }</code></p>
+<p>我们还可以使用<code>options</code>给对应的loader传递一些配置，这里不再展开。当你使用一些 loader 时，loader 的说明一般都有相关配置的描述。</p>
+<h2 id="loader应用顺序"><a href="#loader应用顺序" class="headerlink" title="loader应用顺序"></a>loader应用顺序</h2><hr>
+<p>一个匹配规则中可以配置使用多个 loader，即一个模块文件可以经过多个 loader 的转换处理，执行顺序是从最后配置的 loader 开始，一步步往前。例如，对于上面的 <code>less</code> 规则配置，一个 style.less 文件会途径 less-loader、css-loader、style-loader 处理，成为一个可以打包的模块。</p>
+<p>loader的应用顺序在配置多个loader一起工作时很重要，通常会使用在CSS配置上，除了style-loader和CSS-loader，你可能还要配置less-loader然后再加个postcss的autoprefixe等。</p>
+<p>上述从后到前的顺序是在同一个 rule 中进行的，那如果多个 rule 匹配了同一个模块文件，loader 的应用顺序又是怎样的呢？看一份这样的配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"eslint-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"babel-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>这样无法保证eslint-loader在babel-loader之前执行。webpack在<code>rules</code>中提供一个<code>enforce</code>的字段来配置当前rule的loader类型，没配置的话是普通类型，我们可以配置<code>pre</code>或<code>post</code>，分别对应前置类型或后置类型的loader</p>
+<blockquote>
+<p>eslint-loader要检查的时人工便携的代码，如果在babel-loader之后使用，那么检查的时Babel转换之后的代码，所以必须在babel-loader处理之前使用。</p>
+</blockquote>
+<p>还有一种行内loader，即我们在应用代码中引用依赖时直接声明使用的loader，如<code>const json = require(&#39;json-loader!./file.json&#39;)</code>这种。不建议在应用开发中使用这种 loader。</p>
+<p>顾名思义，所有的 loader 按照前置 -&gt; 行内 -&gt; 普通 -&gt; 后置的顺序执行。所以当我们要确保 eslint-loader 在 babel-loader 之前执行时，可以如下添加 <code>enforce</code> 配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">rules: [</span><br><span class="line">  &#123;</span><br><span class="line">    enforce: <span class="string">'pre'</span>, <span class="comment">// 指定为前置类型</span></span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">"eslint-loader"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>当项目文件类型和应用的 loader 不是特别复杂的时候，通常建议把要应用的同一类型 loader 都写在同一个匹配规则中，这样更好维护和控制。</p>
+<h2 id="使用noParse"><a href="#使用noParse" class="headerlink" title="使用noParse"></a>使用noParse</h2><hr>
+<p>在webpack中，我们需要使用loader实在<code>module.rules</code>下配置的，webpack 配置中的 module 用于控制如何处理项目中不同类型的模块。</p>
+<p>除了<code>module.rules</code>字段用于配置loader之外，还有一个<code>module.noParse</code>字段，可以用于配置哪些模块文件的内容不需要进行解析。对于一些不需要解析依赖（即无依赖） 的第三方大型类库等，可以通过这个字段来配置，以提高整体的构建速度。</p>
+<blockquote>
+<p>使用 noParse 进行忽略的模块文件中不能使用 import、require、define 等导入机制。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    noParse: <span class="regexp">/jquery|lodash/</span>, <span class="comment">// 正则表达式</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 或者使用 function</span></span><br><span class="line">    noParse(content) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="regexp">/jquery|lodash/</span>.test(content)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>noParse</code>从某种程度上来说是个优化配置项，日常可以不用去考虑。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/配置loader/">配置loader</a>
   </div>
 
 </div>
@@ -550,11 +664,11 @@
 			
 		
 			
-				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
 			
 		
 			
@@ -574,11 +688,11 @@
 			
 		
 			
-				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
 			
 		
 			
@@ -591,6 +705,10 @@
 		
 			
 				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
 			
 		
 		</ul>
