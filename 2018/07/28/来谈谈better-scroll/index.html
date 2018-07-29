@@ -1,0 +1,546 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Vue中better-scroll | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="xxinso">
+    
+
+    
+    <meta name="description" content="什么是 better-scroll better-scroll 是一个移动端滚动的解决方案，它是基于 iscroll 的重写，它和 iscroll 的主要区别在这里。better-scroll 也很强大，不仅可以做普通的滚动列表，还可以做轮播图、picker 等等。 better-scroll的滚动原理不少同学可能用过 better-scroll，我收到反馈最多的问题是：  我的better-s">
+<meta name="keywords" content="Vue中better-scroll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue中better-scroll">
+<meta property="og:url" content="http://yoursite.com/2018/07/28/来谈谈better-scroll/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是 better-scroll better-scroll 是一个移动端滚动的解决方案，它是基于 iscroll 的重写，它和 iscroll 的主要区别在这里。better-scroll 也很强大，不仅可以做普通的滚动列表，还可以做轮播图、picker 等等。 better-scroll的滚动原理不少同学可能用过 better-scroll，我收到反馈最多的问题是：  我的better-s">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-29T09:56:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue中better-scroll">
+<meta name="twitter:description" content="什么是 better-scroll better-scroll 是一个移动端滚动的解决方案，它是基于 iscroll 的重写，它和 iscroll 的主要区别在这里。better-scroll 也很强大，不仅可以做普通的滚动列表，还可以做轮播图、picker 等等。 better-scroll的滚动原理不少同学可能用过 better-scroll，我收到反馈最多的问题是：  我的better-s">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/07/28/来谈谈better-scroll/" title="Vue中better-scroll" itemprop="url">Vue中better-scroll</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-28T15:53:50.000Z" itemprop="datePublished"> Published 2018-07-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-better-scroll"><span class="toc-number">1.</span> <span class="toc-text">什么是 better-scroll</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#better-scroll的滚动原理"><span class="toc-number">1.1.</span> <span class="toc-text">better-scroll的滚动原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#better-scroll遇见Vue"><span class="toc-number">2.</span> <span class="toc-text">better-scroll遇见Vue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何在-Vue-中使用-better-scroll"><span class="toc-number">2.1.</span> <span class="toc-text">如何在 Vue 中使用 better-scroll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步数据的处理"><span class="toc-number">2.2.</span> <span class="toc-text">异步数据的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据的动态更新"><span class="toc-number">2.3.</span> <span class="toc-text">数据的动态更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scroll组件的抽象和封装"><span class="toc-number">2.4.</span> <span class="toc-text">scroll组件的抽象和封装</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="什么是-better-scroll"><a href="#什么是-better-scroll" class="headerlink" title="什么是 better-scroll"></a>什么是 better-scroll</h2><hr>
+<p>better-scroll 是一个移动端滚动的解决方案，它是基于 iscroll 的重写，它和 iscroll 的主要区别在这里。better-scroll 也很强大，不仅可以做普通的滚动列表，还可以做轮播图、picker 等等。</p>
+<h3 id="better-scroll的滚动原理"><a href="#better-scroll的滚动原理" class="headerlink" title="better-scroll的滚动原理"></a>better-scroll的滚动原理</h3><p>不少同学可能用过 better-scroll，我收到反馈最多的问题是：</p>
+<blockquote>
+<p>我的better-scroll初始化了，但是没法滚动</p>
+</blockquote>
+<p>不能滚动是现象，我们得搞清楚其中的根本原因。在这之前，我们先来看看浏览器的滚动原理</p>
+<p>浏览器的滚动条大家都会遇到，当页面内容的高度超过视口高度的时候，会出现纵项滚动条；当页面内容的高度超过视<br>口宽度的时候，回出现横向滚动条，也就是当我们的视口展示不下内容的时候，回通过滚动条的方式让用户滚动屏幕看到剩余的内容。</p>
+<p>那么对于better-scroll也是一样的道理，我们先来看一下better-scroll常见的html结构</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span> <span class="tag">&lt;<span class="name">li</span>&gt;</span>...<span class="tag">&lt;/<span class="name">li</span>&gt;</span>          <span class="tag">&lt;<span class="name">li</span>&gt;</span>...<span class="tag">&lt;/<span class="name">li</span>&gt;</span> ... </span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>绿色部分为 wrapper，也就是父容器，它会有固定的高度。黄色部分为 content，它是父容器的第一个子元素，它的高度会随着内容的大小而撑高。那么，当 content 的高度不超过父容器的高度，是不能滚动的，而它一旦超过了父容器的高度，我们就可以滚动内容区了，这就是 better-scroll 的滚动原理。</p>
+<p>那么，我们怎么初始化 better-scroll 呢，如果是上述 html 结构，那么初始化代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> BScroll <span class="keyword">from</span> <span class="string">'better-scroll'</span> <span class="keyword">let</span> wrapper = <span class="built_in">document</span>.querySelector(<span class="string">'.wrapper'</span>)<span class="keyword">let</span> scroll = <span class="keyword">new</span> BScroll(wrapper, &#123;&#125;)</span><br></pre></td></tr></table></figure>
+<p>better-scroll 对外暴露了一个 BScroll 的类，我们初始化只需要 new 一个类的实例即可。第一个参数就是我们 wrapper 的 DOM 对象，第二个是一些配置参数，具体参考 better-scroll 的文档。</p>
+<p>better-scroll的初始化时机很重要，因为它在初始化的时候，回计算氟元素和子元素的高度和宽度，来决定是否可以纵向或者横向滚动。因此，我们在初始化的时候，必须确保父元素和子元素已经正确渲染了。如果子元素或者父元素DOM结构发生改变，必须用scroll.refresh()方法重新计算来确保滚动效果正常。所以同学们反馈的better-scroll不能滚动的问题多半是因为初始化的时机不对，或者是当DOM结构发生变化的时候并没有重新计算beter-scroll。</p>
+<h2 id="better-scroll遇见Vue"><a href="#better-scroll遇见Vue" class="headerlink" title="better-scroll遇见Vue"></a>better-scroll遇见Vue</h2><p>相信很多同学对 Vue.js 都不陌生，当 better-scroll 遇见 Vue，会擦出怎样的火花呢？</p>
+<h3 id="如何在-Vue-中使用-better-scroll"><a href="#如何在-Vue-中使用-better-scroll" class="headerlink" title="如何在 Vue 中使用 better-scroll"></a>如何在 Vue 中使用 better-scroll</h3><p>很多同学开始接触使用 better-scroll 都是受到了我的一门教学课程——《Vue.js高仿饿了么外卖App》 的影响。在那门课程中，我们把 better-scroll 和 Vue 做了结合，实现了很多列表滚动的效果。在 Vue 中的使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt; </span><br><span class="line">    &lt;div class=&quot;wrapper&quot; ref=&quot;wrapper&quot;&gt; </span><br><span class="line">        &lt;ul class=&quot;content&quot;&gt; </span><br><span class="line">            &lt;li&gt;...&lt;/li&gt; </span><br><span class="line">            &lt;li&gt;...&lt;/li&gt;</span><br><span class="line">             ... </span><br><span class="line">        &lt;/ul&gt; </span><br><span class="line">    &lt;/div&gt; </span><br><span class="line">&lt;/template&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">import BScroll from &apos;better-scroll&apos; </span><br><span class="line">    export default &#123; </span><br><span class="line">        mounted() &#123; </span><br><span class="line">            this.$nextTick(() =&gt; &#123; this.scroll = new Bscroll(this.$refs.wrapper, &#123;&#125;) </span><br><span class="line">                &#125;) </span><br><span class="line">               &#125; </span><br><span class="line">            &#125; </span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>Vue.js提供了我们一个获取DOM对象的接口–vm.refs。在这里，我们通过<code>this.$refs.wrapper</code>访问到这个DOM对象，并且我们在mounted这个钩子函数里，<code>this.$nextTick</code>的回掉函数里初始化better-scroll。因为这个时候，wrapper的DOM已经渲染了，我们可以正确计算它以及它内层contend的高度，1⃣以确保可以正常滚动。</p>
+<p>这里的 <code>this.$nextTick</code> 是一个异步函数，为了确保 DOM 已经渲染，感兴趣的同学可以了解一下它的内部实现细节，底层用到了 MutationObserver 或者是 <code>setTimeout(fn, 0)</code>。其实我们在这里把 <code>this.$nextTick</code> 替换成 <code>setTimeout(fn, 20)</code> 也是可以的（20 ms 是一个经验值，每一个 Tick 约为 17 ms），对用户体验而言都是无感知的。</p>
+<h3 id="异步数据的处理"><a href="#异步数据的处理" class="headerlink" title="异步数据的处理"></a>异步数据的处理</h3><p>在我们的实际工作中，列表的数据往往都是异步获取的，因此我们初始化 better-scroll 的时机需要在数据获取后，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">created() &#123; </span><br><span class="line">    requestData().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123; <span class="keyword">this</span>.data = res.data <span class="keyword">this</span>.$nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="keyword">this</span>.scroll = <span class="keyword">new</span> Bscroll(<span class="keyword">this</span>.$refs.wrapper, &#123;&#125;) </span><br><span class="line">        &#125;) </span><br><span class="line">        &#125;) </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里的 requestData 是伪代码，作用就是发起一个 http 请求从服务端获取数据，并且这个函数返回的是一个 promise（实际项目中我们可能会用 axios 或者 vue-resource）。我们获取到数据的后，需要通过异步的方式再去初始化 better-scroll，因为 Vue 是数据驱动的， Vue 数据发生变化（this.data = res.data）到页面重新渲染是一个异步的过程，我们的初始化时机是要在 DOM 重新渲染后，所以这里用到了 this.$nextTick，当然替换成 setTimeout(fn, 20) 也是可以的。</p>
+<p>为什么这里在 created 这个钩子函数里请求数据而不是放到 mounted 的钩子函数里？因为 requestData 是发送一个网络请求，这是一个异步过程，当拿到响应数据的时候，Vue 的 DOM 早就已经渲染好了，但是数据改变 —&gt; DOM 重新渲染仍然是一个异步过程，所以即使在我们拿到数据后，也要异步初始化 better-scroll。</p>
+<h3 id="数据的动态更新"><a href="#数据的动态更新" class="headerlink" title="数据的动态更新"></a>数据的动态更新</h3><p>我们在实际开发中，除了数据异步获取，还有一些场景可以动态更新列表中的数据，比如常见的下拉加载，上拉刷新等。比如我们用better-scroll配合Vue实现的下拉加载的功能，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;wrapper&quot; ref=&quot;wrapper&quot;&gt;</span><br><span class="line">    &lt;ul class=&quot;content&quot;&gt;</span><br><span class="line">      &lt;li v-for=&quot;item in data&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;div class=&quot;loading-wrapper&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  import BScroll from &apos;better-scroll&apos;</span><br><span class="line">  export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        data: []</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    created() &#123;</span><br><span class="line">      this.loadData()</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      loadData() &#123;</span><br><span class="line">        requestData().then((res) =&gt; &#123;</span><br><span class="line">          this.data = res.data.concat(this.data)</span><br><span class="line">          this.$nextTick(() =&gt; &#123;</span><br><span class="line">            if (!this.scroll) &#123;</span><br><span class="line">              this.scroll = new Bscroll(this.$refs.wrapper, &#123;&#125;)</span><br><span class="line">              this.scroll.on(&apos;touchend&apos;, (pos) =&gt; &#123;</span><br><span class="line">                // 下拉动作</span><br><span class="line">                if (pos.y &gt; 50) &#123;</span><br><span class="line">                  this.loadData()</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;)</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">              this.scroll.refresh()</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>这段代码比之前稍微复杂一些, 当我们在滑动列表松开手指时候， better-scroll 会对外派发一个 touchend 事件，我们监听了这个事件，并且判断了 pos.y &gt; 50（我们把这个行为定义成一次下拉的动作）。如果是下拉的话我们会重新请求数据，并且把新的数据和之前的 data 做一次 concat，也就更新了列表的数据，那么数据的改变就会映射到 DOM 的变化。需要注意的一点，这里我们对 this.scroll 做了判断，如果没有初始化过我们会通过 new BScroll 初始化，并且绑定一些事件，否则我们会调用 this.scroll.refresh 方法重新计算，来确保滚动效果的正常。</p>
+<h3 id="scroll组件的抽象和封装"><a href="#scroll组件的抽象和封装" class="headerlink" title="scroll组件的抽象和封装"></a>scroll组件的抽象和封装</h3><p>因此，我们有强烈的需求抽象一个scroll组件，类似小程序scroll-view组件，方便开发者使用</p>
+<p>这里我们用到了 Vue 的特殊元素—— slot 插槽，它可以满足我们灵活定制列表 DOM 结构的需求。接下来我们来看看 JS 部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div ref=&quot;wrapper&quot;&gt;</span><br><span class="line">    &lt;slot&gt;&lt;/slot&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/ecmascript-6&quot;&gt;</span><br><span class="line">  import BScroll from &apos;better-scroll&apos;</span><br><span class="line"></span><br><span class="line">  export default &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">      probeType: &#123;</span><br><span class="line">        type: Number,</span><br><span class="line">        default: 1</span><br><span class="line">      &#125;,</span><br><span class="line">      click: &#123;</span><br><span class="line">        type: Boolean,</span><br><span class="line">        default: true</span><br><span class="line">      &#125;,</span><br><span class="line">      listenScroll: &#123;</span><br><span class="line">        type: Boolean,</span><br><span class="line">        default: false</span><br><span class="line">      &#125;,</span><br><span class="line">      data: &#123;</span><br><span class="line">        type: Array,</span><br><span class="line">        default: null</span><br><span class="line">      &#125;,</span><br><span class="line">      pullup: &#123;</span><br><span class="line">        type: Boolean,</span><br><span class="line">        default: false</span><br><span class="line">      &#125;,</span><br><span class="line">      beforeScroll: &#123;</span><br><span class="line">        type: Boolean,</span><br><span class="line">        default: false</span><br><span class="line">      &#125;,</span><br><span class="line">      refreshDelay: &#123;</span><br><span class="line">        type: Number,</span><br><span class="line">        default: 20</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    mounted() &#123;</span><br><span class="line">      setTimeout(() =&gt; &#123;</span><br><span class="line">        this._initScroll()</span><br><span class="line">      &#125;, 20)</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      _initScroll() &#123;</span><br><span class="line">        if (!this.$refs.wrapper) &#123;</span><br><span class="line">          return</span><br><span class="line">        &#125;</span><br><span class="line">        this.scroll = new BScroll(this.$refs.wrapper, &#123;</span><br><span class="line">          probeType: this.probeType,</span><br><span class="line">          click: this.click</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        if (this.listenScroll) &#123;</span><br><span class="line">          let me = this</span><br><span class="line">          this.scroll.on(&apos;scroll&apos;, (pos) =&gt; &#123;</span><br><span class="line">            me.$emit(&apos;scroll&apos;, pos)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (this.pullup) &#123;</span><br><span class="line">          this.scroll.on(&apos;scrollEnd&apos;, () =&gt; &#123;</span><br><span class="line">            if (this.scroll.y &lt;= (this.scroll.maxScrollY + 50)) &#123;</span><br><span class="line">              this.$emit(&apos;scrollToEnd&apos;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (this.beforeScroll) &#123;</span><br><span class="line">          this.scroll.on(&apos;beforeScrollStart&apos;, () =&gt; &#123;</span><br><span class="line">            this.$emit(&apos;beforeScroll&apos;)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      disable() &#123;</span><br><span class="line">        this.scroll &amp;&amp; this.scroll.disable()</span><br><span class="line">      &#125;,</span><br><span class="line">      enable() &#123;</span><br><span class="line">        this.scroll &amp;&amp; this.scroll.enable()</span><br><span class="line">      &#125;,</span><br><span class="line">      refresh() &#123;</span><br><span class="line">        this.scroll &amp;&amp; this.scroll.refresh()</span><br><span class="line">      &#125;,</span><br><span class="line">      scrollTo() &#123;</span><br><span class="line">        this.scroll &amp;&amp; this.scroll.scrollTo.apply(this.scroll, arguments)</span><br><span class="line">      &#125;,</span><br><span class="line">      scrollToElement() &#123;</span><br><span class="line">        this.scroll &amp;&amp; this.scroll.scrollToElement.apply(this.scroll, arguments)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    watch: &#123;</span><br><span class="line">      data() &#123;</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">          this.refresh()</span><br><span class="line">        &#125;, this.refreshDelay)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped lang=&quot;stylus&quot; rel=&quot;stylesheet/stylus&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>可以很明显的看到我们的 JS 部分精简了非常多的代码，没有对 better-scroll 再做命令式的操作了，同时把数据请求和 better-scroll 也做了剥离，父组件只需要把数据 data 通过 prop 传给 scroll 组件，就可以保证 scroll 组件的滚动效果。同时，如果想实现下拉刷新的功能，只需要通过 prop 把 pulldown 设置为 true，并且监听 pulldown 的事件去做一些数据获取并更新的动作即可，整个逻辑也是非常清晰的。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Vue中better-scroll/">Vue中better-scroll</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2018/07/28/来谈谈better-scroll/" data-title="Vue中better-scroll | Hexo" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/01/28/几种移动端很常用的布局/"  title="几种移动端很常用的布局">
+ <strong>下一篇：</strong><br/> 
+ <span>几种移动端很常用的布局
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-better-scroll"><span class="toc-number">1.</span> <span class="toc-text">什么是 better-scroll</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#better-scroll的滚动原理"><span class="toc-number">1.1.</span> <span class="toc-text">better-scroll的滚动原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#better-scroll遇见Vue"><span class="toc-number">2.</span> <span class="toc-text">better-scroll遇见Vue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何在-Vue-中使用-better-scroll"><span class="toc-number">2.1.</span> <span class="toc-text">如何在 Vue 中使用 better-scroll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步数据的处理"><span class="toc-number">2.2.</span> <span class="toc-text">异步数据的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据的动态更新"><span class="toc-number">2.3.</span> <span class="toc-text">数据的动态更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scroll组件的抽象和封装"><span class="toc-number">2.4.</span> <span class="toc-text">scroll组件的抽象和封装</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发和生产环境的构建配置差异/" title="开发和生产环境的构建配置差异">开发和生产环境的构建配置差异<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内部工作流程/" title="内部工作流程">内部工作流程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vue中better-scroll/" title="Vue中better-scroll">Vue中better-scroll<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="xxinso">xxinso</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
