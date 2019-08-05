@@ -1,0 +1,601 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>面试基础三 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="xxinso">
+    
+
+    
+    <meta name="description" content="1.如何正确的判断this的指向如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。this 的指向可以按照以下顺序判断: 全局环境的this 浏览器环境：无论在严格模式下，还是在全局环境中（在任何函数体外部）this 都指向全局对象 window; node环境: 无论是否在严格模式下，在全局执行环境中（在任何函数体外部），this 都是空对象 {};  是否是 new">
+<meta name="keywords" content="面试基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试基础三">
+<meta property="og:url" content="http://yoursite.com/2019/07/15/面试基础三/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.如何正确的判断this的指向如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。this 的指向可以按照以下顺序判断: 全局环境的this 浏览器环境：无论在严格模式下，还是在全局环境中（在任何函数体外部）this 都指向全局对象 window; node环境: 无论是否在严格模式下，在全局执行环境中（在任何函数体外部），this 都是空对象 {};  是否是 new">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T08:21:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试基础三">
+<meta name="twitter:description" content="1.如何正确的判断this的指向如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。this 的指向可以按照以下顺序判断: 全局环境的this 浏览器环境：无论在严格模式下，还是在全局环境中（在任何函数体外部）this 都指向全局对象 window; node环境: 无论是否在严格模式下，在全局执行环境中（在任何函数体外部），this 都是空对象 {};  是否是 new">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/15/面试基础三/" title="面试基础三" itemprop="url">面试基础三</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-15T02:35:23.000Z" itemprop="datePublished"> Published 2019-07-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-如何正确的判断this的指向"><span class="toc-number">1.</span> <span class="toc-text">1.如何正确的判断this的指向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#全局环境的this"><span class="toc-number">1.1.</span> <span class="toc-text">全局环境的this</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#是否是-new-绑定"><span class="toc-number">1.2.</span> <span class="toc-text">是否是 new 绑定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数是否通过-call-apply-调用，或者使用了-bind-绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。"><span class="toc-number">1.3.</span> <span class="toc-text">函数是否通过 call,apply 调用，或者使用了 bind 绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#箭头函数的情况"><span class="toc-number">1.4.</span> <span class="toc-text">箭头函数的情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原始数据类型和复杂数据类型有什么区别"><span class="toc-number">1.5.</span> <span class="toc-text">原始数据类型和复杂数据类型有什么区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于语意化的理解"><span class="toc-number">2.</span> <span class="toc-text">对于语意化的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语义化的有点有哪些"><span class="toc-number">2.1.</span> <span class="toc-text">语义化的有点有哪些</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h3 id="1-如何正确的判断this的指向"><a href="#1-如何正确的判断this的指向" class="headerlink" title="1.如何正确的判断this的指向"></a>1.如何正确的判断this的指向</h3><p>如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。<br>this 的指向可以按照以下顺序判断:</p>
+<h4 id="全局环境的this"><a href="#全局环境的this" class="headerlink" title="全局环境的this"></a>全局环境的this</h4><ul>
+<li>浏览器环境：无论在严格模式下，还是在全局环境中（在任何函数体外部）this 都指向全局对象 window;</li>
+<li>node环境: 无论是否在严格模式下，在全局执行环境中（在任何函数体外部），this 都是空对象 {};</li>
+</ul>
+<h4 id="是否是-new-绑定"><a href="#是否是-new-绑定" class="headerlink" title="是否是 new 绑定"></a>是否是 <code>new</code> 绑定</h4><p>我们来看一下<code>new</code>实现的原理</p>
+<ul>
+<li>1.创建一个新的对象</li>
+<li>2.这个新对象会被执行 <code>[[原型]]</code> 连接。</li>
+<li>3.属性和方法被加入到 this 引用的对象中。并执行了构造函数中的方法.</li>
+<li>4.如果函数没有返回其他对象，那么 this 指向这个新对象，否则 this 指向构造函数中返回的对象。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">new</span>(<span class="params">func</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> target = &#123;&#125;;</span><br><span class="line">    target.__proto__ = func.prototype;</span><br><span class="line">    <span class="keyword">let</span> res = func.call(target);</span><br><span class="line">    <span class="comment">//排除 null 的情况</span></span><br><span class="line">    <span class="keyword">if</span> (res &amp;&amp; <span class="keyword">typeof</span>(res) == <span class="string">"object"</span> || <span class="keyword">typeof</span>(res) == <span class="string">"function"</span>) &#123;</span><br><span class="line">    	<span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="函数是否通过-call-apply-调用，或者使用了-bind-绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。"><a href="#函数是否通过-call-apply-调用，或者使用了-bind-绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。" class="headerlink" title="函数是否通过 call,apply 调用，或者使用了 bind 绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。"></a>函数是否通过 call,apply 调用，或者使用了 bind 绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。</h4><p>这里同样需要注意一种特殊情况，如果 call,apply 或者 bind 传入的第一个参数值是 <code>undefined</code> 或者 <code>null</code>，严格模式下 this 的值为传入的值 null /undefined。非严格模式下，实际应用的默认绑定规则，this 指向全局对象(node环境为global，浏览器环境为window)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">info</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">//node环境中:非严格模式 global，严格模式为null</span></span><br><span class="line">    <span class="comment">//浏览器环境中:非严格模式 window，严格模式为null</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">    age: <span class="number">20</span>,</span><br><span class="line">    info</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">28</span>;</span><br><span class="line"><span class="keyword">var</span> info = person.info;</span><br><span class="line"><span class="comment">//严格模式抛出错误；</span></span><br><span class="line"><span class="comment">//非严格模式，node下输出undefined（因为全局的age不会挂在 global 上）</span></span><br><span class="line"><span class="comment">//非严格模式。浏览器环境下输出 28（因为全局的age会挂在 window 上）</span></span><br><span class="line">info.call(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+<p>隐式绑定，函数的调用是在某个对象上触发的，即调用位置上存在上下文对象。典型的隐式调用为: <code>xxx.fn()</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">info</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">    age: <span class="number">20</span>,</span><br><span class="line">    info</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">28</span>;</span><br><span class="line">person.info(); <span class="comment">//20;执行的是隐式绑定</span></span><br></pre></td></tr></table></figure>
+<p>默认绑定，在不能应用其它绑定规则时使用的默认规则，通常是独立函数调用。<br>非严格模式： node环境，执行全局对象 global，浏览器环境，执行全局对象 window。<br>严格模式：执行 undefined</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">info</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">28</span>;</span><br><span class="line"><span class="comment">//严格模式；抛错</span></span><br><span class="line"><span class="comment">//非严格模式，node下输出 undefined（因为全局的age不会挂在 global 上）</span></span><br><span class="line"><span class="comment">//非严格模式。浏览器环境下输出 28（因为全局的age不会挂在 window 上）</span></span><br><span class="line"><span class="comment">//严格模式抛出，因为 this 此时是 undefined</span></span><br><span class="line">info();</span><br></pre></td></tr></table></figure>
+<h4 id="箭头函数的情况"><a href="#箭头函数的情况" class="headerlink" title="箭头函数的情况"></a>箭头函数的情况</h4><p>箭头函数没有自己的this，继承外层上下文绑定的this。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    age: <span class="number">20</span>,</span><br><span class="line">    info: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.age); <span class="comment">//this继承的是外层上下文绑定的this</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> person = &#123;<span class="attr">age</span>: <span class="number">28</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> info = obj.info();</span><br><span class="line">info(); <span class="comment">//20</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> info2 = obj.info.call(person);</span><br><span class="line">info2(); <span class="comment">//28</span></span><br></pre></td></tr></table></figure>
+<h4 id="原始数据类型和复杂数据类型有什么区别"><a href="#原始数据类型和复杂数据类型有什么区别" class="headerlink" title="原始数据类型和复杂数据类型有什么区别"></a>原始数据类型和复杂数据类型有什么区别</h4><p>基本数据类型和复杂数据类型的区别为:</p>
+<ul>
+<li>1.内存的分配不同</li>
+<li>基本数据类型存储在栈中。</li>
+<li><p>复杂数据类型存储在堆中，栈中存储的变量，是指向堆中的引用地址。</p>
+</li>
+<li><p>2.访问机制不同</p>
+</li>
+<li>基本数据类型是按值访问</li>
+<li><p>复杂数据类型按引用访问，JS不允许直接访问保存在堆内存中的对象，在访问一个对象时，首先得到的是这个对象在栈内存中的地址，然后再按照这个地址去获得这个对象中的值。</p>
+</li>
+<li><p>3.复制变量时不同(a=b)</p>
+</li>
+<li>基本数据类型：a=b;是将b中保存的原始值的副本赋值给新变量a，a和b完全独立，互不影响</li>
+<li><p>复杂数据类型：a=b;将b保存的对象内存的引用地址赋值给了新变量a;a和b指向了同一个堆内存地址，其中一个值发生了改变，另一个也会改变。</p>
+</li>
+<li><p>4.参数传递的不同(实参/形参)<br>函数传参都是按值传递(栈中的存储的内容)：基本数据类型，拷贝的是值；复杂数据类型，拷贝的是引用地址</p>
+</li>
+</ul>
+<h3 id="对于语意化的理解"><a href="#对于语意化的理解" class="headerlink" title="对于语意化的理解"></a>对于语意化的理解</h3><p>语义化意味着顾名思义，HTML5的语义化指的是合理正确的使用语义化的标签来创建页面结构，如 header,footer,nav，从标签上即可以直观的知道这个标签的作用，而不是滥用div。</p>
+<h4 id="语义化的有点有哪些"><a href="#语义化的有点有哪些" class="headerlink" title="语义化的有点有哪些"></a>语义化的有点有哪些</h4><ul>
+<li>代码结构清晰，易于阅读，利于开发和维护。</li>
+<li>方便其他设备解析（如屏幕阅读器）根据语义渲染网页。</li>
+<li>有利于搜索引擎优化（SEO），搜索引擎爬虫会根据不同的标签来赋予不同的权重。<br>语义化标签主要有：</li>
+<li>title：主要用于页面的头部的信息介绍</li>
+<li>header：定义文档的页眉</li>
+<li>nav：主要用于页面导航</li>
+<li>main：规定文档的主要内容。对于文档来说应当是唯一的。它不应包含在文档中重复出现的内容，比如侧栏、导航栏、版权信息、站点标志或搜索表单。</li>
+<li>article：独立的自包含内容</li>
+<li>h1~h6：定义标题</li>
+<li>ul: 用来定义无序列表</li>
+<li>ol: 用来定义有序列表</li>
+<li>address：定义文档或文章的作者/拥有者的联系信息。</li>
+<li>canvas：用于绘制图像</li>
+<li>dialog：定义一个对话框、确认框或窗口</li>
+<li>aside：定义其所处内容之外的内容。<aside> 的内容可用作文章的侧栏。</aside></li>
+<li>section：定义文档中的节（section、区段）。比如章节、页眉、页脚或文档中的其他部分。</li>
+<li>figure：规定独立的流内容（图像、图表、照片、代码等等）。figure 元素的内容应该与主内容相关，但如果被删除，则不应对文档流产生影响。</li>
+<li>details：描述文档或者文档某一部分细节</li>
+<li>mark：义带有记号的文本。</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/面试基础/">面试基础</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2019/07/15/面试基础三/" data-title="面试基础三 | Hexo" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/15/EventLoop/" title="EventLoop">
+  <strong>上一篇：</strong><br/>
+  <span>
+  EventLoop</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/07/15/浏览器缓存/"  title="浏览器缓存机制">
+ <strong>下一篇：</strong><br/> 
+ <span>浏览器缓存机制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-如何正确的判断this的指向"><span class="toc-number">1.</span> <span class="toc-text">1.如何正确的判断this的指向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#全局环境的this"><span class="toc-number">1.1.</span> <span class="toc-text">全局环境的this</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#是否是-new-绑定"><span class="toc-number">1.2.</span> <span class="toc-text">是否是 new 绑定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数是否通过-call-apply-调用，或者使用了-bind-绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。"><span class="toc-number">1.3.</span> <span class="toc-text">函数是否通过 call,apply 调用，或者使用了 bind 绑定，如果是，那么this绑定的就是指定的对象【归结为显式绑定】。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#箭头函数的情况"><span class="toc-number">1.4.</span> <span class="toc-text">箭头函数的情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原始数据类型和复杂数据类型有什么区别"><span class="toc-number">1.5.</span> <span class="toc-text">原始数据类型和复杂数据类型有什么区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于语意化的理解"><span class="toc-number">2.</span> <span class="toc-text">对于语意化的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语义化的有点有哪些"><span class="toc-number">2.1.</span> <span class="toc-text">语义化的有点有哪些</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/面试基础/" title="面试基础">面试基础<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js继承的六种方式/" title="js继承的六种方式">js继承的六种方式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/浏览器缓存机制/" title="浏览器缓存机制">浏览器缓存机制<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式总结/" title="正则表达式总结">正则表达式总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EventLoop/" title="EventLoop">EventLoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发和生产环境的构建配置差异/" title="开发和生产环境的构建配置差异">开发和生产环境的构建配置差异<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内部工作流程/" title="内部工作流程">内部工作流程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="xxinso">xxinso</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,585 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>EventLoop | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="xxinso">
+    
+
+    
+    <meta name="description" content="我们都知道 JavaScript 是一门单线程语言，也就是说同一时间只能做一件事。这是因为 JavaScript 生来作为浏览器脚本语言，主要用来处理与用户的交互、网络以及操作 DOM。这就决定了它只能是单线程的，否则会带来很复杂的同步问题。 假设 JavaScript 有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？ 既然 Javasc">
+<meta name="keywords" content="EventLoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EventLoop">
+<meta property="og:url" content="http://yoursite.com/2019/07/15/EventLoop/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="我们都知道 JavaScript 是一门单线程语言，也就是说同一时间只能做一件事。这是因为 JavaScript 生来作为浏览器脚本语言，主要用来处理与用户的交互、网络以及操作 DOM。这就决定了它只能是单线程的，否则会带来很复杂的同步问题。 假设 JavaScript 有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？ 既然 Javasc">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T09:37:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EventLoop">
+<meta name="twitter:description" content="我们都知道 JavaScript 是一门单线程语言，也就是说同一时间只能做一件事。这是因为 JavaScript 生来作为浏览器脚本语言，主要用来处理与用户的交互、网络以及操作 DOM。这就决定了它只能是单线程的，否则会带来很复杂的同步问题。 假设 JavaScript 有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？ 既然 Javasc">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/15/EventLoop/" title="EventLoop" itemprop="url">EventLoop</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-15T02:35:23.000Z" itemprop="datePublished"> Published 2019-07-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#同步和异步"><span class="toc-number">1.</span> <span class="toc-text">同步和异步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步"><span class="toc-number">1.1.</span> <span class="toc-text">同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步"><span class="toc-number">1.2.</span> <span class="toc-text">异步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行栈和任务队列"><span class="toc-number">2.</span> <span class="toc-text">执行栈和任务队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#复习一下数据结构吧"><span class="toc-number">2.1.</span> <span class="toc-text">复习一下数据结构吧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行栈"><span class="toc-number">2.2.</span> <span class="toc-text">执行栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#任务队列"><span class="toc-number">2.3.</span> <span class="toc-text">任务队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件循环"><span class="toc-number">3.</span> <span class="toc-text">事件循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#宏任务和微任务"><span class="toc-number">3.1.</span> <span class="toc-text">宏任务和微任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见的宏任务和微任务"><span class="toc-number">3.2.</span> <span class="toc-text">常见的宏任务和微任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Event-Loop-遇到-async-await"><span class="toc-number">4.</span> <span class="toc-text">Event Loop 遇到 async/await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js-与-浏览器环境下事件循环的区别"><span class="toc-number">5.</span> <span class="toc-text">Node.js 与 浏览器环境下事件循环的区别</span></a></li></ol>
+		
+		</div>
+		
+		<p>我们都知道 JavaScript 是一门<code>单线程</code>语言，也就是说同一时间只能做一件事。这是因为 JavaScript 生来作为浏览器脚本语言，主要用来处理与用户的交互、网络以及操作 DOM。这就决定了它只能是单线程的，否则会带来很复杂的同步问题。</p>
+<p>假设 JavaScript 有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？</p>
+<p>既然 Javascript 是单线程的，它就像是只有一个窗口的银行，客户不得不排队一个一个的等待办理。同理 JavaScript 的任务也要一个接一个的执行，如果某个任务（比如加载高清图片）是个耗时任务，那浏览器岂不得一直卡着？为了防止主线程的阻塞，JavaScript 有了<code>同步</code>和<code>异步</code>的概念。</p>
+<h2 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h2><h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>如果在一个函数返回的时候，调用者就能够得到预期结果，那么这个函数就是同步的。也就是说同步方法调用一旦开始，调用者必须等到该函数调用返回后，才能继续后续的行为。下面这段段代码首先会弹出 alert 框，如果你不点击 确定 按钮，所有的页面交互都被锁死，并且后续的 console 语句不会被打印出来。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alert(<span class="string">'Yancey'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'is'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'the'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'best'</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>如果在函数返回的时候，调用者还不能够得到预期结果，而是需要在将来通过一定的手段得到，那么这个函数就是异步的。比如说发一个网络请求，我们告诉主程序等到接收到数据后再通知我，然后我们就可以去做其他的事情了。当异步完成后，会通知到我们，但是此时可能程序正在做其他的事情，所以即使异步完成了也需要在一旁等待，等到程序空闲下来才有时间去看哪些异步已经完成了，再去执行。</p>
+<p>这也就是定时器并不能精确在指定时间后输出回调函数结果的原因。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'yancey'</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100000000</span>; i += <span class="number">1</span>) &#123;</span><br><span class="line">  <span class="comment">// todo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="执行栈和任务队列"><a href="#执行栈和任务队列" class="headerlink" title="执行栈和任务队列"></a>执行栈和任务队列</h2><h3 id="复习一下数据结构吧"><a href="#复习一下数据结构吧" class="headerlink" title="复习一下数据结构吧"></a>复习一下数据结构吧</h3><ul>
+<li><p>栈 (stack): 栈是遵循后进先出 (LIFO) 原则的有序集合，新添加或待删除的元素都保存在同一端，称为栈顶，另一端叫做栈底。在栈里，新元素都靠近栈顶，旧元素都接近栈底。栈在编程语言的编译器和内存中存储基本数据类型和对象的指针、方法调用等.</p>
+</li>
+<li><p>队列 (queue): 队列是遵循先进先出 (FIFO) 原则的有序集合，队列在尾部添加新元素，并在顶部移除元素，最新添加的元素必须排在队列的末尾。在计算机科学中，最常见的例子就是打印队列。</p>
+</li>
+<li><p>堆 (heap): 堆是基于树抽象数据类型的一种特殊的数据结构。</p>
+</li>
+</ul>
+<p>JavaScript 中的内存分为<code>堆内存</code>和<code>栈内存</code></p>
+<p>avaScript 中引用类型值的大小是不固定的，因此它们会被存储到<code>堆内存</code>中，由系统自动分配存储空间。JavaScript 不允许直接访问堆内存中的位置，因此我们不能直接操作对象的堆内存空间，而是操作<code>对象的引用</code></p>
+<p>而 <code>JavaScript</code> 中的基础数据类型都有固定的大小，因此它们被存储到 <code>栈内存</code> 中。我们可以直接操作保存在栈内存空间的值，因此基础数据类型都是 <code>按值访问</code>。此外，栈内存还会存储 <code>对象的引用 (指针)</code> 以及 <code>函数执行时的运行空间</code>。</p>
+<p>下面比较一下两种存储方式的不同。</p>
+<p>栈内存|堆内存<br>存储基础数据类型|存储引用数据类型<br>按值访问|按引用访问<br>存储的值大小固定|存储的值大小不定，可动态调整<br>由系统自动分配内存空间|由程序员通过代码进行分配<br>主要用来执行程序|主要用来存放对象<br>空间小，运行效率高|空间大，但是运行效率相对较低<br>先进后出，后进先出|无序存储，可根据引用直接获取</p>
+<h3 id="执行栈"><a href="#执行栈" class="headerlink" title="执行栈"></a>执行栈</h3><p>当我们调用一个方法的时候，JavaScript 会生成一个与这个方法对应的执行环境，又叫执行上下文(context)。这个执行环境中保存着该方法的私有作用域、上层作用域(作用域链)、方法的参数，以及这个作用域中定义的变量和 this 的指向，而当一系列方法被依次调用的时候。由于 JavaScript 是单线程的，这些方法就会按顺序被排列在一个单独的地方，这个地方就是所谓执行栈。</p>
+<h3 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h3><p>事件队列是一个存储着<code>异步任务</code>的队列，其中的任务严格按照时间先后顺序执行，排在队头的任务将会率先执行，而排在队尾的任务会最后执行。事件队列每次仅执行一个任务，在该任务执行完毕之后，再执行下一个任务。执行栈则是一个类似于函数调用栈的运行容器，当执行栈为空时，JS 引擎便检查事件队列，如果事件队列不为空的话，事件队列便将第一个任务压入执行栈中运行。</p>
+<h2 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h2><p>我们注意到，在异步代码完成后仍有可能要在一旁等待，因为此时程序可能在做其他的事情，等到程序空闲下来才有时间去看哪些异步已经完成了。所以 JavaScript 有一套机制去处理同步和异步操作，那就是事件循环 (Event Loop)。</p>
+<ul>
+<li>所有同步任务都在主线程上执行，形成一个执行栈。</li>
+<li>而异步任务会被放置到 Task Table，当异步任务有了运行结果，就将该函数移入任务队列。</li>
+<li>一旦执行栈中的所有同步任务执行完毕，引擎就会读取任务队列，然后将任务队列中的第一个任务压入执行栈中运行。</li>
+</ul>
+<p>主线程不断重复第三步，也就是 <code>只要主线程空了，就会去读取任务队列</code>，该过程不断重复，这就是所谓的 <code>事件循环</code>。</p>
+<h3 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h3><p>一个很形象的例子来描述宏任务和微任务<br>因为柜员同时职能处理一个来办理业务的客户，这时每一个来办理业务的人就可以认为是银行柜员的一个宏任务来存在的，当柜员处理完当前客户的问题以后，选择接待下一位，广播报号，也就是下一个宏任务的开始。<br>所以多个宏任务合在一起就可以认为说有一个任务队列在这，里边是当前银行中所有排号的客户。<br>任务队列中的都是已经完成的异步操作，而不是说注册一个异步任务就会被放在这个任务队列中，就像在银行中排号，如果叫到你的时候你不在，那么你当前的号牌就作废了，柜员会选择直接跳过进行下一个客户的业务处理，等你回来以后还需要重新取号<br>而且一个宏任务在执行的过程中，是可以添加一些微任务的，就像在柜台办理业务，你前边的一位老大爷可能在存款，在存款这个业务办理完以后，柜员会问老大爷还有没有其他需要办理的业务，这时老大爷想了一下：“最近P2P爆雷有点儿多，是不是要选择稳一些的理财呢”，然后告诉柜员说，要办一些理财的业务，这时候柜员肯定不能告诉老大爷说：“您再上后边取个号去，重新排队”。<br>所以本来快轮到你来办理业务，会因为老大爷临时添加的“理财业务”而往后推。<br>也许老大爷在办完理财以后还想 再办一个信用卡？或者 再买点儿纪念币？<br>无论是什么需求，只要是柜员能够帮她办理的，都会在处理你的业务之前来做这些事情，这些都可以认为是微任务。<br>在当前的微任务没有执行完成时，是不会执行下一个宏任务的。<br>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">  resolve()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p><code>setTimeout</code>就是作为宏任务来存在的，而<code>Promise.then</code>则是具有代表性的微任务，上述代码的执行顺序就是按照序号来输出的。</p>
+<p>所有会进入的异步都是指的事件回调中的那部分代码</p>
+<p>所有会进入的异步都是指的事件回调中的那部分代码<br>也就是说<code>new Promise</code>在实例化的过程中所执行的代码都是同步进行的，而then中注册的回调才是异步执行的。<br>在同步代码执行完成后才回去检查是否有异步任务完成，并执行对应的回调，而微任务又会在宏任务之前执行。<br>所以就得到了上述的输出结论<code>1、2、3、4</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">-  <span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">+&#125;)</span><br><span class="line"></span><br><span class="line">+<span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">+  resolve()</span><br><span class="line">+  <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">+&#125;).then(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">-  <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">+&#125;)</span><br><span class="line"></span><br><span class="line">+<span class="built_in">console</span>.log(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>总结一下，异步任务分为 <code>宏任务(macrotask)</code> 与 <code>微任务 (microtask)</code>。宏任务会进入一个队列，而微任务会进入到另一个不同的队列，且微任务要优于宏任务执行。</p>
+<h3 id="常见的宏任务和微任务"><a href="#常见的宏任务和微任务" class="headerlink" title="常见的宏任务和微任务"></a>常见的宏任务和微任务</h3><ul>
+<li>宏任务：script(整体代码)、setTimeout、setInterval、I/O、事件、postMessage、 MessageChannel、setImmediate (Node.js)</li>
+<li>微任务：Promise.then、 MutaionObserver、process.nextTick (Node.js)</li>
+</ul>
+<h2 id="Event-Loop-遇到-async-await"><a href="#Event-Loop-遇到-async-await" class="headerlink" title="Event Loop 遇到 async/await"></a>Event Loop 遇到 async/await</h2><p>我们知道，async/await 仅仅是生成器的语法糖，所以不要怕，只要把它转换成 Promise 的形式即可。下面这段代码是 async/await 函数的经典形式。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// await 前面的代码</span></span><br><span class="line">  <span class="keyword">await</span> bar();</span><br><span class="line">  <span class="comment">// await 后面的代码</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// do something...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+<p>复制代码其中 <code>await 前面的代码</code> 是同步的，调用此函数时会直接执行；而 <code>await bar()</code>; 这句可以被转换成 <code>Promise.resolve(bar())</code>；<code>await 后面的代码</code> 则会被放到 Promise 的 then() 方法里。因此上面的代码可以被转换成如下形式，这样是不是就很清晰了？</p>
+<h2 id="Node-js-与-浏览器环境下事件循环的区别"><a href="#Node-js-与-浏览器环境下事件循环的区别" class="headerlink" title="Node.js 与 浏览器环境下事件循环的区别"></a>Node.js 与 浏览器环境下事件循环的区别</h2><p>Node.js 在升级到 11.x 后，Event Loop 运行原理发生了变化，一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate) 就立刻执行微任务队列，这点就跟浏览器端一致。</p>
+<p><code>两道练习</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise1'</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then11'</span>);</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'promise2'</span>);</span><br><span class="line">      resolve();</span><br><span class="line">    &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'then21'</span>);</span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'then23'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then12'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise3'</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'then31'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise1'</span>); <span class="comment">// 1</span></span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then11'</span>); <span class="comment">// 2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'promise2'</span>); <span class="comment">// 3</span></span><br><span class="line">      resolve();</span><br><span class="line">    &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'then21'</span>); <span class="comment">// 4</span></span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'then23'</span>); <span class="comment">// 5</span></span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then12'</span>); <span class="comment">//6</span></span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/EventLoop/">EventLoop</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2019/07/15/EventLoop/" data-title="EventLoop | Hexo" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/15/web安全/" title="web安全">
+  <strong>上一篇：</strong><br/>
+  <span>
+  web安全</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/07/15/面试基础三/"  title="面试基础三">
+ <strong>下一篇：</strong><br/> 
+ <span>面试基础三
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#同步和异步"><span class="toc-number">1.</span> <span class="toc-text">同步和异步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步"><span class="toc-number">1.1.</span> <span class="toc-text">同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步"><span class="toc-number">1.2.</span> <span class="toc-text">异步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行栈和任务队列"><span class="toc-number">2.</span> <span class="toc-text">执行栈和任务队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#复习一下数据结构吧"><span class="toc-number">2.1.</span> <span class="toc-text">复习一下数据结构吧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行栈"><span class="toc-number">2.2.</span> <span class="toc-text">执行栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#任务队列"><span class="toc-number">2.3.</span> <span class="toc-text">任务队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件循环"><span class="toc-number">3.</span> <span class="toc-text">事件循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#宏任务和微任务"><span class="toc-number">3.1.</span> <span class="toc-text">宏任务和微任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见的宏任务和微任务"><span class="toc-number">3.2.</span> <span class="toc-text">常见的宏任务和微任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Event-Loop-遇到-async-await"><span class="toc-number">4.</span> <span class="toc-text">Event Loop 遇到 async/await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js-与-浏览器环境下事件循环的区别"><span class="toc-number">5.</span> <span class="toc-text">Node.js 与 浏览器环境下事件循环的区别</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/面试基础/" title="面试基础">面试基础<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js继承的六种方式/" title="js继承的六种方式">js继承的六种方式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/浏览器缓存机制/" title="浏览器缓存机制">浏览器缓存机制<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式总结/" title="正则表达式总结">正则表达式总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EventLoop/" title="EventLoop">EventLoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发和生产环境的构建配置差异/" title="开发和生产环境的构建配置差异">开发和生产环境的构建配置差异<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内部工作流程/" title="内部工作流程">内部工作流程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="xxinso">xxinso</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

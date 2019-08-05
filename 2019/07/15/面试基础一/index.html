@@ -1,0 +1,795 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>面试基础一 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="xxinso">
+    
+
+    
+    <meta name="description" content="1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？ 基本类型有6种，分别是undefined、null、bool、string、number、symbol（ES6）更新。 虽然 typeof null 返回的值是 object,但是null不是对象，而是基本数据类型的一种。 复杂数据类型的值存储在内存，地址（指向堆的值）存储在栈内存，当我们把对象赋值给另一个变量的">
+<meta name="keywords" content="面试基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试基础一">
+<meta property="og:url" content="http://yoursite.com/2019/07/15/面试基础一/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？ 基本类型有6种，分别是undefined、null、bool、string、number、symbol（ES6）更新。 虽然 typeof null 返回的值是 object,但是null不是对象，而是基本数据类型的一种。 复杂数据类型的值存储在内存，地址（指向堆的值）存储在栈内存，当我们把对象赋值给另一个变量的">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T08:21:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试基础一">
+<meta name="twitter:description" content="1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？ 基本类型有6种，分别是undefined、null、bool、string、number、symbol（ES6）更新。 虽然 typeof null 返回的值是 object,但是null不是对象，而是基本数据类型的一种。 复杂数据类型的值存储在内存，地址（指向堆的值）存储在栈内存，当我们把对象赋值给另一个变量的">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/15/面试基础一/" title="面试基础一" itemprop="url">面试基础一</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-15T02:35:23.000Z" itemprop="datePublished"> Published 2019-07-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基本类型有哪几种？null-是对象吗？基本数据类型和复杂数据类型存储有什么区别？"><span class="toc-number">1.</span> <span class="toc-text">1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#typeof-是否正确判断类型-instanceof呢？-instanceof-的实现原理是什么？"><span class="toc-number">2.</span> <span class="toc-text">typeof 是否正确判断类型? instanceof呢？ instanceof 的实现原理是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-for-of-for-in-和-forEach-map-的区别。"><span class="toc-number">3.</span> <span class="toc-text">3. for of , for in 和 forEach,map 的区别。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-如何判断一个变量是不是数组？"><span class="toc-number"></span> <span class="toc-text">4. 如何判断一个变量是不是数组？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-类数组和数组的区别是什么"><span class="toc-number"></span> <span class="toc-text">5.类数组和数组的区别是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-和-有什么区别？"><span class="toc-number"></span> <span class="toc-text">6.== 和 === 有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-let、const-以及-var-的区别是什么？"><span class="toc-number"></span> <span class="toc-text">7 let、const 以及 var 的区别是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-在JS中什么是变量提升？什么是暂时性死区？"><span class="toc-number"></span> <span class="toc-text">8.在JS中什么是变量提升？什么是暂时性死区？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-如何正确的判断this-箭头函数的this是什么？"><span class="toc-number"></span> <span class="toc-text">9.如何正确的判断this? 箭头函数的this是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-词法作用域和this的区别。"><span class="toc-number"></span> <span class="toc-text">10.词法作用域和this的区别。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-词法作用域和this的区别。"><span class="toc-number"></span> <span class="toc-text">11.词法作用域和this的区别。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-谈谈你对JS执行上下文栈和作用域链的理解。"><span class="toc-number"></span> <span class="toc-text">12.谈谈你对JS执行上下文栈和作用域链的理解。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-什么是闭包？闭包的作用是什么？闭包有哪些使用场景？"><span class="toc-number"></span> <span class="toc-text">13.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-call、apply有什么区别？call-aplly和bind的内部是如何实现的？"><span class="toc-number"></span> <span class="toc-text">14. call、apply有什么区别？call,aplly和bind的内部是如何实现的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？"><span class="toc-number"></span> <span class="toc-text">14.new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-谈谈你对原型的理解？"><span class="toc-number"></span> <span class="toc-text">15.谈谈你对原型的理解？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-什么是原型链？【原型链解决的是什么问题？】"><span class="toc-number"></span> <span class="toc-text">16.什么是原型链？【原型链解决的是什么问题？】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-prototype-和-proto-区别是什么？"><span class="toc-number"></span> <span class="toc-text">16.prototype 和 proto 区别是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-使用ES5实现一个继承？"><span class="toc-number"></span> <span class="toc-text">17.使用ES5实现一个继承？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-什么是深拷贝？深拷贝和浅拷贝有什么区别？"><span class="toc-number"></span> <span class="toc-text">18.什么是深拷贝？深拷贝和浅拷贝有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#19-防抖和节流的区别是什么？防抖和节流的实现。"><span class="toc-number"></span> <span class="toc-text">19.防抖和节流的区别是什么？防抖和节流的实现。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#20-取数组的最大值（ES5、ES6）"><span class="toc-number"></span> <span class="toc-text">20.取数组的最大值（ES5、ES6）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21-ES6新的特性有哪些？"><span class="toc-number"></span> <span class="toc-text">21.ES6新的特性有哪些？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-setTimeout倒计时为什么会出现误差？"><span class="toc-number"></span> <span class="toc-text">22.setTimeout倒计时为什么会出现误差？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-为什么-0-1-0-2-0-3"><span class="toc-number"></span> <span class="toc-text">23.为什么 0.1 + 0.2 != 0.3 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-promise-有几种状态-Promise-有什么优缺点"><span class="toc-number"></span> <span class="toc-text">24.promise 有几种状态, Promise 有什么优缺点 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-Promise构造函数是同步还是异步执行，then中的方法呢-promise如何实现then处理"><span class="toc-number"></span> <span class="toc-text">25.Promise构造函数是同步还是异步执行，then中的方法呢 ?promise如何实现then处理 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-Promise和setTimeout的区别"><span class="toc-number"></span> <span class="toc-text">26.Promise和setTimeout的区别 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#27-promise-all"><span class="toc-number"></span> <span class="toc-text">27.promise.all</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#28-如何实现-Promise-finally"><span class="toc-number"></span> <span class="toc-text">28.如何实现 Promise.finally?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#29-什么是函数柯里化？实现-sum-1-2-3-返回结果是1-2-3之和"><span class="toc-number"></span> <span class="toc-text">29. 什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和</span></a>
+		
+		</div>
+		
+		<h4 id="1-基本类型有哪几种？null-是对象吗？基本数据类型和复杂数据类型存储有什么区别？"><a href="#1-基本类型有哪几种？null-是对象吗？基本数据类型和复杂数据类型存储有什么区别？" class="headerlink" title="1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？"></a>1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？</h4><ul>
+<li>基本类型有6种，分别是undefined、null、bool、string、number、symbol（ES6）更新。</li>
+<li>虽然 typeof null 返回的值是 object,但是null不是对象，而是基本数据类型的一种。</li>
+<li>复杂数据类型的值存储在内存，地址（指向堆的值）存储在栈内存，当我们把对象赋值给另一个变量的时候复制的是地址，指向同一块内存空间，当其中的一个对象改变时，另一个也会跟着改变。</li>
+</ul>
+<h4 id="typeof-是否正确判断类型-instanceof呢？-instanceof-的实现原理是什么？"><a href="#typeof-是否正确判断类型-instanceof呢？-instanceof-的实现原理是什么？" class="headerlink" title="typeof 是否正确判断类型? instanceof呢？ instanceof 的实现原理是什么？"></a>typeof 是否正确判断类型? instanceof呢？ instanceof 的实现原理是什么？</h4><ul>
+<li><p>首先 typeof 能够正确的判断基本数据类型，但是除了 null, typeof null输出的是对象。</p>
+</li>
+<li><p>但是对象来说，typeof 不能正确的判断其类型， typeof 一个函数可以输出 ‘function’,而除此之外，输出的全是 object,这种情况下，我们无法准确的知道对象的类型。</p>
+</li>
+<li><p>instanceof可以准确的判断复杂数据类型，但是不能正确判断基本数据类型。<code>A instanceof B</code> 在A的原型链中层层查找，是否有原型等于B.prototype,如果一直找到A的原型链的顶端(null;即Object.<strong>proto</strong>.<strong>proto</strong>),仍然不等于B.prototype，那么返回false，否则返回true.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// L instanceof R</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">instance_of</span>(<span class="params">L, R</span>) </span>&#123;<span class="comment">//L 表示左表达式，R 表示右表达式</span></span><br><span class="line">    <span class="keyword">var</span> O = R.prototype;<span class="comment">// 取 R 的显式原型</span></span><br><span class="line">    L = L.__proto__;    <span class="comment">// 取 L 的隐式原型</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123; </span><br><span class="line">        <span class="keyword">if</span> (L === <span class="literal">null</span>) <span class="comment">//已经找到顶层</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;  </span><br><span class="line">        <span class="keyword">if</span> (O === L)   <span class="comment">//当 O 严格等于 L 时，返回 true</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">        L = L.__proto__;  <span class="comment">//继续向上一层原型链查找</span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="3-for-of-for-in-和-forEach-map-的区别。"><a href="#3-for-of-for-in-和-forEach-map-的区别。" class="headerlink" title="3. for of , for in 和 forEach,map 的区别。"></a>3. for of , for in 和 forEach,map 的区别。</h4><ul>
+<li>具有 iterator 接口，就可以用for…of循环遍历它的成员(属性值)。for…of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象、Generator 对象，以及字符串。for…of循环调用遍历器接口，数组的遍历器接口只返回具有数字索引的属性。对于普通的对象，for…of结构不能直接使用，会报错，必须部署了 Iterator 接口后才能使用。可以中断循环。</li>
+<li>for…in…循环: 遍历对象自身的和继承的可枚举的属性, 不能直接获取属性值。可以中断循环。</li>
+<li>forEach: 只能遍历数组，不能中断，没有返回值(或认为返回值是undefined)。</li>
+<li>map: 只能遍历数组，不能中断，返回值是修改后的数组。</li>
+</ul>
+<p><strong>关于forEach是否会改变原数组的问题，为此我写了代码测试了下(注意数组项是复杂数据类型的情况)。 除了forEach之外，map等API，也有同样的问题。</strong></p>
+<h3 id="4-如何判断一个变量是不是数组？"><a href="#4-如何判断一个变量是不是数组？" class="headerlink" title="4. 如何判断一个变量是不是数组？"></a>4. 如何判断一个变量是不是数组？</h3><ul>
+<li>使用 Array.isArray 判断，如果返回 true, 说明是数组</li>
+<li>使用instanceof Array判断如果返回的是true，说明是数组</li>
+<li>使用Object.prototype.toString.call判断，如果值是[Object,Array],说明是数组。</li>
+</ul>
+<h3 id="5-类数组和数组的区别是什么"><a href="#5-类数组和数组的区别是什么" class="headerlink" title="5.类数组和数组的区别是什么"></a>5.类数组和数组的区别是什么</h3><ul>
+<li><p>1）拥有length属性，其它属性（索引）为非负整数（对象中的索引会被当做字符串来处理）;</p>
+</li>
+<li><p>2）不具有数组所具有的方法；</p>
+</li>
+</ul>
+<p>类数组是一个普通对象，而真实的数组是Array类型。常见的类数组有: 函数的参数 arguments, DOM 对象列表(比如通过 document.querySelectorAll 得到的列表), jQuery 对象 (比如 $(“div”)).</p>
+<p>类数组可以转换为数组:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方法</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.slice.call(arrayLike, start);</span><br><span class="line"><span class="comment">//第二种方法</span></span><br><span class="line">[...arrayLike];</span><br><span class="line"><span class="comment">//第三种方法:</span></span><br><span class="line"><span class="built_in">Array</span>.from(arrayLike);</span><br></pre></td></tr></table></figure>
+<p>PS: 任何定义了遍历器（Iterator）接口的对象，都可以用扩展运算符转为真正的数组。</p>
+<p>Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象。</p>
+<h3 id="6-和-有什么区别？"><a href="#6-和-有什么区别？" class="headerlink" title="6.== 和 === 有什么区别？"></a>6.== 和 === 有什么区别？</h3><ul>
+<li>=== 不需要进行类型转换，只有类型相同并且值相等时，才返回 true.</li>
+<li><p>== 如果两者类型不同，首先需要进行类型转换。具体流程如下:</p>
+</li>
+<li><ol>
+<li>首先判断两者类型是否相同，如果相等，判断值是否相等.</li>
+</ol>
+</li>
+<li><ol>
+<li>如果类型不同，进行类型转换.</li>
+</ol>
+</li>
+<li><ol>
+<li>判断比较的是否是 null 或者是 undefined, 如果是, 返回 true .</li>
+</ol>
+</li>
+<li><ol>
+<li>判断其中一方是否为 boolean, 如果是, 将 boolean 转为 number 再进行判断</li>
+</ol>
+</li>
+<li><ol>
+<li>判断两者类型是否为 string 和 number, 如果是, 将字符串转换成 number</li>
+</ol>
+</li>
+<li><ol>
+<li>判断其中一方是否为 object 且另一方为 string、number 或者 symbol , 如果是, 将 object 转为原始类型再进行判断</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> person1 = &#123;</span><br><span class="line">    age: <span class="number">25</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> person2 = person1;</span><br><span class="line">person2.gae = <span class="number">20</span>;</span><br><span class="line"><span class="built_in">console</span>.log(person1 === person2); <span class="comment">//true,注意复杂数据类型，比较的是引用</span></span><br></pre></td></tr></table></figure>
+<p><strong>思考: [] == ![]</strong></p>
+<ul>
+<li>1.首先我们知道！的优先级高于 == 。</li>
+<li>2.[] 引用类型转换成布尔值都是true,因此![]的是false。</li>
+<li>3.根据上面的比较步骤中的第四条，其中一方是 boolean，将 boolean 转为 number 再进行判断，false转换成 number，对应的值是 0.</li>
+<li>4.根据上面比较步骤中的第六条，有一方是 number，那么将object也转换成Number,空数组转换成数字，对应的值是0.(空数组转换成数字，对应的值是0，如果数组中只有一个数字，那么转成number就是这个数字，其它情况，均为NaN)</li>
+<li>5.0 == 0; 为true</li>
+</ul>
+<h3 id="7-let、const-以及-var-的区别是什么？"><a href="#7-let、const-以及-var-的区别是什么？" class="headerlink" title="7 let、const 以及 var 的区别是什么？"></a>7 let、const 以及 var 的区别是什么？</h3><ul>
+<li>let 和 const 定义的变量不会出现变量提升，而 var 定义的变量会提升。</li>
+<li>let 和 const 是JS中的块级作用域</li>
+<li>let 和 const 不允许重复声明(会抛出错误)</li>
+<li>let 和 const 定义的变量在定义语句之前，如果使用会抛出错误(形成了暂时性死区)，而 var 不会。</li>
+<li>const 声明一个只读的常量。一旦声明，常量的值就不能改变(如果声明是一个对象，那么不能改变的是对象的引用地址)</li>
+</ul>
+<h3 id="8-在JS中什么是变量提升？什么是暂时性死区？"><a href="#8-在JS中什么是变量提升？什么是暂时性死区？" class="headerlink" title="8.在JS中什么是变量提升？什么是暂时性死区？"></a>8.在JS中什么是变量提升？什么是暂时性死区？</h3><p>变量提升就是变量在声明之前就可以使用，值为undefined。</p>
+<p>在代码块内，使用 let/const 命令声明变量之前，该变量都是不可用的(会抛出错误)。这在语法上，称为“暂时性死区”。暂时性死区也意味着 typeof 不再是一个百分百安全的操作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> x; <span class="comment">// ReferenceError(暂时性死区，抛错)</span></span><br><span class="line"><span class="keyword">let</span> x;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> y; <span class="comment">// 值是undefined,不会报错</span></span><br></pre></td></tr></table></figure>
+<p>暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</p>
+<h3 id="9-如何正确的判断this-箭头函数的this是什么？"><a href="#9-如何正确的判断this-箭头函数的this是什么？" class="headerlink" title="9.如何正确的判断this? 箭头函数的this是什么？"></a>9.如何正确的判断this? 箭头函数的this是什么？</h3><p>this的绑定规则有四种：默认绑定，隐式绑定，显式绑定，new绑定。</p>
+<ul>
+<li>1.函数是否在 new 中调用(new绑定)，如果是，那么 this 绑定的是新创建的对象【前提是构造函数中没有返回对象或者是function，否则this指向返回的对象/function】</li>
+<li>2.函数是否通过 call,apply 调用，或者使用了 bind (即硬绑定)，如果是，那么this绑定的就是指定的对象。</li>
+<li>3.函数是否在某个上下文对象中调用(隐式绑定)，如果是的话，this 绑定的是那个上下文对象。一般是 obj.foo()</li>
+<li>4.如果以上都不是，那么使用默认绑定。如果在严格模式下，则绑定到 undefined，否则绑定到全局对象。</li>
+<li>5.如果把null或者undefined作为 this 的绑定对象传入 call、apply 或者 bind,这些值在调用时会被忽略，实际应用的是默认绑定规则。</li>
+<li>6.箭头函数没有自己的 this, 它的this继承于上一层代码块的this。</li>
+</ul>
+<h3 id="10-词法作用域和this的区别。"><a href="#10-词法作用域和this的区别。" class="headerlink" title="10.词法作用域和this的区别。"></a>10.词法作用域和this的区别。</h3><ul>
+<li>词法作用域是由你在写代码时将变量和块作用域写在哪里来决定的。</li>
+<li>this 是在调用时被绑定的，this 指向什么，完全取决于函数的调用位置(关于this的指向问题，本文已经有说明)。</li>
+</ul>
+<h3 id="11-词法作用域和this的区别。"><a href="#11-词法作用域和this的区别。" class="headerlink" title="11.词法作用域和this的区别。"></a>11.词法作用域和this的区别。</h3><ul>
+<li>词法作用域是由你在写代码时将变量和块作用域写在哪里来决定的。</li>
+<li>this 是在调用时被绑定的，this 指向什么，完全取决于函数的调用位置(关于this的指向问题，本文已经有说明)。</li>
+</ul>
+<h3 id="12-谈谈你对JS执行上下文栈和作用域链的理解。"><a href="#12-谈谈你对JS执行上下文栈和作用域链的理解。" class="headerlink" title="12.谈谈你对JS执行上下文栈和作用域链的理解。"></a>12.谈谈你对JS执行上下文栈和作用域链的理解。</h3><p>执行上下文就是当前 JavaScript 代码被解析和执行时所在环境, JS执行上下文栈可以认为是一个存储函数调用的栈结构，遵循先进后出的原则。</p>
+<ul>
+<li>JavaScript执行在单线程上，所有的代码都是排队执行。</li>
+<li>一开始浏览器执行全局的代码时，首先创建全局的执行上下文，压入执行栈的顶部。</li>
+<li>每当进入一个函数的执行就会创建函数的执行上下文，并且把它压入执行栈的顶部。当前函数执行-完成后，当前函数的执行上下文出栈，并等待垃圾回收。</li>
+<li>浏览器的JS执行引擎总是访问栈顶的执行上下文。</li>
+<li>全局上下文只有唯一的一个，它在浏览器关闭时出栈。</li>
+</ul>
+<p>作用域链: 无论是 LHS 还是 RHS 查询，都会在当前的作用域开始查找，如果没有找到，就会向上级作用域继续查找目标标识符，每次上升一个作用域，一直到全局作用域为止。</p>
+<h3 id="13-什么是闭包？闭包的作用是什么？闭包有哪些使用场景？"><a href="#13-什么是闭包？闭包的作用是什么？闭包有哪些使用场景？" class="headerlink" title="13.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？"></a>13.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？</h3><p>闭包是指有权访问另一个函数作用域中的变量的函数，创建闭包最常用的方式就是在一个函数内部创建另一个函数。</p>
+<ul>
+<li><ol>
+<li>封装私有变量。</li>
+</ol>
+</li>
+<li><ol>
+<li>模仿块级作用域(ES5中没有块级作用域)</li>
+</ol>
+</li>
+<li><ol>
+<li>实现JS的模块</li>
+</ol>
+</li>
+</ul>
+<h3 id="14-call、apply有什么区别？call-aplly和bind的内部是如何实现的？"><a href="#14-call、apply有什么区别？call-aplly和bind的内部是如何实现的？" class="headerlink" title="14. call、apply有什么区别？call,aplly和bind的内部是如何实现的？"></a>14. call、apply有什么区别？call,aplly和bind的内部是如何实现的？</h3><ul>
+<li>fn.call(obj, arg1, arg2, …),调用一个函数, 具有一个指定的this值和分别地提供的参数(参数的列表)。</li>
+<li>fn.apply(obj, [argsArray]),调用一个函数，具有一个指定的this值，以及作为一个数组（或类数组对象）提供的参数。</li>
+</ul>
+<blockquote>
+<p>call核心:</p>
+</blockquote>
+<ul>
+<li>1.将函数设为传入参数的属性。</li>
+<li>2.指定this到函数并传入给定参数执行函数。</li>
+<li>3.如果不传入参数或者参数为null，默认指向为 window / global。</li>
+<li>4.删除参数上的函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.call = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/** 如果第一个参数传入的是 null 或者是 undefined, 那么指向this指向 window/global */</span></span><br><span class="line">    <span class="comment">/** 如果第一个参数传入的不是null或者是undefined, 那么必须是一个对象 */</span></span><br><span class="line">    <span class="keyword">if</span> (!context) &#123;</span><br><span class="line">        <span class="comment">//context为null或者是undefined</span></span><br><span class="line">        context = <span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">'undefined'</span> ? global : <span class="built_in">window</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    context.fn = <span class="keyword">this</span>; <span class="comment">//this指向的是当前的函数(Function的实例)</span></span><br><span class="line">    <span class="keyword">let</span> rest = [...arguments].slice(<span class="number">1</span>);<span class="comment">//获取除了this指向对象以外的参数, 空数组slice后返回的仍然是空数组</span></span><br><span class="line">    <span class="keyword">let</span> result = context.fn(...rest); <span class="comment">//隐式绑定,当前函数的this指向了context.</span></span><br><span class="line">    <span class="keyword">delete</span> context.fn;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试代码</span></span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">    name: <span class="string">'Selina'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">'Chirs'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params">job, age</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    <span class="built_in">console</span>.log(job, age);</span><br><span class="line">&#125;</span><br><span class="line">bar.call(foo, <span class="string">'programmer'</span>, <span class="number">20</span>);</span><br><span class="line"><span class="comment">// Selina programmer 20</span></span><br><span class="line">bar.call(<span class="literal">null</span>, <span class="string">'teacher'</span>, <span class="number">25</span>);</span><br><span class="line"><span class="comment">// 浏览器环境: Chirs teacher 25; node 环境: undefined teacher 25</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>apply </p>
+</blockquote>
+<p>apply的实现和call很类似，但是需要注意他们的参数是不一样的，apply的第二个参数是数组或类数组.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.apply = <span class="function"><span class="keyword">function</span> (<span class="params">context, rest</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!context) &#123;</span><br><span class="line">        <span class="comment">//context为null或者是undefined时,设置默认值</span></span><br><span class="line">        context = <span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">'undefined'</span> ? global : <span class="built_in">window</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    context.fn = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> result;</span><br><span class="line">    <span class="keyword">if</span>(rest === <span class="literal">undefined</span> || rest === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">//undefined 或者 是 null 不是 Iterator 对象，不能被 ...</span></span><br><span class="line">        result = context.fn(rest);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> rest === <span class="string">'object'</span>) &#123;</span><br><span class="line">        result = context.fn(...rest);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span> context.fn;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">    name: <span class="string">'Selina'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">'Chirs'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params">job, age</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    <span class="built_in">console</span>.log(job, age);</span><br><span class="line">&#125;</span><br><span class="line">bar.apply(foo, [<span class="string">'programmer'</span>, <span class="number">20</span>]);</span><br><span class="line"><span class="comment">// Selina programmer 20</span></span><br><span class="line">bar.apply(<span class="literal">null</span>, [<span class="string">'teacher'</span>, <span class="number">25</span>]);</span><br><span class="line"><span class="comment">// 浏览器环境: Chirs programmer 20; node 环境: undefined teacher 25</span></span><br></pre></td></tr></table></figure>
+<p>bind 和 call/apply 有一个很重要的区别，一个函数被 call/apply 的时候，会直接调用，但是 bind 会创建一个新函数。当这个新函数被调用时，bind() 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">context</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="keyword">this</span> !== <span class="string">"function"</span>)&#123;</span><br><span class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">"not a function"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> args = [...arguments].slice(<span class="number">1</span>);</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Fn</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    Fn.prototype = <span class="keyword">this</span>.prototype;</span><br><span class="line">    <span class="keyword">let</span> bound = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> res = [...args, ...arguments]; <span class="comment">//bind传递的参数和函数调用时传递的参数拼接</span></span><br><span class="line">        context = <span class="keyword">this</span> <span class="keyword">instanceof</span> Fn ? <span class="keyword">this</span> : context || <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">return</span> self.apply(context, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//原型链</span></span><br><span class="line">    bound.prototype = <span class="keyword">new</span> Fn();</span><br><span class="line">    <span class="keyword">return</span> bound;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name = <span class="string">'Jack'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">person</span>(<span class="params">age, job, gender</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name , age, job, gender);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> Yve = &#123;<span class="attr">name</span> : <span class="string">'Yvette'</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> result = person.bind(Yve, <span class="number">22</span>, <span class="string">'enginner'</span>)(<span class="string">'female'</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="14-new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？"><a href="#14-new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？" class="headerlink" title="14.new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？"></a>14.new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？</h3><p>new:</p>
+<ul>
+<li>1.创建一个新的对象</li>
+<li>2.这个新对象会被执行[[原型]]连接。</li>
+<li>3.属性和方法被加入到 this 引用的对象中。并执行了构造函数中的方法.</li>
+<li>4.如果函数没有返回其他对象，那么this指向这个新对象，否则this指向构造函数中返回的对象。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">new</span>(<span class="params">func</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> target = &#123;&#125;;</span><br><span class="line">    target.__proto__ = func.prototype;</span><br><span class="line">    <span class="keyword">let</span> res = func.call(target);</span><br><span class="line">    <span class="keyword">if</span> (res &amp;&amp; <span class="keyword">typeof</span>(res) == <span class="string">"object"</span> || <span class="keyword">typeof</span>(res) == <span class="string">"function"</span>) &#123;</span><br><span class="line">    	<span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字面量创建对象，不会调用 Object构造函数, 简洁且性能更好;</p>
+<p>new Object() 方式创建对象本质上是方法调用，涉及到在proto链中遍历该方法，当找到该方法后，又会生产方法调用必须的 堆栈信息，方法调用结束后，还要释放该堆栈，性能不如字面量的方式。</p>
+<p>通过对象字面量定义对象时，不会调用Object构造函数。</p>
+<h3 id="15-谈谈你对原型的理解？"><a href="#15-谈谈你对原型的理解？" class="headerlink" title="15.谈谈你对原型的理解？"></a>15.谈谈你对原型的理解？</h3><p>在 JavaScript 中，每当定义一个对象（函数也是对象）时候，对象中都会包含一些预定义的属性。其中每个函数对象都有一个prototype 属性，这个属性指向函数的原型对象。使用原型对象的好处是所有对象实例共享它所包含的属性和方法。</p>
+<h3 id="16-什么是原型链？【原型链解决的是什么问题？】"><a href="#16-什么是原型链？【原型链解决的是什么问题？】" class="headerlink" title="16.什么是原型链？【原型链解决的是什么问题？】"></a>16.什么是原型链？【原型链解决的是什么问题？】</h3><p>原型链解决的主要是继承问题。</p>
+<p>每个对象拥有一个原型对象，通过 proto (读音: dunder proto) 指针指向其原型对象，并从中继承方法和属性，同时原型对象也可能拥有原型，这样一层一层，最终指向 null(Object.proptotype.<strong>proto</strong> 指向的是null)。这种关系被称为原型链 (prototype chain)，通过原型链一个对象可以拥有定义在其他对象中的属性和方法。</p>
+<p>构造函数 Parent、Parent.prototype 和 实例 p 的关系如下:(p.<strong>proto</strong> === Parent.prototype)</p>
+<h3 id="16-prototype-和-proto-区别是什么？"><a href="#16-prototype-和-proto-区别是什么？" class="headerlink" title="16.prototype 和 proto 区别是什么？"></a>16.prototype 和 <strong>proto</strong> 区别是什么？</h3><p>prototype是构造函数的属性。<br><strong>proto</strong> 是每个实例都有的属性，可以访问 [[prototype]] 属性。<br>实例的<strong>proto</strong> 与其构造函数的prototype指向的是同一个对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line">Student.prototype.setAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age=<span class="number">20</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> Jack = <span class="keyword">new</span> Student(<span class="string">'jack'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(Jack.__proto__);</span><br><span class="line"><span class="comment">//console.log(Object.getPrototypeOf(Jack));;</span></span><br><span class="line"><span class="built_in">console</span>.log(Student.prototype);</span><br><span class="line"><span class="built_in">console</span>.log(Jack.__proto__ === Student.prototype);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<h3 id="17-使用ES5实现一个继承？"><a href="#17-使用ES5实现一个继承？" class="headerlink" title="17.使用ES5实现一个继承？"></a>17.使用ES5实现一个继承？</h3><blockquote>
+<p>组合继承(最常用的继承方式)</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.colors = [<span class="string">'red'</span>, <span class="string">'blue'</span>, <span class="string">'green'</span>];</span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    SuperType.call(<span class="keyword">this</span>, name);</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype = <span class="keyword">new</span> SuperType();</span><br><span class="line">SubType.prototype.constructor = SubType;</span><br><span class="line"></span><br><span class="line">SubType.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="18-什么是深拷贝？深拷贝和浅拷贝有什么区别？"><a href="#18-什么是深拷贝？深拷贝和浅拷贝有什么区别？" class="headerlink" title="18.什么是深拷贝？深拷贝和浅拷贝有什么区别？"></a>18.什么是深拷贝？深拷贝和浅拷贝有什么区别？</h3><p>浅拷贝是指只复制第一层对象，但是当对象的属性是引用类型时，实质复制的是其引用，当引用指向的值改变时也会跟着变化。</p>
+<p>深拷贝复制变量值，对于非基本类型的变量，则递归至基本类型变量后，再复制。深拷贝后的对象与原来的对象是完全隔离的，互不影响，对一个对象的修改并不会影响另一个对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">obj</span>) </span>&#123; <span class="comment">//递归拷贝</span></span><br><span class="line">    <span class="keyword">if</span>(obj === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>; <span class="comment">//null 的情况</span></span><br><span class="line">    <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> <span class="built_in">RegExp</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">RegExp</span>(obj);</span><br><span class="line">    <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> <span class="built_in">Date</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(obj);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> obj !== <span class="string">'object'</span>) &#123;</span><br><span class="line">        <span class="comment">//如果不是复杂数据类型，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 如果obj是数组，那么 obj.constructor 是 [Function: Array]</span></span><br><span class="line"><span class="comment">     * 如果obj是对象，那么 obj.constructor 是 [Function: Object]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">let</span> t = <span class="keyword">new</span> obj.constructor();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">        <span class="comment">//如果 obj[key] 是复杂数据类型，递归</span></span><br><span class="line">        t[key] = deepClone(obj[key]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="19-防抖和节流的区别是什么？防抖和节流的实现。"><a href="#19-防抖和节流的区别是什么？防抖和节流的实现。" class="headerlink" title="19.防抖和节流的区别是什么？防抖和节流的实现。"></a>19.防抖和节流的区别是什么？防抖和节流的实现。</h3><p>防抖和节流的作用都是防止函数多次调用。区别在于，假设一个用户一直触发这个函数，且每次触发函数的间隔小于设置的时间，防抖的情况下只会调用一次，而节流的情况会每隔一定时间调用一次函数。</p>
+<blockquote>
+<p>防抖(debounce): n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span> (<span class="params">func, wait, immediate = true</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> timer;</span><br><span class="line">    <span class="keyword">const</span> later = <span class="function">(<span class="params">context,args</span>) =&gt;</span>setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">        timer = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(!immediate)&#123;</span><br><span class="line">            func.apply(context,args);</span><br><span class="line">            <span class="comment">// 执行回调</span></span><br><span class="line">            context = args = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,wait)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> debounced = <span class="function"><span class="keyword">function</span>(<span class="params">...params</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">let</span> context = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">let</span> args = params;</span><br><span class="line">        <span class="keyword">if</span> (!timer) &#123;</span><br><span class="line">            timer = later(context, args);</span><br><span class="line">            <span class="keyword">if</span> (immediate) &#123;</span><br><span class="line">                <span class="comment">//立即执行</span></span><br><span class="line">                func.apply(context, args);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            clearTimeout(timer);</span><br><span class="line">            <span class="comment">//函数在每个等待时延的结束被调用</span></span><br><span class="line">            timer = later(context, args);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        debounced.cancel = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            clearTimeout(timer);</span><br><span class="line">            timer = <span class="literal">null</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> debounced;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>防抖应用场景：</p>
+<ul>
+<li>每次 resize/scroll 触发统计事件</li>
+<li>文本输入的验证（连续输入文字后发送 AJAX 请求进行验证，验证一次就好）</li>
+</ul>
+<blockquote>
+<p>节流(throttle): 高频事件在规定时间内只会执行一次，执行一次后，只有大于设定的执行周期后才会执行第二次。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span> (<span class="params">func, wait, options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> timeout, context, args, result;</span><br><span class="line">    <span class="keyword">var</span> previous = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (!options) options = &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> later = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    previous = options.leading === <span class="literal">false</span> ? <span class="number">0</span> : <span class="built_in">Date</span>.now() || <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    timeout = <span class="literal">null</span>;</span><br><span class="line">    result = func.apply(context, args);</span><br><span class="line">    <span class="keyword">if</span> (!timeout) context = args = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> throttled = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> now = <span class="built_in">Date</span>.now() || <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        <span class="keyword">if</span> (!previous &amp;&amp; options.leading === <span class="literal">false</span>) previous = now;</span><br><span class="line">        <span class="keyword">var</span> remaining = wait - (now - previous);</span><br><span class="line">        context = <span class="keyword">this</span>;</span><br><span class="line">        args = <span class="built_in">arguments</span>;</span><br><span class="line">        <span class="keyword">if</span> (remaining &lt;= <span class="number">0</span> || remaining &gt; wait) &#123;</span><br><span class="line">            <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">                clearTimeout(timeout);</span><br><span class="line">                timeout = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            previous = now;</span><br><span class="line">            result = func.apply(context, args);</span><br><span class="line">            <span class="keyword">if</span> (!timeout) context = args = <span class="literal">null</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!timeout &amp;&amp; options.trailing !== <span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="comment">// 判断是否设置了定时器和 trailing</span></span><br><span class="line">            timeout = setTimeout(later, remaining);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line"></span><br><span class="line">        throttled.cancel = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        clearTimeout(timeout);</span><br><span class="line">        previous = <span class="number">0</span>;</span><br><span class="line">        timeout = context = args = <span class="literal">null</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> throttled;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数节流的应用场景有:</p>
+<ul>
+<li>DOM 元素的拖拽功能实现（mousemove）</li>
+<li>射击游戏的 mousedown/keydown 事件（单位时间只能发射一颗子弹）</li>
+<li>计算鼠标移动的距离（mousemove）</li>
+<li>Canvas 模拟画板功能（mousemove）</li>
+<li>搜索联想（keyup）</li>
+<li>监听滚动事件判断是否到页面底部自动加载更多：给 scroll 加了 debounce 后，只有用户停止滚动后，才会判断是否到了页面底部；如果是 throttle 的话，只要页面滚动就会间隔一段时间判断一次</li>
+</ul>
+<h3 id="20-取数组的最大值（ES5、ES6）"><a href="#20-取数组的最大值（ES5、ES6）" class="headerlink" title="20.取数组的最大值（ES5、ES6）"></a>20.取数组的最大值（ES5、ES6）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>, <span class="number">30</span>]);</span><br><span class="line"><span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max(...[<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>, <span class="number">30</span>]);</span><br><span class="line"><span class="comment">// reduce</span></span><br><span class="line">[<span class="number">14</span>,<span class="number">3</span>,<span class="number">77</span>,<span class="number">30</span>].reduce(<span class="function">(<span class="params">accumulator, currentValue</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> accumulator = accumulator &gt; currentValue ? accumulator : currentValue</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="21-ES6新的特性有哪些？"><a href="#21-ES6新的特性有哪些？" class="headerlink" title="21.ES6新的特性有哪些？"></a>21.ES6新的特性有哪些？</h3><ul>
+<li>1.新增了块级作用域(let,const)</li>
+<li>2.提供了定义类的语法糖(class)</li>
+<li>3.新增了一种基本数据类型(Symbol)</li>
+<li>4.新增了变量的解构赋值</li>
+<li>5.函数参数允许设置默认值，引入了rest参数，新增了箭头函数</li>
+<li>6.数组新增了一些API，如 isArray / from / of 方法;数组实例新增了 entries()，keys() 和 values() 等方法</li>
+<li>7.对象和数组新增了扩展运算符</li>
+<li>8.ES6 新增了模块化(import/export)</li>
+<li>9.ES6 新增了 Set 和 Map 数据结构</li>
+<li>10.ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例</li>
+<li>11.ES6 新增了生成器(Generator)和遍历器(Iterator)</li>
+</ul>
+<h3 id="22-setTimeout倒计时为什么会出现误差？"><a href="#22-setTimeout倒计时为什么会出现误差？" class="headerlink" title="22.setTimeout倒计时为什么会出现误差？"></a>22.setTimeout倒计时为什么会出现误差？</h3><p>setTimeout() 只是将事件插入了“任务队列”，必须等当前代码（执行栈）执行完，主线程才会去执行它指定的回调函数。要是当前代码消耗时间很长，也有可能要等很久，所以并没办法保证回调函数一定会在 setTimeout() 指定的时间执行。所以， setTimeout() 的第二个参数表示的是最少时间，并非是确切时间。</p>
+<p>HTML5标准规定了 setTimeout() 的第二个参数的最小值不得小于4毫秒，如果低于这个值，则默认是4毫秒。在此之前。老版本的浏览器都将最短时间设为10毫秒。另外，对于那些DOM的变动（尤其是涉及页面重新渲染的部分），通常是间隔16毫秒执行。这时使用 requestAnimationFrame() 的效果要好于 setTimeout();</p>
+<h3 id="23-为什么-0-1-0-2-0-3"><a href="#23-为什么-0-1-0-2-0-3" class="headerlink" title="23.为什么 0.1 + 0.2 != 0.3 ?"></a>23.为什么 0.1 + 0.2 != 0.3 ?</h3><p>0.1 + 0.2 != 0.3 是因为在进制转换和进阶运算的过程中出现精度损失。<br>计算机无法直接对十进制的数字直接进行运算，首先要转换喂二进制然后进行对阶运算。</p>
+<blockquote>
+<p>1.进制转换</p>
+</blockquote>
+<p>0.1和0.2转换成二进制后会无限循环</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.1</span> -&gt; <span class="number">0.0001100110011001</span>...(无限循环)</span><br><span class="line"><span class="number">0.2</span> -&gt; <span class="number">0.0011001100110011</span>...(无限循环)</span><br></pre></td></tr></table></figure>
+<p>但是由于IEEE 754尾数位数限制，需要将后面多余的位截掉，这样在进制之间的转换中精度已经损失。</p>
+<blockquote>
+<p>2.对阶运算</p>
+</blockquote>
+<p>由于指数位数不相同，运算时需要对阶运算 这部分也可能产生精度损失。<br>按照上面两步运算（包括两步的精度损失），最后的结果是<br>0.0100110011001100110011001100110011001100110011001100<br>结果转换成十进制之后就是 0.30000000000000004。</p>
+<h3 id="24-promise-有几种状态-Promise-有什么优缺点"><a href="#24-promise-有几种状态-Promise-有什么优缺点" class="headerlink" title="24.promise 有几种状态, Promise 有什么优缺点 ?"></a>24.promise 有几种状态, Promise 有什么优缺点 ?</h3><p>promise有三种状态: fulfilled, rejected, pending.</p>
+<blockquote>
+<p>Promise的优点</p>
+</blockquote>
+<p>1.一旦状态改变，就不会再变，任何时候都可以得到这个结果。<br>2.可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。</p>
+<blockquote>
+<p>promise的缺点<br>1.无法取消 Promise。<br>2.当处于pending状态时，无法得知目前进展到哪一个阶段。</p>
+</blockquote>
+<h3 id="25-Promise构造函数是同步还是异步执行，then中的方法呢-promise如何实现then处理"><a href="#25-Promise构造函数是同步还是异步执行，then中的方法呢-promise如何实现then处理" class="headerlink" title="25.Promise构造函数是同步还是异步执行，then中的方法呢 ?promise如何实现then处理 ?"></a>25.Promise构造函数是同步还是异步执行，then中的方法呢 ?promise如何实现then处理 ?</h3><p>Promise的构造函数是同步执行的。then 中的方法是异步执行的。</p>
+<h3 id="26-Promise和setTimeout的区别"><a href="#26-Promise和setTimeout的区别" class="headerlink" title="26.Promise和setTimeout的区别 ?"></a>26.Promise和setTimeout的区别 ?</h3><p>Promise 是微任务，setTimeout 是宏任务，同一个事件循环中，promise.then总是先于 setTimeout 执行。</p>
+<h3 id="27-promise-all"><a href="#27-promise-all" class="headerlink" title="27.promise.all"></a>27.promise.all</h3><p>要实现 Promise.all,首先我们需要知道 Promise.all 的功能：</p>
+<ul>
+<li><ol>
+<li>如果传入的参数是一个空的可迭代对象，那么此promise对象回调完成(resolve),只有此情况，是同步执行的，其它都是异步返回的。</li>
+</ol>
+</li>
+<li><ol>
+<li>如果传入的参数不包含任何 promise，则返回一个异步完成. promises 中所有的promise都“完成”时或参数中不包含 promise 时回调完成。</li>
+</ol>
+</li>
+<li><ol>
+<li>如果参数中有一个promise失败，那么Promise.all返回的promise对象失败</li>
+</ol>
+</li>
+<li><ol>
+<li>在任何情况下，Promise.all 返回的 promise 的完成状态的结果都是一个数组</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.all = <span class="function"><span class="keyword">function</span> (<span class="params">promises</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">let</span> result = [];</span><br><span class="line">        <span class="keyword">if</span> (promises.length === <span class="number">0</span>) &#123;</span><br><span class="line">            resolve(result);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">processValue</span>(<span class="params">i, data</span>) </span>&#123;</span><br><span class="line">                result[i] = data;</span><br><span class="line">                <span class="keyword">if</span> (++index === promises.length) &#123;</span><br><span class="line">                    resolve(result);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; promises.length; i++) &#123;</span><br><span class="line">                <span class="comment">//promises[i] 可能是普通值</span></span><br><span class="line">                <span class="built_in">Promise</span>.resolve(promises[i]).then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">                    processValue(i, data);</span><br><span class="line">                &#125;, (err) =&gt; &#123;</span><br><span class="line">                    reject(err);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="28-如何实现-Promise-finally"><a href="#28-如何实现-Promise-finally" class="headerlink" title="28.如何实现 Promise.finally?"></a>28.如何实现 Promise.finally?</h3><p>不管成功还是失败，都会走到finally中,并且finally之后，还可以继续then。并且会将值原封不动的传递给后面的then.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.prototype.finally = <span class="function"><span class="keyword">function</span> (<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.then(<span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(callback()).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> value;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;, (err) =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(callback()).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> err;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="29-什么是函数柯里化？实现-sum-1-2-3-返回结果是1-2-3之和"><a href="#29-什么是函数柯里化？实现-sum-1-2-3-返回结果是1-2-3之和" class="headerlink" title="29. 什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和"></a>29. 什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和</h3><p>函数柯里话是把接收多个参数的函数变成接收一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">c</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a+b+c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(sum(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)); <span class="comment">// 6</span></span><br></pre></td></tr></table></figure></p>
+<p>引申：实现一个curry函数，将普通函数进行柯里化:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curry</span>(<span class="params">fn, args = []</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">let</span> rest = [...args, ...arguments];</span><br><span class="line">        <span class="keyword">if</span> (rest.length &lt; fn.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> curry.call(<span class="keyword">this</span>,fn,rest);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>,rest);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a,b,c</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a+b+c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> sumFn = curry(sum);</span><br><span class="line"><span class="built_in">console</span>.log(sumFn(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)); <span class="comment">//6</span></span><br><span class="line"><span class="built_in">console</span>.log(sumFn(<span class="number">1</span>)(<span class="number">2</span>, <span class="number">3</span>)); <span class="comment">//6</span></span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/面试基础/">面试基础</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2019/07/15/面试基础一/" data-title="面试基础一 | Hexo" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/15/面试基础二/" title="面试基础二">
+  <strong>上一篇：</strong><br/>
+  <span>
+  面试基础二</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/07/15/web安全/"  title="web安全">
+ <strong>下一篇：</strong><br/> 
+ <span>web安全
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基本类型有哪几种？null-是对象吗？基本数据类型和复杂数据类型存储有什么区别？"><span class="toc-number">1.</span> <span class="toc-text">1.基本类型有哪几种？null 是对象吗？基本数据类型和复杂数据类型存储有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#typeof-是否正确判断类型-instanceof呢？-instanceof-的实现原理是什么？"><span class="toc-number">2.</span> <span class="toc-text">typeof 是否正确判断类型? instanceof呢？ instanceof 的实现原理是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-for-of-for-in-和-forEach-map-的区别。"><span class="toc-number">3.</span> <span class="toc-text">3. for of , for in 和 forEach,map 的区别。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-如何判断一个变量是不是数组？"><span class="toc-number"></span> <span class="toc-text">4. 如何判断一个变量是不是数组？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-类数组和数组的区别是什么"><span class="toc-number"></span> <span class="toc-text">5.类数组和数组的区别是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-和-有什么区别？"><span class="toc-number"></span> <span class="toc-text">6.== 和 === 有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-let、const-以及-var-的区别是什么？"><span class="toc-number"></span> <span class="toc-text">7 let、const 以及 var 的区别是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-在JS中什么是变量提升？什么是暂时性死区？"><span class="toc-number"></span> <span class="toc-text">8.在JS中什么是变量提升？什么是暂时性死区？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-如何正确的判断this-箭头函数的this是什么？"><span class="toc-number"></span> <span class="toc-text">9.如何正确的判断this? 箭头函数的this是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-词法作用域和this的区别。"><span class="toc-number"></span> <span class="toc-text">10.词法作用域和this的区别。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-词法作用域和this的区别。"><span class="toc-number"></span> <span class="toc-text">11.词法作用域和this的区别。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-谈谈你对JS执行上下文栈和作用域链的理解。"><span class="toc-number"></span> <span class="toc-text">12.谈谈你对JS执行上下文栈和作用域链的理解。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-什么是闭包？闭包的作用是什么？闭包有哪些使用场景？"><span class="toc-number"></span> <span class="toc-text">13.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-call、apply有什么区别？call-aplly和bind的内部是如何实现的？"><span class="toc-number"></span> <span class="toc-text">14. call、apply有什么区别？call,aplly和bind的内部是如何实现的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？"><span class="toc-number"></span> <span class="toc-text">14.new的原理是什么？通过new的方式创建对象和通过字面量创建有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-谈谈你对原型的理解？"><span class="toc-number"></span> <span class="toc-text">15.谈谈你对原型的理解？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-什么是原型链？【原型链解决的是什么问题？】"><span class="toc-number"></span> <span class="toc-text">16.什么是原型链？【原型链解决的是什么问题？】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-prototype-和-proto-区别是什么？"><span class="toc-number"></span> <span class="toc-text">16.prototype 和 proto 区别是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-使用ES5实现一个继承？"><span class="toc-number"></span> <span class="toc-text">17.使用ES5实现一个继承？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-什么是深拷贝？深拷贝和浅拷贝有什么区别？"><span class="toc-number"></span> <span class="toc-text">18.什么是深拷贝？深拷贝和浅拷贝有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#19-防抖和节流的区别是什么？防抖和节流的实现。"><span class="toc-number"></span> <span class="toc-text">19.防抖和节流的区别是什么？防抖和节流的实现。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#20-取数组的最大值（ES5、ES6）"><span class="toc-number"></span> <span class="toc-text">20.取数组的最大值（ES5、ES6）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21-ES6新的特性有哪些？"><span class="toc-number"></span> <span class="toc-text">21.ES6新的特性有哪些？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-setTimeout倒计时为什么会出现误差？"><span class="toc-number"></span> <span class="toc-text">22.setTimeout倒计时为什么会出现误差？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-为什么-0-1-0-2-0-3"><span class="toc-number"></span> <span class="toc-text">23.为什么 0.1 + 0.2 != 0.3 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-promise-有几种状态-Promise-有什么优缺点"><span class="toc-number"></span> <span class="toc-text">24.promise 有几种状态, Promise 有什么优缺点 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-Promise构造函数是同步还是异步执行，then中的方法呢-promise如何实现then处理"><span class="toc-number"></span> <span class="toc-text">25.Promise构造函数是同步还是异步执行，then中的方法呢 ?promise如何实现then处理 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-Promise和setTimeout的区别"><span class="toc-number"></span> <span class="toc-text">26.Promise和setTimeout的区别 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#27-promise-all"><span class="toc-number"></span> <span class="toc-text">27.promise.all</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#28-如何实现-Promise-finally"><span class="toc-number"></span> <span class="toc-text">28.如何实现 Promise.finally?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#29-什么是函数柯里化？实现-sum-1-2-3-返回结果是1-2-3之和"><span class="toc-number"></span> <span class="toc-text">29. 什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和</span></a>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/面试基础/" title="面试基础">面试基础<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js继承的六种方式/" title="js继承的六种方式">js继承的六种方式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/浏览器缓存机制/" title="浏览器缓存机制">浏览器缓存机制<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式总结/" title="正则表达式总结">正则表达式总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EventLoop/" title="EventLoop">EventLoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发和生产环境的构建配置差异/" title="开发和生产环境的构建配置差异">开发和生产环境的构建配置差异<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内部工作流程/" title="内部工作流程">内部工作流程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="xxinso">xxinso</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

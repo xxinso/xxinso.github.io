@@ -1,0 +1,920 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>面试基础二 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="xxinso">
+    
+
+    
+    <meta name="description" content="1.说一说js异步发展史异步最早的解决方案是回调函数，如事件的回调，setInterval/setTimeout中的回调。但是回调函数有一个很常见的问题，就是回调地狱的问题(稍后会举例说明); 为了解决回调地狱的问题，社区提出了Promise解决方案，ES6将其写进了语言标准。Promise解决了回调地狱的问题，但是Promise也存在一些问题，如错误不能被try catch，而且使用Promis">
+<meta name="keywords" content="面试基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试基础二">
+<meta property="og:url" content="http://yoursite.com/2019/07/15/面试基础二/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.说一说js异步发展史异步最早的解决方案是回调函数，如事件的回调，setInterval/setTimeout中的回调。但是回调函数有一个很常见的问题，就是回调地狱的问题(稍后会举例说明); 为了解决回调地狱的问题，社区提出了Promise解决方案，ES6将其写进了语言标准。Promise解决了回调地狱的问题，但是Promise也存在一些问题，如错误不能被try catch，而且使用Promis">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-29T18:36:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试基础二">
+<meta name="twitter:description" content="1.说一说js异步发展史异步最早的解决方案是回调函数，如事件的回调，setInterval/setTimeout中的回调。但是回调函数有一个很常见的问题，就是回调地狱的问题(稍后会举例说明); 为了解决回调地狱的问题，社区提出了Promise解决方案，ES6将其写进了语言标准。Promise解决了回调地狱的问题，但是Promise也存在一些问题，如错误不能被try catch，而且使用Promis">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/15/面试基础二/" title="面试基础二" itemprop="url">面试基础二</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="xxinso" target="_blank" itemprop="author">xxinso</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-15T02:35:23.000Z" itemprop="datePublished"> Published 2019-07-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-说一说js异步发展史"><span class="toc-number">1.</span> <span class="toc-text">1.说一说js异步发展史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-谈谈对-async-await-的理解，async-await-的实现原理是什么"><span class="toc-number">2.</span> <span class="toc-text">2.谈谈对 async/await 的理解，async/await 的实现原理是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-使用-async-await-需要注意什么？"><span class="toc-number">3.</span> <span class="toc-text">3.使用 async/await 需要注意什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-如何实现-Promise-race？"><span class="toc-number">4.</span> <span class="toc-text">4.如何实现 Promise.race？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-可遍历数据结构的有什么特点？"><span class="toc-number">5.</span> <span class="toc-text">5.可遍历数据结构的有什么特点？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requestAnimationFrame-和-setTimeout-setInterval-有什么区别？使用-requestAnimationFrame-有哪些好处？"><span class="toc-number">6.</span> <span class="toc-text">requestAnimationFrame 和 setTimeout/setInterval 有什么区别？使用 requestAnimationFrame 有哪些好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-JS-类型转换的规则是什么？"><span class="toc-number">7.</span> <span class="toc-text">7.JS 类型转换的规则是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#强制类型转换"><span class="toc-number">7.1.</span> <span class="toc-text">强制类型转换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式类型转换"><span class="toc-number">8.</span> <span class="toc-text">隐式类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-简述下对-webWorker-的理解？"><span class="toc-number">9.</span> <span class="toc-text">8.简述下对 webWorker 的理解？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-ES6模块和CommonJS模块的差异？"><span class="toc-number">10.</span> <span class="toc-text">9.ES6模块和CommonJS模块的差异？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-浏览器的时间代理机制是什么"><span class="toc-number">11.</span> <span class="toc-text">10.浏览器的时间代理机制是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-js如何自定义事件？"><span class="toc-number">12.</span> <span class="toc-text">11.js如何自定义事件？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-createEvent-‘CustomEvent’-DOM3"><span class="toc-number">13.</span> <span class="toc-text">使用 createEvent(‘CustomEvent’) (DOM3)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-new-customEvent-DOM4"><span class="toc-number">14.</span> <span class="toc-text">使用 new customEvent() (DOM4)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-跨域的方法有哪些？原理是什么？"><span class="toc-number">15.</span> <span class="toc-text">12.跨域的方法有哪些？原理是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx-反向代理"><span class="toc-number">16.</span> <span class="toc-text">nginx 反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#js异步加载有哪些"><span class="toc-number">17.</span> <span class="toc-text">js异步加载有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下面代码a在什么情况中打印出1？"><span class="toc-number">18.</span> <span class="toc-text">下面代码a在什么情况中打印出1？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现双向绑定-Proxy-与-Object-defineProperty-相比优劣如何"><span class="toc-number">19.</span> <span class="toc-text">实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-is-与比较操作符-、-有什么区别？"><span class="toc-number">20.</span> <span class="toc-text">Object.is() 与比较操作符 ===、== 有什么区别？</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="1-说一说js异步发展史"><a href="#1-说一说js异步发展史" class="headerlink" title="1.说一说js异步发展史"></a>1.说一说js异步发展史</h3><p>异步最早的解决方案是回调函数，如事件的回调，setInterval/setTimeout中的回调。但是回调函数有一个很常见的问题，就是回调地狱的问题(稍后会举例说明);</p>
+<p>为了解决回调地狱的问题，社区提出了Promise解决方案，ES6将其写进了语言标准。Promise解决了回调地狱的问题，但是Promise也存在一些问题，如错误不能被try catch，而且使用Promise的链式调用，其实并没有从根本上解决回调地狱的问题，只是换了一种写法。</p>
+<p>ES6引入了gennerater，Generator是一种异步编程解决方案，Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权，Generator 函数可以看出是异步任务的容器，需要暂停的地方，都用yield语句注明。但是 Generator 使用起来较为复杂。</p>
+<p>ES7又提出了新的异步解决方案:async/await，async是 Generator 函数的语法糖，async/await 使得异步代码看起来像同步代码，异步编程发展的目标就是让异步逻辑的代码看起来像同步一样。</p>
+<blockquote>
+<p>1.回调函数: callback</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//node读取文件</span></span><br><span class="line">fs.readFile(xxx, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>回调函数的使用场景(包括但不限于):</p>
+<ul>
+<li>1.事件回调</li>
+<li>2.Node API</li>
+<li>3.setTimeout/setInterval中的回调函数</li>
+</ul>
+<p>异步回调嵌套会导致代码难以维护，并且不方便统一处理错误，不能try catch 和 回调地狱(如先读取A文本内容，再根据A文本内容读取B再根据B的内容读取C…)。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(A, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    fs.readFile(B, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">        fs.readFile(C, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">            fs.readFile(D, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">                <span class="comment">//....</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>2.Promise</p>
+</blockquote>
+<p>Promise 主要解决了回调地狱的问题，Promise 最早由社区提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了Promise对象。</p>
+<p>那么我们看看Promise是如何解决回调地狱问题的，仍然以上文的readFile为例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        fs.readFile(url, <span class="string">'utf8'</span>, (err, data) =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span>(err) reject(err);</span><br><span class="line">            resolve(data);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">read(A).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> read(B);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> read(C);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> read(D);</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">reason</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(reason);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>3.Generator</p>
+</blockquote>
+<p>Generator 函数是 ES6 提供的一种异步编程解决方案，整个 Generator 函数就是一个封装的异步任务，或者说是异步任务的容器。异步操作需要暂停的地方，都用 yield 语句注明。<br>Generator 函数一般配合 yield 或 Promise 使用。Generator函数返回的是迭代器。对生成器和迭代器不了解的同学，请自行补习下基础。下面我们看一下 Generator 的简单使用:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="keyword">yield</span> <span class="number">111</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="keyword">let</span> b = <span class="keyword">yield</span> <span class="number">222</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="keyword">let</span> c = <span class="keyword">yield</span> <span class="number">333</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(c);</span><br><span class="line">    <span class="keyword">let</span> d = <span class="keyword">yield</span> <span class="number">444</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> t = gen();</span><br><span class="line"><span class="comment">//next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值</span></span><br><span class="line">t.next(<span class="number">1</span>); <span class="comment">//第一次调用next函数时，传递的参数无效</span></span><br><span class="line">t.next(<span class="number">2</span>); <span class="comment">//a输出2;</span></span><br><span class="line">t.next(<span class="number">3</span>); <span class="comment">//b输出3; </span></span><br><span class="line">t.next(<span class="number">4</span>); <span class="comment">//c输出4;</span></span><br><span class="line">t.next(<span class="number">5</span>); <span class="comment">//d输出5;</span></span><br></pre></td></tr></table></figure>
+<p>仍然以上文的readFile为例，使用 Generator + co库来实现:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>);</span><br><span class="line"><span class="keyword">const</span> bluebird = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"><span class="keyword">const</span> readFile = bluebird.promisify(fs.readFile);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">read</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> readFile(A, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">yield</span> readFile(B, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">yield</span> readFile(C, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">&#125;</span><br><span class="line">co(read()).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>4.async/await</p>
+</blockquote>
+<p>ES7中引入了 async/await 概念。async其实是一个语法糖，它的实现就是将Generator函数和自动执行器（co），包装在一个函数中。</p>
+<p>async/await 的优点是代码清晰，不用像 Promise 写很多 then 链，就可以处理回调地狱的问题。错误可以被try catch。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">const</span> bluebird = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"><span class="keyword">const</span> readFile = bluebird.promisify(fs.readFile);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">await</span> readFile(A, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">await</span> readFile(B, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">await</span> readFile(C, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">read().then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="2-谈谈对-async-await-的理解，async-await-的实现原理是什么"><a href="#2-谈谈对-async-await-的理解，async-await-的实现原理是什么" class="headerlink" title="2.谈谈对 async/await 的理解，async/await 的实现原理是什么?"></a>2.谈谈对 async/await 的理解，async/await 的实现原理是什么?</h3><p>async/await就是Generater的语法糖，使异步变的更加方便</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">read</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> oneStep = <span class="keyword">yield</span> readFile(<span class="string">"one"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">let</span> twoStep = <span class="keyword">yield</span> readFile(<span class="string">"two"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">let</span> threeStep = <span class="keyword">yield</span> readFile(<span class="string">"three"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">return</span> threeStep</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">read</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> oneStep = <span class="keyword">await</span> readFile(<span class="string">"one"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">let</span> twoStep = <span class="keyword">await</span> readFile(<span class="string">"two"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">let</span> threeStep = <span class="keyword">await</span> readFile(<span class="string">"three"</span>,<span class="string">"utf-8"</span>);</span><br><span class="line">    <span class="keyword">return</span> threeStep</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>async 函数就是将 Generator 函数的星号（*）替换成 async，将 yield 替换成await。</p>
+<blockquote>
+<p>我们说 async 是 Generator 的语法糖，那么这个糖究竟甜在哪呢？</p>
+</blockquote>
+<ul>
+<li><p>1.async函数内置执行器，函数调用之后，会自动执行，输出最后结果。而Generator需要调用next或者配合co模块使用。</p>
+</li>
+<li><p>2.更好的语义，async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。</p>
+</li>
+<li><p>3.更广的适用性。co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async 函数的 await 命令后面，可以是 Promise 对象和原始类型的值。</p>
+</li>
+<li><p>4.返回值是Promise，async函数的返回值是 Promise 对象，Generator的返回值是 Iterator，Promise 对象使用起来更加方便。</p>
+</li>
+</ul>
+<blockquote>
+<p>async 函数的实现原理，就是将 Generator 函数和自动执行器，包装在一个函数里。</p>
+</blockquote>
+<h3 id="3-使用-async-await-需要注意什么？"><a href="#3-使用-async-await-需要注意什么？" class="headerlink" title="3.使用 async/await 需要注意什么？"></a>3.使用 async/await 需要注意什么？</h3><p>1.await 命令后面的Promise对象，运行结果可能是 rejected，此时等同于 async 函数返回的 Promise 对象被reject。因此需要加上错误处理，可以给每个 await 后的 Promise 增加 catch 方法；也可以将 await 的代码放在 try…catch 中。<br>2.多个await命令后面的异步操作，如果不存在继发关系，最好让它们同时触发。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面两种写法都可以同时触发</span></span><br><span class="line"><span class="comment">//法一</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">Promise</span>.all([</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(resolve, <span class="number">600</span>);</span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(resolve, <span class="number">600</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">    ])</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//法二</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> fn1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(resolve, <span class="number">800</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> fn2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(resolve, <span class="number">800</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">    <span class="keyword">await</span> fn1;</span><br><span class="line">    <span class="keyword">await</span> fn2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><ol>
+<li>await命令只能用在async函数之中，如果用在普通函数，会报错。</li>
+</ol>
+</li>
+<li><ol>
+<li>async 函数可以保留运行堆栈。</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-如何实现-Promise-race？"><a href="#4-如何实现-Promise-race？" class="headerlink" title="4.如何实现 Promise.race？"></a>4.如何实现 Promise.race？</h3><p>在代码实现前，我们需要先了解 Promise.race 的特点：</p>
+<ul>
+<li>1.Promise.race返回的仍然是一个Promise. 它的状态与第一个完成的Promise的状态相同。它可以是完成（ resolves），也可以是失败（rejects），这要取决于第一个Promise是哪一种状态。</li>
+<li>2.如果传入的参数是不可迭代的，那么将会抛出错误。</li>
+<li>3.如果传的参数数组是空，那么返回的 promise 将永远等待。</li>
+<li>4.如果迭代包含一个或多个非承诺值和/或已解决/拒绝的承诺，则 Promise.race 将解析为迭代中找到的第一个值。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.race = <span class="function"><span class="keyword">function</span> (<span class="params">promises</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//promises 必须是一个可遍历的数据结构，否则抛错</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> promises[<span class="built_in">Symbol</span>.iterator] !== <span class="string">'function'</span>) &#123;</span><br><span class="line">            <span class="comment">//真实不是这个错误</span></span><br><span class="line">            <span class="built_in">Promise</span>.reject(<span class="string">'args is not iteratable!'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (promises.length === <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; promises.length; i++) &#123;</span><br><span class="line">                <span class="built_in">Promise</span>.resolve(promises[i]).then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">                    resolve(data);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;, (err) =&gt; &#123;</span><br><span class="line">                    reject(err);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-可遍历数据结构的有什么特点？"><a href="#5-可遍历数据结构的有什么特点？" class="headerlink" title="5.可遍历数据结构的有什么特点？"></a>5.可遍历数据结构的有什么特点？</h3><p>一个对象如果要具备可被 for…of 循环调用的 Iterator 接口，就必须在其 Symbol.iterator 的属性上部署遍历器生成方法(或者原型链上的对象具有该方法)</p>
+<p>PS: 遍历器对象根本特征就是具有next方法。每次调用next方法，都会返回一个代表当前成员的信息对象，具有value和done两个属性。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//如为对象添加Iterator 接口;</span></span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">"Yvette"</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    job: <span class="string">'engineer'</span>,</span><br><span class="line">    [<span class="built_in">Symbol</span>.iterator]() &#123;</span><br><span class="line">        <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(self);</span><br><span class="line">        <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            next() &#123;</span><br><span class="line">                <span class="keyword">if</span> (index &lt; keys.length) &#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;</span><br><span class="line">                        value: self[keys[index++]],</span><br><span class="line">                        done: <span class="literal">false</span></span><br><span class="line">                    &#125;;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123; <span class="attr">value</span>: <span class="literal">undefined</span>, <span class="attr">done</span>: <span class="literal">true</span> &#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> item <span class="keyword">of</span> obj) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(item); <span class="comment">//Yvette  18  engineer</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 Generator 函数(遍历器对象生成函数)简写 Symbol.iterator 方法，可以简写如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">"Yvette"</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    job: <span class="string">'engineer'</span>,</span><br><span class="line">    * [<span class="built_in">Symbol</span>.iterator] () &#123;</span><br><span class="line">        <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(self);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>;index &lt; keys.length; index++) &#123;</span><br><span class="line">            <span class="keyword">yield</span> self[keys[index]];<span class="comment">//yield表达式仅能使用在 Generator 函数中</span></span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>原生具备 Iterator 接口的数据结构如下。</p>
+</blockquote>
+<ul>
+<li>Array</li>
+<li>Map</li>
+<li>Set</li>
+<li>String</li>
+<li>TypedArray</li>
+<li>函数的 arguments 对象</li>
+<li>NodeList 对象</li>
+<li>ES6 的数组、Set、Map 都部署了以下三个方法: entries() / keys() / values()，调用后都返回遍历器对象。</li>
+</ul>
+<h3 id="requestAnimationFrame-和-setTimeout-setInterval-有什么区别？使用-requestAnimationFrame-有哪些好处？"><a href="#requestAnimationFrame-和-setTimeout-setInterval-有什么区别？使用-requestAnimationFrame-有哪些好处？" class="headerlink" title="requestAnimationFrame 和 setTimeout/setInterval 有什么区别？使用 requestAnimationFrame 有哪些好处？"></a>requestAnimationFrame 和 setTimeout/setInterval 有什么区别？使用 requestAnimationFrame 有哪些好处？</h3><p>在 requestAnimationFrame 之前，我们主要使用 setTimeout/setInterval 来编写JS动画。</p>
+<p>编写动画的关键是循环间隔的设置，一方面，循环间隔足够短，动画效果才能显得平滑流畅；另一方面，循环间隔还要足够长，才能确保浏览器有能力渲染产生的变化。</p>
+<p>大部分的电脑显示器的刷新频率是60HZ，也就是每秒钟重绘60次。大多数浏览器都会对重绘操作加以限制，不超过显示器的重绘频率，因为即使超过那个频率用户体验也不会提升。因此，最平滑动画的最佳循环间隔是 1000ms / 60 ，约为16.7ms。</p>
+<p>setTimeout/setInterval 有一个显著的缺陷在于时间是不精确的，setTimeout/setInterval 只能保证延时或间隔不小于设定的时间。因为它们实际上只是把任务添加到了任务队列中，但是如果前面的任务还没有执行完成，它们必须要等待。</p>
+<p>requestAnimationFrame 才有的是系统时间间隔，保持最佳绘制效率，不会因为间隔时间过短，造成过度绘制，增加开销；也不会因为间隔时间太长，使用动画卡顿不流畅，让各种网页动画效果能够有一个统一的刷新机制，从而节省系统资源，提高系统性能，改善视觉效果。</p>
+<p>综上所述，requestAnimationFrame 和 setTimeout/setInterval 在编写动画时相比，优点如下:</p>
+<ul>
+<li>1.requestAnimationFrame 不需要设置时间，采用系统时间间隔，能达到最佳的动画效果。</li>
+<li>2.requestAnimationFrame 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成。</li>
+</ul>
+<h3 id="7-JS-类型转换的规则是什么？"><a href="#7-JS-类型转换的规则是什么？" class="headerlink" title="7.JS 类型转换的规则是什么？"></a>7.JS 类型转换的规则是什么？</h3><p>JS的类型转换分为 强制类型转换和隐式类型转换</p>
+<ul>
+<li>通过 Number()、parseInt()、parseFloat()、toString()、String()、Boolean(),进行强制类型转换。</li>
+<li>逻辑运算符(&amp;&amp;、 ||、 !)、运算符(+、-、*、/)、关系操作符(&gt;、 &lt;、 &lt;= 、&gt;=)、相等运算符(==)或者 if/while 的条件，可能会进行隐式类型转换。</li>
+</ul>
+<h4 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h4><blockquote>
+<p>1.Number() 将任意类型的参数转换为数值类型</p>
+</blockquote>
+<p>规则如下</p>
+<ul>
+<li>如果是布尔值，true和false分别被转换为1和0</li>
+<li>如果是数字，返回自身</li>
+<li>如果是 null，返回 0</li>
+<li>如果是undefined返回NaN</li>
+<li>如果是字符串，遵循以下规则:<br> 1.如果字符串中只包含数字(或者是 0X / 0x 开头的十六进制数字字符串，允许包含正负号)，则将其转换为十进制。<br> 2.如果字符串中包含有效的浮点格式，将其转换为浮点数值。<br> 3.如果是空字符串，将其转换为0。<br> 4.如不是以上格式的字符串，均返回 NaN</li>
+<li>如果是Symbol，抛出错误</li>
+<li>如果是对象，则调用对象的 valueOf() 方法，然后依据前面的规则转换返回的值。如果转换的结果是 NaN ，则调用对象的 toString() 方法，再次依照前面的规则转换返回的字符串值。<br>部分内置对象调用默认的 valueOf 的行为:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th style="text-align:center">返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Array</td>
+<td style="text-align:center">数组本身（对象类型）</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td style="text-align:center">布尔值（原始类型）</td>
+</tr>
+<tr>
+<td>Date</td>
+<td style="text-align:center">从 UTC 1970 年 1 月 1 日午夜开始计算，到所封装的日期所经过的毫秒数</td>
+</tr>
+<tr>
+<td>Function</td>
+<td style="text-align:center">函数本身（对象类型）</td>
+</tr>
+<tr>
+<td>Number</td>
+<td style="text-align:center">数字值（原始类型）</td>
+</tr>
+<tr>
+<td>Object</td>
+<td style="text-align:center">对象本身（对象类型）</td>
+</tr>
+<tr>
+<td>String</td>
+<td style="text-align:center">字符串值（原始类型）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>(<span class="string">'0111'</span>); <span class="comment">//111</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'0X11'</span>) <span class="comment">//17</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="literal">null</span>); <span class="comment">//0</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">''</span>); <span class="comment">//0</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'1a'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="number">-0X11</span>);<span class="comment">//-17</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>2.parseInt(param, radix)<br>如果第一个参数传入的是字符串类型:</p>
+<ul>
+<li>1.忽略字符串前面的空格，直至找到第一个非空字符，如果是空字符串，返回NaN</li>
+<li>2.如果第一个字符不是数字符号或者正负号，返回NaN</li>
+<li>3.如果第一个字符是数字/正负号，则继续解析直至字符串解析完毕或者遇到一个非数字符号为止</li>
+</ul>
+</blockquote>
+<p>如果第一个参数传入的Number类型:</p>
+<ul>
+<li>1.数字如果是0开头，则将其当作八进制来解析(如果是一个八进制数)；如果以0x开头，则将其当作十六进制来解析。<br>如果第一个参数是 null 或者是 undefined，或者是一个对象类型：</li>
+<li>1.返回NaN<br>如果第一个参数是数组： 1. 去数组的第一个元素，按照上面的规则进行解析<br>如果第一个参数是Symbol类型： 1. 抛出错误<br>如果指定radix参数，以radix为基数进行解析</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">'0111'</span>); <span class="comment">//111</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">0111</span>); <span class="comment">//八进制数 73</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">''</span>);<span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'0X11'</span>); <span class="comment">//17</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'1a'</span>) <span class="comment">//1</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'a1'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">parseInt</span>([<span class="string">'10aa'</span>,<span class="string">'aaa'</span>]);<span class="comment">//10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">parseInt</span>([]);<span class="comment">//NaN; parseInt(undefined);</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>toString()</p>
+</blockquote>
+<ul>
+<li>如果是Number类型，输出数字字符串</li>
+<li>如果是 null 或者是 undefined，抛错</li>
+<li>如果是数组，那么将数组展开输出。空数组，返回’’</li>
+<li>如果是对象，返回 [object Object]</li>
+<li>如果是Date, 返回日期的文字表示法</li>
+<li>如果是函数，输出对应的字符串(如下demo)</li>
+<li>如果是Symbol，输出Symbol字符串</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arry = [];</span><br><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">a</span>:<span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> sym = <span class="built_in">Symbol</span>(<span class="number">100</span>);</span><br><span class="line"><span class="keyword">let</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">let</span> fn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="built_in">console</span>.log(<span class="string">'稳住，我们能赢！'</span>)&#125;</span><br><span class="line"><span class="keyword">let</span> str = <span class="string">'hello world'</span>;</span><br><span class="line"><span class="built_in">console</span>.log([].toString()); <span class="comment">// ''</span></span><br><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="literal">undefined</span>, <span class="number">5</span>, <span class="number">6</span>].toString());<span class="comment">//1,2,3,,5,6</span></span><br><span class="line"><span class="built_in">console</span>.log(arry.toString()); <span class="comment">// 1,2,3</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.toString()); <span class="comment">// [object Object]</span></span><br><span class="line"><span class="built_in">console</span>.log(date.toString()); <span class="comment">// Sun Apr 21 2019 16:11:39 GMT+0800 (CST)</span></span><br><span class="line"><span class="built_in">console</span>.log(fn.toString());<span class="comment">// function () &#123;console.log('稳住，我们能赢！')&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(str.toString());<span class="comment">// 'hello world'</span></span><br><span class="line"><span class="built_in">console</span>.log(sym.toString());<span class="comment">// Symbol(100)</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span>.toString());<span class="comment">// 抛错</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">null</span>.toString());<span class="comment">// 抛错</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>String()<br>String() 的转换规则与 toString() 基本一致，最大的一点不同在于 null 和 undefined，使用 String 进行转换，null 和 undefined对应的是字符串 ‘null’ 和 ‘undefined’</p>
+</blockquote>
+<blockquote>
+<p>Boolean<br>除了 undefined、 null、 false、 ‘’、 0(包括 +0，-0)、 NaN 转换出来是false，其它都是true.</p>
+</blockquote>
+<h3 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h3><blockquote>
+<p>&amp;&amp; 、|| 、 ! 、 if/while 的条件判断<br>需要将数据转换成 Boolean 类型，转换规则同 Boolean 强制类型转换</p>
+</blockquote>
+<blockquote>
+<p>运算符: + - * /</p>
+</blockquote>
+<ul>
+<li>号操作符，不仅可以用作数字相加，还可以用作字符串拼接。<br>仅当 + 号两边都是数字时，进行的是加法运算。如果两边都是字符串，直接拼接，无需进行隐式类型转换。</li>
+</ul>
+<p>除了上面的情况外，如果操作数是对象、数值或者布尔值，则调用toString()方法取得字符串值(toString转换规则)。对于 undefined 和 null，分别调用String()显式转换为字符串，然后再进行拼接。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(&#123;&#125;+<span class="number">10</span>); <span class="comment">//[object Object]10</span></span><br><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="literal">undefined</span>, <span class="number">5</span>, <span class="number">6</span>] + <span class="number">10</span>);<span class="comment">//1,2,3,,5,610</span></span><br></pre></td></tr></table></figure>
+<p>-、*、/ 操作符针对的是运算，如果操作值之一不是数值，则被隐式调用Number()函数进行转换。如果其中有一个转换除了为NaN，结果为NaN.</p>
+<blockquote>
+<p>关系操作符: ==、&gt;、&lt; 、&lt;=、&gt;=<br><strong>&gt;</strong>, <strong>&lt;</strong>,<strong>&lt;=</strong>,<strong>&gt;=</strong></p>
+</blockquote>
+<ul>
+<li>1.如果两个操作值都是数值，则进行数值比较</li>
+<li>2.如果两个操作值都是字符串，则比较字符串对应的字符编码值</li>
+<li>3.如果有一方是Symbol类型，抛出错误</li>
+<li>4.除了上述情况之外，都进行Number()进行类型转换，然后再进行比较。</li>
+</ul>
+<p>注: NaN是非常特殊的值，它不和任何类型的值相等，包括它自己，同时它与任何类型的值比较大小时都返回false。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">10</span> &gt; &#123;&#125;);<span class="comment">//返回false.</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *&#123;&#125;.valueOf ---&gt; &#123;&#125;</span></span><br><span class="line"><span class="comment"> *&#123;&#125;.toString() ---&gt; '[object Object]' ---&gt; NaN</span></span><br><span class="line"><span class="comment"> *NaN 和 任何类型比大小，都返回 false</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>1.如果类型相同，无需进行类型转换。</li>
+<li>2.如果其中一个操作值是 null 或者是 undefined，那么另一个操作符必须为 null 或者 undefined 时，才返回 true，否则都返回 false。</li>
+<li>3.如果其中一个是 Symbol 类型，那么返回 false。</li>
+<li>4.两个操作值是否为 string 和 number，就会将字符串转换为 number。</li>
+<li>5.如果一个操作值是 boolean，那么转换成 number。</li>
+<li>6.如果一个操作值为 object 且另一方为 string、number 或者 symbol，是的话就会把 object 转为原始类型再进行判断(调用object的valueOf/toString方法进行转换)</li>
+</ul>
+<blockquote>
+<p>对象如何转换成原始数据类型<br>如果部署了 [Symbol.toPrimitive] 接口，那么调用此接口，若返回的不是基础数据类型，抛出错误。</p>
+</blockquote>
+<p>如果没有部署 [Symbol.toPrimitive] 接口，那么先返回 valueOf() 的值，若返回的不是基础类型的值，再返回 toString() 的值，若返回的不是基础类型的值， 则抛出异常。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/先调用 valueOf, 后调用 toString</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    [<span class="built_in">Symbol</span>.toPrimitive]() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">200</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    valueOf() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">300</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Hello'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//如果 valueOf 返回的不是基本数据类型，则会调用 toString， </span></span><br><span class="line"><span class="comment">//如果 toString 返回的也不是基本数据类型，会抛出错误</span></span><br><span class="line"><span class="built_in">console</span>.log(obj + <span class="number">200</span>); <span class="comment">//400</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-简述下对-webWorker-的理解？"><a href="#8-简述下对-webWorker-的理解？" class="headerlink" title="8.简述下对 webWorker 的理解？"></a>8.简述下对 webWorker 的理解？</h3><p>HTML5则提出了 Web Worker 标准，表示js允许多线程，但是子线程完全受主线程控制并且不能操作dom，只有主线程可以操作dom，所以js本质上依然是单线程语言。</p>
+<p>web worker就是在js单线程执行的基础上开启一个子线程，进行程序处理，而不影响主线程的执行，当子线程执行完之后再回到主线程上，在这个过程中不影响主线程的执行。子线程与主线程之间提供了数据交互的接口postMessage和onmessage，来进行数据发送和接收。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'./worker.js'</span>); <span class="comment">//创建一个子线程</span></span><br><span class="line">worker.postMessage(<span class="string">'Hello'</span>);</span><br><span class="line">worker.onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.data); <span class="comment">//Hi</span></span><br><span class="line">    worker.terminate(); <span class="comment">//结束线程</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.data); <span class="comment">//Hello</span></span><br><span class="line">    postMessage(<span class="string">"Hi"</span>); <span class="comment">//向主进程发送消息</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>仅是最简示例代码，项目中通常是将一些耗时较长的代码，放在子线程中运行。</p>
+<h3 id="9-ES6模块和CommonJS模块的差异？"><a href="#9-ES6模块和CommonJS模块的差异？" class="headerlink" title="9.ES6模块和CommonJS模块的差异？"></a>9.ES6模块和CommonJS模块的差异？</h3><ul>
+<li><ol>
+<li>ES6模块在编译时，就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 模块，运行时加载。</li>
+</ol>
+</li>
+<li><ol>
+<li>ES6 模块自动采用严格模式，无论模块头部是否写了 “use strict”;</li>
+</ol>
+</li>
+<li><ol>
+<li>require 可以做动态加载，import 语句做不到，import 语句必须位于顶层作用域中。</li>
+</ol>
+</li>
+<li><ol>
+<li>ES6 模块中顶层的 this 指向 undefined，CommonJS 模块的顶层 this 指向当前模块。</li>
+</ol>
+</li>
+<li><ol>
+<li>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。</li>
+</ol>
+</li>
+</ul>
+<p>CommonJS 模块输出的是值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//name.js</span></span><br><span class="line"><span class="keyword">var</span> name = <span class="string">'William'</span>;</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> name = <span class="string">'Yvette'</span>, <span class="number">200</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    name</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="keyword">const</span> name = <span class="built_in">require</span>(<span class="string">'./name'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">//William</span></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(name), <span class="number">300</span>); <span class="comment">//William</span></span><br></pre></td></tr></table></figure>
+<p>对比 ES6 模块看一下:<br>ES6 模块的运行机制与 CommonJS 不一样。JS 引擎对脚本静态分析的时候，遇到模块加载命令 import ，就会生成一个只读引用。等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。</p>
+<h3 id="10-浏览器的时间代理机制是什么"><a href="#10-浏览器的时间代理机制是什么" class="headerlink" title="10.浏览器的时间代理机制是什么"></a>10.浏览器的时间代理机制是什么</h3><p>在说浏览器事件代理机制原理之前，我们首先了解一下事件流的概念，早期浏览器，IE采用的是事件冒泡事件流，而Netscape采用的则是事件捕获。”DOM2级事件”把事件流分为三个阶段，捕获阶段、目标阶段、冒泡阶段。现代浏览器也都遵循此规范</p>
+<blockquote>
+<p>那么事件代理是什么呢？<br>时间代理又成为事件委托，在祖先级DOM元素绑定一个事件，当触发子孙级DOM元素的事件时，利用事件冒泡的原理来触发绑定在祖先级DOM的事件。因为事件会从目标元素一层层冒泡至document对象。<br>为什么要事件代理？</p>
+<ol>
+<li>添加到页面的事件数量回影响页面的运行性能，如果添加的事件过多，会导致网页的性能下降。采用事件代理的方式，可以大大减少注册事件的个数。</li>
+<li>事件代理的当时，某个子孙元素是动态增加的，不需要再次对其进行事件绑定。</li>
+<li>不用担心某个注册了事件的DOM元素被移除后，可能无法回收其事件处理程序，我们只要把事件处理程序委托给更高层级的元素，就可以避免此问题。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>如将页面中的所有click事件都代理到document上:</p>
+</blockquote>
+<p>addEventListener 接受3个参数，分别是要处理的事件名、处理事件程序的函数和一个布尔值。布尔值默认为false。表示冒泡阶段调用事件处理程序，若设置为true，表示在捕获阶段调用事件处理程序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.target);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 捕获阶段调用调用事件处理程序，eventPhase是 1; </span></span><br><span class="line"><span class="comment">    * 处于目标，eventPhase是2 </span></span><br><span class="line"><span class="comment">    * 冒泡阶段调用事件处理程序，eventPhase是 1；</span></span><br><span class="line"><span class="comment">    */</span> </span><br><span class="line">    <span class="built_in">console</span>.log(e.eventPhase);</span><br><span class="line">    </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="11-js如何自定义事件？"><a href="#11-js如何自定义事件？" class="headerlink" title="11.js如何自定义事件？"></a>11.js如何自定义事件？</h3><blockquote>
+<p>自定义 DOM 事件(不考虑IE9之前版本)<br>自定义事件有三种方法,一种是使用 <strong>new Event()</strong>, 另一种是 <strong>createEvent(‘CustomEvent’)</strong> , 另一种是 <strong>new customEvent()</strong></p>
+</blockquote>
+<p>1.使用<strong>new Event()</strong><br>获取不到<strong>event.detail</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> btn = <span class="built_in">document</span>.querySelector(<span class="string">'#btn'</span>);</span><br><span class="line"><span class="keyword">let</span> ev = <span class="keyword">new</span> Event(<span class="string">'alert'</span>, &#123;</span><br><span class="line">    bubbles: <span class="literal">true</span>,    <span class="comment">//事件是否冒泡;默认值false</span></span><br><span class="line">    cancelable: <span class="literal">true</span>, <span class="comment">//事件能否被取消;默认值false</span></span><br><span class="line">    composed: <span class="literal">false</span></span><br><span class="line">&#125;);</span><br><span class="line">btn.addEventListener(<span class="string">'alert'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.bubbles); <span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.cancelable); <span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.detail); <span class="comment">//undefined</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line">btn.dispatchEvent(ev);</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用-createEvent-‘CustomEvent’-DOM3"><a href="#使用-createEvent-‘CustomEvent’-DOM3" class="headerlink" title="使用 createEvent(‘CustomEvent’) (DOM3)"></a>使用 createEvent(‘CustomEvent’) (DOM3)</h3><p>要创建自定义事件，可以调用 <strong>createEvent(‘CustomEvent’)</strong>，返回的对象有 initCustomEvent 方法，接受以下四个参数:</p>
+<ul>
+<li>type: 字符串，表示触发的事件类型，如此处的’alert’</li>
+<li>bubbles: 布尔值： 表示事件是否冒泡</li>
+<li>cancelable: 布尔值，表示事件是否可以取消</li>
+<li>detail: 任意值，保存在 event 对象的 detail 属性中</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> btn = <span class="built_in">document</span>.querySelector(<span class="string">'#btn'</span>);</span><br><span class="line"><span class="keyword">let</span> ev = btn.createEvent(<span class="string">'CustomEvent'</span>);</span><br><span class="line">ev.initCustomEvent(<span class="string">'alert'</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="string">'button'</span>);</span><br><span class="line">btn.addEventListener(<span class="string">'alert'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.bubbles); <span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.cancelable);<span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.detail); <span class="comment">//button</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line">btn.dispatchEvent(ev);</span><br></pre></td></tr></table></figure>
+<h3 id="使用-new-customEvent-DOM4"><a href="#使用-new-customEvent-DOM4" class="headerlink" title="使用 new customEvent() (DOM4)"></a>使用 new customEvent() (DOM4)</h3><p>使用起来比 <strong>createEvent(‘CustomEvent’)</strong> 更加方便</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> btn = <span class="built_in">document</span>.querySelector(<span class="string">'#btn'</span>);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 第一个参数是事件类型</span></span><br><span class="line"><span class="comment"> * 第二个参数是一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> ev = <span class="keyword">new</span> CustomEvent(<span class="string">'alert'</span>, &#123;</span><br><span class="line">    bubbles: <span class="string">'true'</span>,</span><br><span class="line">    cancelable: <span class="string">'true'</span>,</span><br><span class="line">    detail: <span class="string">'button'</span></span><br><span class="line">&#125;);</span><br><span class="line">btn.addEventListener(<span class="string">'alert'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.bubbles); <span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.cancelable);<span class="comment">//true</span></span><br><span class="line">    <span class="built_in">console</span>.log(event.detail); <span class="comment">//button</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line">btn.dispatchEvent(ev);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>自定义非 DOM 事件(观察者模式)</p>
+</blockquote>
+<p>EventTarget类型有一个单独的属性handlers，用于存储事件处理程序（观察者）。</p>
+<p>addHandler() 用于注册给定类型事件的事件处理程序；</p>
+<p>fire() 用于触发一个事件；</p>
+<p>removeHandler() 用于注销某个事件类型的事件处理程序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">EventTarget</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.handlers = &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line">EventTarget.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>:EventTarget,</span><br><span class="line">    addHandler:function(type,handler)&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="keyword">this</span>.handlers[type] === <span class="string">"undefined"</span>)&#123;</span><br><span class="line">            <span class="keyword">this</span>.handlers[type] = [];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.handlers[type].push(handler);</span><br><span class="line">    &#125;,</span><br><span class="line">    fire:<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!event.target)&#123;</span><br><span class="line">            event.target = <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.handlers[event.type] <span class="keyword">instanceof</span> <span class="built_in">Array</span>)&#123;</span><br><span class="line">            <span class="keyword">const</span> handlers = <span class="keyword">this</span>.handlers[event.type];</span><br><span class="line">            handlers.forEach(<span class="function">(<span class="params">handler</span>)=&gt;</span>&#123;</span><br><span class="line">                handler(event);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    removeHandler:<span class="function"><span class="keyword">function</span>(<span class="params">type,handler</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.handlers[type] <span class="keyword">instanceof</span> <span class="built_in">Array</span>)&#123;</span><br><span class="line">            <span class="keyword">const</span> handlers = <span class="keyword">this</span>.handlers[type];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>,len = handlers.length; i &lt; len; i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(handlers[i] === handler)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            handlers.splice(i,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//使用</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleMessage</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.message);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建一个新对象</span></span><br><span class="line"><span class="keyword">var</span> target = <span class="keyword">new</span> EventTarget();</span><br><span class="line"><span class="comment">//添加一个事件处理程序</span></span><br><span class="line">target.addHandler(<span class="string">"message"</span>, handleMessage);</span><br><span class="line"><span class="comment">//触发事件</span></span><br><span class="line">target.fire(&#123;<span class="attr">type</span>:<span class="string">"message"</span>, <span class="attr">message</span>:<span class="string">"Hi"</span>&#125;); <span class="comment">//Hi</span></span><br><span class="line"><span class="comment">//删除事件处理程序</span></span><br><span class="line">target.removeHandler(<span class="string">"message"</span>,handleMessage);</span><br><span class="line"><span class="comment">//再次触发事件，没有事件处理程序</span></span><br><span class="line">target.fire(&#123;<span class="attr">type</span>:<span class="string">"message"</span>,<span class="attr">message</span>: <span class="string">"Hi"</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="12-跨域的方法有哪些？原理是什么？"><a href="#12-跨域的方法有哪些？原理是什么？" class="headerlink" title="12.跨域的方法有哪些？原理是什么？"></a>12.跨域的方法有哪些？原理是什么？</h3><p>知其然知其所以然，在说跨域方法之前，我们先了解下什么叫跨域，浏览器有同源策略，只有当“协议”、“域名”、“端口号”都相同时，才能称之为是同源，其中有一个不同，即是跨域。</p>
+<p>那么同源策略的作用是什么呢？同源策略限制了从同一个源加载的文档或脚本如何与来自另一个源的资源进行交互。这是一个用于隔离潜在恶意文件的重要安全机制。</p>
+<p>那么我们又为什么需要跨域呢？一是前端和服务器分开部署，接口请求需要跨域，二是我们可能会加载其它网站的页面作为iframe内嵌。</p>
+<blockquote>
+<p>跨域的方法有哪些？<br>常用的跨域方法</p>
+</blockquote>
+<p>1.jsonp<br>尽管浏览器有同源策略，但是<code>&lt;script&gt;</code> 标签的 src 属性不会被同源策略所约束，可以获取任意服务器上的脚本并执行。jsonp 通过插入script标签的方式来实现跨域，参数只能通过url传入，仅能支持get请求。</p>
+<p>实现原理:<br>step1: 创建 callback 方法<br>step2: 插入 script 标签<br>Step3: 后台接受到请求，解析前端传过去的 callback 方法，返回该方法的调用，并且数据作为参数传入该方法<br>Step4: 前端执行服务端返回的方法调用<br>下面代码仅为说明 jsonp 原理，项目中请使用成熟的库。分别看一下前端和服务端的简单实现：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//前端代码</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonp</span>(<span class="params">&#123;url, params, cb&#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">//创建script标签</span></span><br><span class="line">        <span class="keyword">let</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">        <span class="comment">//将回调函数挂在 window 上</span></span><br><span class="line">        <span class="built_in">window</span>[cb] = <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">            resolve(data);</span><br><span class="line">            <span class="comment">//代码执行后，删除插入的script标签</span></span><br><span class="line">            <span class="built_in">document</span>.body.removeChild(script);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//回调函数加在请求地址上</span></span><br><span class="line">        params = &#123;...params, cb&#125; <span class="comment">//wb=b&amp;cb=show</span></span><br><span class="line">        <span class="keyword">let</span> arrs = [];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> params) &#123;</span><br><span class="line">            arrs.push(<span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;params[key]&#125;</span>`</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        script.src = <span class="string">`<span class="subst">$&#123;url&#125;</span>?<span class="subst">$&#123;arrs.join(<span class="string">'&amp;'</span>)&#125;</span>`</span>;</span><br><span class="line">        <span class="built_in">document</span>.body.appendChild(script);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;</span><br><span class="line">jsonp(&#123;</span><br><span class="line">    url: <span class="string">'http://localhost:3000/say'</span>,</span><br><span class="line">    params: &#123;</span><br><span class="line">        <span class="comment">//code</span></span><br><span class="line">    &#125;,</span><br><span class="line">    cb: <span class="string">'sayHi'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 后端代码</span></span><br><span class="line"><span class="comment">//express启动一个后台服务</span></span><br><span class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">let</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/say'</span>, (req, res) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> &#123;cb&#125; = req.query; <span class="comment">//获取传来的callback函数名，cb是key</span></span><br><span class="line">    res.send(<span class="string">`<span class="subst">$&#123;cb&#125;</span>('Hello!')`</span>);</span><br><span class="line">&#125;);</span><br><span class="line">app.listen(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+<p>2.cors<br>jsonp 只能支持 get 请求，cors 可以支持多种请求。cors 并不需要前端做什么工作。</p>
+<blockquote>
+<p>简单跨域请求:<br>只要服务器设置的Access-Control-Allow-Origin Header和请求来源匹配，浏览器就允许跨域</p>
+<ul>
+<li>1.请求的方法是get，head或者post。</li>
+<li>2.Content-Type是application/x-www-form-urlencoded, multipart/form-data 或 text/plain中的一个值，或者不设置也可以，一般默认就是application/x-www-form-urlencoded。</li>
+<li>3.请求中没有自定义的HTTP头部，如x-token。(应该是这几种头部 Accept，Accept-Language，Content-Language，Last-Event-ID，Content-Type）</li>
+</ul>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简单跨域请求</span></span><br><span class="line">app.use(<span class="function">(<span class="params">req, res, next</span>) =&gt;</span> &#123;</span><br><span class="line">    res.setHeader(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">'XXXX'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>&lt; 带预检(Preflighted)的跨域请求</p>
+<p>不满于简单跨域请求的，即是带预检的跨域请求。服务端需要设置 Access-Control-Allow-Origin (允许跨域资源请求的域) 、 Access-Control-Allow-Methods (允许的请求方法) 和 Access-Control-Allow-Headers (允许的请求头)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="function">(<span class="params">req, res, next</span>) =&gt;</span> &#123;</span><br><span class="line">    res.setHeader(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">'XXX'</span>);</span><br><span class="line">    res.setHeader(<span class="string">'Access-Control-Allow-Headers'</span>, <span class="string">'XXX'</span>); <span class="comment">//允许返回的头</span></span><br><span class="line">    res.setHeader(<span class="string">'Access-Control-Allow-Methods'</span>, <span class="string">'XXX'</span>);<span class="comment">//允许使用put方法请求接口</span></span><br><span class="line">    res.setHeader(<span class="string">'Access-Control-Max-Age'</span>, <span class="number">6</span>); <span class="comment">//预检的存活时间</span></span><br><span class="line">    <span class="keyword">if</span>(req.method === <span class="string">"OPTIONS"</span>) &#123;</span><br><span class="line">        res.end(); <span class="comment">//如果method是OPTIONS，不做处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="nginx-反向代理"><a href="#nginx-反向代理" class="headerlink" title="nginx 反向代理"></a>nginx 反向代理</h3><p>使用nginx反向代理实现跨域，只需要修改nginx的配置即可解决跨域问题。</p>
+<p>A网站向B网站请求某个接口时，向B网站发送一个请求，nginx根据配置文件接收这个请求，代替A网站向B网站来请求。 nginx拿到这个资源后再返回给A网站，以此来解决了跨域问题。</p>
+<p>例如nginx的端口号为 8090，需要请求的服务器端口号为 3000。（localhost:8090 请求 localhost:3000/say）</p>
+<p>nginx配置如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       <span class="number">8090</span>;</span><br><span class="line"></span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /Users/liuyan35/Test/Study/CORS/<span class="number">1</span>-jsonp;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">    location /say &#123;</span><br><span class="line">        rewrite  ^<span class="regexp">/say/</span>(.*)$ /$<span class="number">1</span> <span class="keyword">break</span>;</span><br><span class="line">        proxy_pass   http:<span class="comment">//localhost:3000;</span></span><br><span class="line">        add_header <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">        add_header <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>;</span><br><span class="line">        add_header <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET, POST, OPTIONS'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    # others</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.websocket</p>
+<p>Websocket 是 HTML5 的一个持久化的协议，它实现了浏览器与服务器的全双工通信，同时也是跨域的一种解决方案。</p>
+<p>Websocket 不受同源策略影响，只要服务器端支持，无需任何配置就支持跨域。</p>
+<p>5.postMessage<br>postMessage 通过用作前端页面之前的跨域，如父页面与iframe页面的跨域。window.postMessage方法，允许跨窗口通信，不论这两个窗口是否同源。</p>
+<p>话说工作中两个页面之前需要通信的情况并不多，我本人工作中，仅使用过两次，一次是H5页面中发送postMessage信息，ReactNative的webview中接收此此消息，并作出相应处理。另一次是可轮播的页面，某个轮播页使用的是iframe页面，为了解决滑动的事件冲突，iframe页面中去监听手势，发送消息告诉父页面是否左滑和右滑。</p>
+<blockquote>
+<p>子页面向父页面发消息</p>
+</blockquote>
+<p>父页面</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>, (e) =&gt; &#123;</span><br><span class="line">    <span class="keyword">this</span>.props.movePage(e.data);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>子页面</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="comment">/*左滑*/</span>) &#123;</span><br><span class="line">    <span class="built_in">window</span>.parent &amp;&amp; <span class="built_in">window</span>.parent.postMessage(<span class="number">-1</span>, <span class="string">'*'</span>)</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="comment">/*右滑*/</span>)&#123;</span><br><span class="line">    <span class="built_in">window</span>.parent &amp;&amp; <span class="built_in">window</span>.parent.postMessage(<span class="number">1</span>, <span class="string">'*'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>父页面向子页面发消息</p>
+</blockquote>
+<p>父页面</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> iframe = <span class="built_in">document</span>.querySelector(<span class="string">'#iframe'</span>);</span><br><span class="line">iframe.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    iframe.contentWindow.postMessage(<span class="string">'hello'</span>, <span class="string">'http://localhost:3002'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>子页面:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.data);</span><br><span class="line">    e.source.postMessage(<span class="string">'Hi'</span>, e.origin); <span class="comment">//回消息</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>6.node中间件<br>node 中间件的跨域原理和nginx代理跨域，同源策略是浏览器的限制，服务端没有同源策略。<br>node中间件实现跨域的原理如下:</p>
+<ul>
+<li>1.接受客户端请求</li>
+<li>2.将请求 转发给服务器。</li>
+<li>3.拿到服务器 响应 数据。</li>
+<li>4.将 响应 转发给客户端。</li>
+</ul>
+<h3 id="js异步加载有哪些"><a href="#js异步加载有哪些" class="headerlink" title="js异步加载有哪些"></a>js异步加载有哪些</h3><ul>
+<li>1.<code>&lt;script&gt;</code> 的 defer 属性，HTML4 中新增</li>
+<li>2.<code>&lt;script&gt;</code> 的 async 属性，HTML5 中新增</li>
+<li><code>&lt;script&gt;</code>标签打开defer属性，脚本就会异步加载。渲染引擎遇到这一行命令，就会开始下载外部脚本，但不会等它下载和执行，而是直接执行后面的命令。</li>
+<li>defer 和 async 的区别在于: defer要等到整个页面在内存中正常渲染结束，才会执行；</li>
+<li>async一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。defer是“渲染完再执行”，async是“下载完就执行”。<br>如果有多个 defer 脚本，会按照它们在页面出现的顺序加载。<br>如果有多个 async 脚本，会按照它们在页面出现的顺序加载。</li>
+</ul>
+<p>3.动态插入<code>script</code>脚本<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">downloadJS</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">    varelement = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>); </span><br><span class="line">    element.src = <span class="string">"XXX.js"</span>; </span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(element); </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//何时的时候，调用上述方法</span></span><br></pre></td></tr></table></figure></p>
+<p>4.有条件的动态创建脚本<br>如页面 onload 之后。</p>
+<h3 id="下面代码a在什么情况中打印出1？"><a href="#下面代码a在什么情况中打印出1？" class="headerlink" title="下面代码a在什么情况中打印出1？"></a>下面代码a在什么情况中打印出1？</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//?</span></span><br><span class="line"><span class="keyword">if</span>(a == <span class="number">1</span> &amp;&amp; a == <span class="number">2</span> &amp;&amp; a == <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.在类型转换的时候，我们知道了对象如何转换成原始数据类型。如果部署了 [Symbol.toPrimitive]，那么返回的就是Symbol.toPrimitive的返回值。当然，我们也可以把此函数部署在valueOf或者是toString接口上，效果相同。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用闭包延长作用域的特性</span></span><br><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">    [<span class="built_in">Symbol</span>.toPrimitive]: (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">let</span> i = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> i++;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.利用Object.defineProperty在window/global上定义a属性，获取a属性时，会调用get.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> val = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(<span class="built_in">window</span>, <span class="string">'a'</span>, &#123;</span><br><span class="line">  get: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>3.利用数组的特性<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">a.join = a.shift;</span><br></pre></td></tr></table></figure></p>
+<h3 id="实现双向绑定-Proxy-与-Object-defineProperty-相比优劣如何"><a href="#实现双向绑定-Proxy-与-Object-defineProperty-相比优劣如何" class="headerlink" title="实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?"></a>实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?</h3><ul>
+<li><p>1.Object.definedProperty 的作用是劫持一个对象的属性，劫持属性的getter和setter方法，在对象的属性发生变化时进行特定的操作。而 Proxy 劫持的是整个对象。</p>
+</li>
+<li><p>2.Proxy 会返回一个代理对象，我们只需要操作新对象即可，而 Object.defineProperty 只能遍历对象属性直接修改。</p>
+</li>
+<li><p>3.Object.definedProperty 不支持数组，更准确的说是不支持数组的各种API，因为如果仅仅考虑arry[i] = value 这种情况，是可以劫持的，但是这种劫持意义不大。而 Proxy 可以支持数组的各种API。</p>
+</li>
+<li><p>4.尽管 Object.defineProperty 有诸多缺陷，但是其兼容性要好于 Proxy.</p>
+</li>
+</ul>
+<p>Vue2.x使用使用 Object.defineProperty 实现数据双向绑定,V3.0 则使用了 Proxy.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//拦截器</span></span><br><span class="line"><span class="keyword">let</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> temp = <span class="string">'Yvette'</span>;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'name'</span>, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"读取成功"</span>);</span><br><span class="line">        <span class="keyword">return</span> temp</span><br><span class="line">    &#125;,</span><br><span class="line">    set(value) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"设置成功"</span>);</span><br><span class="line">        temp = value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'Chris'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name);</span><br></pre></td></tr></table></figure>
+<p>Object.defineProperty 定义出来的属性，默认是不可枚举，不可更改，不可配置[无法delete]</p>
+<p>我们可以看到 Proxy 会劫持整个对象，读取对象中的属性或者是修改属性值，那么就会被劫持。但是有点需要注意，复杂数据类型，监控的是引用地址，而不是值，如果引用地址没有改变，那么不会触发set。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'Yvette'</span>, <span class="attr">hobbits</span>: [<span class="string">'travel'</span>, <span class="string">'reading'</span>], <span class="attr">info</span>: &#123;</span><br><span class="line">    age: <span class="number">20</span>,</span><br><span class="line">    job: <span class="string">'engineer'</span></span><br><span class="line">&#125;&#125;;</span><br><span class="line"><span class="keyword">let</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(obj, &#123;</span><br><span class="line">    get(target, key) &#123; <span class="comment">//第三个参数是 proxy， 一般不使用</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'读取成功'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, key);</span><br><span class="line">    &#125;,</span><br><span class="line">    set(target, key, value) &#123;</span><br><span class="line">        <span class="keyword">if</span>(key === <span class="string">'length'</span>) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//如果是数组长度的变化，返回。</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'设置成功'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.set([target, key, value]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">p.name = <span class="number">20</span>; <span class="comment">//设置成功</span></span><br><span class="line">p.age = <span class="number">20</span>; <span class="comment">//设置成功; 不需要事先定义此属性</span></span><br><span class="line">p.hobbits.push(<span class="string">'photography'</span>); <span class="comment">//读取成功;注意不会触发设置成功</span></span><br><span class="line">p.info.age = <span class="number">18</span>; <span class="comment">//读取成功;不会触发设置成功</span></span><br></pre></td></tr></table></figure>
+<p>最后，我们再看下对于数组的劫持，Object.definedProperty 和 Proxy 的差别</p>
+<p>Object.definedProperty 可以将数组的索引作为属性进行劫持，但是仅支持直接对 arry[i] 进行操作，不支持数组的API，非常鸡肋。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arry = []</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(arry, <span class="string">'0'</span>, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"读取成功"</span>);</span><br><span class="line">        <span class="keyword">return</span> temp</span><br><span class="line">    &#125;,</span><br><span class="line">    set(value) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"设置成功"</span>);</span><br><span class="line">        temp = value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">arry[<span class="number">0</span>] = <span class="number">10</span>; <span class="comment">//触发设置成功</span></span><br><span class="line">arry.push(<span class="number">10</span>); <span class="comment">//不能被劫持</span></span><br></pre></td></tr></table></figure>
+<p>Proxy 可以监听到数组的变化，支持各种API。注意数组的变化触发get和set可能不止一次，如有需要，自行根据key值决定是否要进行处理。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hobbits = [<span class="string">'travel'</span>, <span class="string">'reading'</span>];</span><br><span class="line"><span class="keyword">let</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(hobbits, &#123;</span><br><span class="line">    get(target, key) &#123;</span><br><span class="line">        <span class="comment">// if(key === 'length') return true; //如果是数组长度的变化，返回。</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'读取成功'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, key);</span><br><span class="line">    &#125;,</span><br><span class="line">    set(target, key, value) &#123;</span><br><span class="line">        <span class="comment">// if(key === 'length') return true; //如果是数组长度的变化，返回。</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'设置成功'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.set([target, key, value]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">p.splice(<span class="number">0</span>,<span class="number">1</span>) <span class="comment">//触发get和set，可以被劫持</span></span><br><span class="line">p.push(<span class="string">'photography'</span>);<span class="comment">//触发get和set</span></span><br><span class="line">p.slice(<span class="number">1</span>); <span class="comment">//触发get；因为 slice 是不会修改原数组的</span></span><br></pre></td></tr></table></figure>
+<h3 id="Object-is-与比较操作符-、-有什么区别？"><a href="#Object-is-与比较操作符-、-有什么区别？" class="headerlink" title="Object.is() 与比较操作符 ===、== 有什么区别？"></a>Object.is() 与比较操作符 ===、== 有什么区别？</h3><p>以下情况，Object.is认为是相等</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">两个值都是 <span class="literal">undefined</span></span><br><span class="line">两个值都是 <span class="literal">null</span></span><br><span class="line">两个值都是 <span class="literal">true</span> 或者都是 <span class="literal">false</span></span><br><span class="line">两个值是由相同个数的字符按照相同的顺序组成的字符串</span><br><span class="line">两个值指向同一个对象</span><br><span class="line">两个值都是数字并且</span><br><span class="line">都是正零 +<span class="number">0</span></span><br><span class="line">都是负零 <span class="number">-0</span></span><br><span class="line">都是 <span class="literal">NaN</span></span><br><span class="line">都是除零和 <span class="literal">NaN</span> 外的其它同一个数字</span><br></pre></td></tr></table></figure>
+<p>Object.is() 类似于 ===，但是有一些细微差别，如下：</p>
+<ul>
+<li>1.NaN 和 NaN 相等</li>
+<li>2.-0 和 +0 不相等</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(<span class="literal">NaN</span>, <span class="literal">NaN</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> === <span class="literal">NaN</span>);<span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(<span class="number">-0</span>, +<span class="number">0</span>)); <span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">-0</span> === +<span class="number">0</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>Object.is 和 ==差得远了， == 在类型不同时，需要进行类型转换，前文已经详细说明。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/面试基础/">面试基础</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2019/07/15/面试基础二/" data-title="面试基础二 | Hexo" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2019/07/15/面试基础一/"  title="面试基础一">
+ <strong>下一篇：</strong><br/> 
+ <span>面试基础一
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-说一说js异步发展史"><span class="toc-number">1.</span> <span class="toc-text">1.说一说js异步发展史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-谈谈对-async-await-的理解，async-await-的实现原理是什么"><span class="toc-number">2.</span> <span class="toc-text">2.谈谈对 async/await 的理解，async/await 的实现原理是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-使用-async-await-需要注意什么？"><span class="toc-number">3.</span> <span class="toc-text">3.使用 async/await 需要注意什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-如何实现-Promise-race？"><span class="toc-number">4.</span> <span class="toc-text">4.如何实现 Promise.race？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-可遍历数据结构的有什么特点？"><span class="toc-number">5.</span> <span class="toc-text">5.可遍历数据结构的有什么特点？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requestAnimationFrame-和-setTimeout-setInterval-有什么区别？使用-requestAnimationFrame-有哪些好处？"><span class="toc-number">6.</span> <span class="toc-text">requestAnimationFrame 和 setTimeout/setInterval 有什么区别？使用 requestAnimationFrame 有哪些好处？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-JS-类型转换的规则是什么？"><span class="toc-number">7.</span> <span class="toc-text">7.JS 类型转换的规则是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#强制类型转换"><span class="toc-number">7.1.</span> <span class="toc-text">强制类型转换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式类型转换"><span class="toc-number">8.</span> <span class="toc-text">隐式类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-简述下对-webWorker-的理解？"><span class="toc-number">9.</span> <span class="toc-text">8.简述下对 webWorker 的理解？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-ES6模块和CommonJS模块的差异？"><span class="toc-number">10.</span> <span class="toc-text">9.ES6模块和CommonJS模块的差异？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-浏览器的时间代理机制是什么"><span class="toc-number">11.</span> <span class="toc-text">10.浏览器的时间代理机制是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-js如何自定义事件？"><span class="toc-number">12.</span> <span class="toc-text">11.js如何自定义事件？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-createEvent-‘CustomEvent’-DOM3"><span class="toc-number">13.</span> <span class="toc-text">使用 createEvent(‘CustomEvent’) (DOM3)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-new-customEvent-DOM4"><span class="toc-number">14.</span> <span class="toc-text">使用 new customEvent() (DOM4)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-跨域的方法有哪些？原理是什么？"><span class="toc-number">15.</span> <span class="toc-text">12.跨域的方法有哪些？原理是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx-反向代理"><span class="toc-number">16.</span> <span class="toc-text">nginx 反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#js异步加载有哪些"><span class="toc-number">17.</span> <span class="toc-text">js异步加载有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下面代码a在什么情况中打印出1？"><span class="toc-number">18.</span> <span class="toc-text">下面代码a在什么情况中打印出1？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现双向绑定-Proxy-与-Object-defineProperty-相比优劣如何"><span class="toc-number">19.</span> <span class="toc-text">实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-is-与比较操作符-、-有什么区别？"><span class="toc-number">20.</span> <span class="toc-text">Object.is() 与比较操作符 ===、== 有什么区别？</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/面试基础/" title="面试基础">面试基础<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/几种移动端很常用的布局/" title="几种移动端很常用的布局">几种移动端很常用的布局<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-1-图片加载优化和代码压缩/" title="优化前端资源加载 1 - 图片加载优化和代码压缩">优化前端资源加载 1 - 图片加载优化和代码压缩<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/使用Plugin/" title="使用Plugin">使用Plugin<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/用HRM提高开发效率/" title="用HRM提高开发效率">用HRM提高开发效率<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-3-进一步控制-JS-大小/" title="优化前端资源加载 3 - 进一步控制 JS 大小">优化前端资源加载 3 - 进一步控制 JS 大小<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/更好的使用webpack-dev-server/" title="更好的使用webpack-dev-server">更好的使用webpack-dev-server<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建自己的loader/" title="创建自己的loader">创建自己的loader<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/优化前端资源加载-2-分离代码文件/" title="优化前端资源加载 2 - 分离代码文件">优化前端资源加载 2 - 分离代码文件<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js继承的六种方式/" title="js继承的六种方式">js继承的六种方式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/浏览器缓存机制/" title="浏览器缓存机制">浏览器缓存机制<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack搭建前端基本环境/" title="webpack搭建前端基本环境">webpack搭建前端基本环境<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式总结/" title="正则表达式总结">正则表达式总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack-如何解析模块代码路径/" title="webpack 如何解析模块代码路径">webpack 如何解析模块代码路径<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EventLoop/" title="EventLoop">EventLoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webpack的使用方法/" title="webpack的使用方法">webpack的使用方法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发和生产环境的构建配置差异/" title="开发和生产环境的构建配置差异">开发和生产环境的构建配置差异<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内部工作流程/" title="内部工作流程">内部工作流程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/提升webpack的构建速度/" title="提升webpack的构建速度">提升webpack的构建速度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/配置loader/" title="配置loader">配置loader<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="xxinso">xxinso</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
